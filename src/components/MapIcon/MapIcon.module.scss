@@ -1,0 +1,10 @@
+.icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-accent);
+}
+
+.icon svg {
+  flex: 0 0 auto;
+}
