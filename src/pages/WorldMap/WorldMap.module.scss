@@ -1,7 +1,385 @@
 .page {
-  min-height: 60vh;
-  padding: 24px;
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
-  background: var(--color-surface);
+  width: 100vw;
+  min-height: 100vh;
+  display: grid;
+  overflow: hidden;
+  place-items: center;
+  background: #050607;
+}
+
+.mapFrame {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  place-items: center;
+}
+
+.ambientAudio {
+  display: none;
+}
+
+.map {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  animation: mapDrift 56s ease-in-out infinite;
+  transform: translate3d(0, 0, 0);
+  transform-origin: 50% 50%;
+  will-change: transform;
+}
+
+.baseMap,
+.continentImage {
+  width: 1939px;
+  height: 811px;
+}
+
+.continentImage {
+  pointer-events: none;
+  transform-box: fill-box;
+  transform-origin: center;
+  transition:
+    transform 520ms cubic-bezier(0.18, 0.82, 0.24, 1),
+    filter 520ms cubic-bezier(0.18, 0.82, 0.24, 1);
+}
+
+.glow {
+  fill: var(--continent-glow-fill);
+  mix-blend-mode: screen;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 420ms ease,
+    filter 420ms ease;
+}
+
+.hitbox {
+  cursor: pointer;
+  fill: rgba(255, 255, 255, 0.01);
+  outline: none;
+  pointer-events: fill;
+}
+
+.continent:hover .continentImage,
+.continent:focus-within .continentImage {
+  filter:
+    brightness(1.06)
+    saturate(1.08)
+    drop-shadow(0 8px 12px rgba(0, 0, 0, 0.38))
+    drop-shadow(0 0 8px color-mix(in srgb, var(--continent-glow), transparent 52%));
+  transform: translateY(-4px);
+}
+
+.continent:hover .glow,
+.continent:focus-within .glow {
+  filter:
+    drop-shadow(0 0 7px color-mix(in srgb, var(--continent-glow), transparent 8%))
+    drop-shadow(0 0 18px color-mix(in srgb, var(--continent-glow), transparent 28%));
+  opacity: 1;
+}
+
+.atmosphereLayer {
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* Disable this wrapper to remove all atmosphere effects at once. */
+.atmosphere {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Lightweight map-bound layers: no canvas loop, no particle engine. */
+.oceanDepth,
+.oceanCurrent,
+.waterShimmer,
+.lightSweeps,
+.cloudShadow,
+.cloudImageShadows,
+.cloudImages,
+.colorGrade,
+.vignette,
+.snowBandTop,
+.snowBandBottom {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.oceanDepth {
+  opacity: 0.24;
+  mix-blend-mode: multiply;
+  background:
+    radial-gradient(ellipse at 20% 54%, rgba(2, 17, 26, 0.58), transparent 38%),
+    radial-gradient(ellipse at 67% 46%, rgba(3, 23, 34, 0.48), transparent 44%),
+    linear-gradient(180deg, rgba(15, 35, 44, 0.16), transparent 42%, rgba(5, 12, 20, 0.22));
+}
+
+.waterShimmer {
+  opacity: 0.14;
+  mix-blend-mode: screen;
+  background:
+    radial-gradient(ellipse at 16% 42%, rgba(138, 197, 205, 0.18), transparent 22%),
+    radial-gradient(ellipse at 64% 36%, rgba(186, 221, 219, 0.12), transparent 24%),
+    radial-gradient(ellipse at 48% 68%, rgba(110, 168, 184, 0.13), transparent 26%);
+  background-size:
+    360px 230px,
+    540px 310px,
+    760px 420px;
+  animation: waterDrift 54s linear infinite;
+  transform: translate3d(0, 0, 0);
+}
+
+.oceanCurrent {
+  opacity: 0.12;
+  mix-blend-mode: soft-light;
+  background:
+    radial-gradient(ellipse at 18% 38%, rgba(122, 181, 190, 0.13), transparent 21%),
+    radial-gradient(ellipse at 70% 48%, rgba(192, 226, 218, 0.08), transparent 24%),
+    radial-gradient(ellipse at 42% 70%, rgba(73, 126, 145, 0.13), transparent 28%),
+    radial-gradient(ellipse at 86% 26%, rgba(141, 193, 198, 0.08), transparent 20%);
+  background-size:
+    760px 380px,
+    980px 520px,
+    680px 420px,
+    1120px 620px;
+  animation: oceanCurrent 86s linear infinite;
+  transform: translate3d(0, 0, 0);
+}
+
+.lightSweeps {
+  opacity: 0.08;
+  mix-blend-mode: soft-light;
+  background:
+    radial-gradient(ellipse at 30% 36%, rgba(136, 177, 181, 0.16), transparent 27%),
+    radial-gradient(ellipse at 76% 66%, rgba(74, 128, 145, 0.13), transparent 31%);
+  background-size:
+    1040px 470px,
+    1320px 560px;
+  animation: lightSweep 96s linear infinite;
+  transform: translate3d(0, 0, 0);
+}
+
+.cloudShadow {
+  opacity: 0.19;
+  mix-blend-mode: multiply;
+  background:
+    radial-gradient(ellipse at 20% 34%, rgba(0, 0, 0, 0.58), transparent 36%),
+    radial-gradient(ellipse at 70% 58%, rgba(0, 0, 0, 0.5), transparent 39%),
+    radial-gradient(ellipse at 48% 80%, rgba(0, 0, 0, 0.42), transparent 35%);
+  background-size:
+    820px 310px,
+    960px 360px,
+    720px 280px;
+  animation: shadowSail 120s linear infinite;
+  transform: translate3d(0, 0, 0);
+}
+
+.cloudImageShadows,
+.cloudImages {
+  overflow: hidden;
+}
+
+.cloudImage,
+.cloudImageShadow {
+  position: absolute;
+  left: var(--cloud-x);
+  top: var(--cloud-y);
+  width: 39%;
+  max-width: none;
+  height: auto;
+  pointer-events: none;
+  transform: translate3d(0, 0, 0) scale(var(--cloud-render-scale));
+  transform-origin: center;
+  animation: cloudSail var(--cloud-duration) linear infinite;
+  animation-delay: var(--cloud-delay);
+}
+
+.cloudImage {
+  --cloud-render-scale: var(--cloud-scale);
+  opacity: var(--cloud-opacity);
+  filter: brightness(0.58) contrast(1.12) saturate(0.38) sepia(0.05) hue-rotate(154deg);
+  mix-blend-mode: screen;
+}
+
+.cloudImageShadow {
+  --cloud-render-scale: calc(var(--cloud-scale) * 0.96);
+  --cloud-shadow-x: 2.6%;
+  --cloud-shadow-y: 3.8%;
+  opacity: calc(var(--cloud-opacity) * 0.62);
+  filter: brightness(0) blur(5px);
+  mix-blend-mode: multiply;
+}
+
+.colorGrade {
+  opacity: 0.19;
+  mix-blend-mode: soft-light;
+  background:
+    linear-gradient(180deg, rgba(79, 118, 132, 0.1), transparent 46%, rgba(7, 14, 25, 0.2)),
+    radial-gradient(ellipse at center, transparent 55%, rgba(2, 7, 14, 0.18) 100%);
+}
+
+.vignette {
+  opacity: 0.4;
+  background:
+    radial-gradient(ellipse at center, transparent 46%, rgba(0, 0, 0, 0.22) 72%, rgba(0, 0, 0, 0.48) 100%),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.2), transparent 18%, transparent 82%, rgba(0, 0, 0, 0.2));
+}
+
+.snowBandTop {
+  height: 25%;
+}
+
+.snowBandBottom {
+  top: auto;
+  bottom: 0;
+  height: 24%;
+}
+
+.snowflake {
+  position: absolute;
+  top: -8px;
+  left: var(--flake-x);
+  width: 3px;
+  height: 3px;
+  border-radius: 1px;
+  opacity: 0;
+  background: rgba(238, 244, 255, 0.72);
+  box-shadow:
+    0 0 3px rgba(255, 255, 255, 0.74),
+    0 0 8px rgba(77, 102, 255, 0.5),
+    0 0 13px rgba(56, 79, 230, 0.28);
+  animation: snowFall var(--flake-duration) linear infinite;
+  animation-delay: var(--flake-delay);
+  transform: translate3d(0, 0, 0);
+}
+
+.snowflake::before,
+.snowflake::after {
+  content: none;
+}
+
+@keyframes mapDrift {
+  0%,
+  100% {
+    transform: translate3d(-0.16%, 0.08%, 0) scale(1.006);
+  }
+
+  42% {
+    transform: translate3d(0.26%, -0.18%, 0) scale(1.014);
+  }
+
+  74% {
+    transform: translate3d(0.08%, 0.18%, 0) scale(1.01);
+  }
+}
+
+@keyframes waterDrift {
+  from {
+    background-position:
+      0 0,
+      0 0,
+      0 0;
+  }
+
+  to {
+    background-position:
+      360px 230px,
+      -540px 310px,
+      760px -420px;
+  }
+}
+
+@keyframes oceanCurrent {
+  from {
+    background-position:
+      0 0,
+      0 0,
+      0 0,
+      0 0;
+  }
+
+  to {
+    background-position:
+      760px -380px,
+      -980px 520px,
+      680px 420px,
+      -1120px -620px;
+  }
+}
+
+@keyframes lightSweep {
+  from {
+    background-position:
+      -820px -120px,
+      1040px 180px;
+  }
+
+  to {
+    background-position:
+      820px 120px,
+      -1040px -180px;
+  }
+}
+
+@keyframes shadowSail {
+  from {
+    transform: translate3d(8%, -2%, 0);
+  }
+
+  to {
+    transform: translate3d(-16%, 4%, 0);
+  }
+}
+
+@keyframes cloudSail {
+  from {
+    transform: translate3d(var(--cloud-shadow-x, 0%), var(--cloud-shadow-y, 0%), 0)
+      scale(var(--cloud-render-scale));
+  }
+
+  to {
+    transform:
+      translate3d(
+        calc(var(--cloud-drift-x) + var(--cloud-shadow-x, 0%)),
+        calc(var(--cloud-drift-y) + var(--cloud-shadow-y, 0%)),
+        0
+      )
+      scale(var(--cloud-render-scale));
+  }
+}
+
+@keyframes snowFall {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -8px, 0) rotate(45deg) scale(0.7);
+  }
+
+  14% {
+    opacity: 0.68;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--flake-drift), 168px, 0) rotate(225deg) scale(0.92);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .map,
+  .lightSweeps,
+  .oceanCurrent,
+  .waterShimmer,
+  .cloudShadow,
+  .cloudImage,
+  .cloudImageShadow,
+  .snowflake {
+    animation: none;
+  }
 }
