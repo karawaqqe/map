@@ -5,6 +5,8 @@ export const mapSize = {
 
 export const worldMapImage = new URL('../../img/globalmap/world_map.png', import.meta.url).href
 export const windSound = new URL('../../sounds/wind/soundwind.mp3', import.meta.url).href
+export const birdImage = new URL('../../img/bird/newbird.png', import.meta.url).href
+export const birdSound = new URL('../../sounds/birds/birdsound.mp3', import.meta.url).href
 
 export const cloudImages = [
   new URL('../../img/clouds/cloud1.png', import.meta.url).href,
@@ -21,28 +23,44 @@ export const continents = [
     id: 'eiridors',
     name: 'Eiridors',
     image: new URL('../../img/continents/Eiridors/Eiritor_continent.png', import.meta.url).href,
-    glowColor: '#8fe66d',
-    glowFill: 'rgba(143, 230, 109, 0.045)',
+    crest: new URL('../../img/herbs/herb_eridor.png', import.meta.url).href,
+    glowColor: '#00ff3c',
+    glowFill: 'rgba(0, 255, 60, 0.082)',
+    glowOpacity: 1,
+    glowStrength: 1,
+    overlay: { x: 301, y: 272, width: 260, height: 160, crestSize: 112 },
   },
   {
     id: 'death',
     name: 'Death',
     image: new URL('../../img/continents/Death/death_continent.png', import.meta.url).href,
-    glowColor: '#ff5346',
-    glowFill: 'rgba(255, 83, 70, 0.045)',
+    crest: new URL('../../img/herbs/herb_death.png', import.meta.url).href,
+    glowColor: '#ff0000',
+    glowFill: 'rgba(255, 0, 0, 0.16)',
+    glowOpacity: 1.18,
+    glowStrength: 1.45,
+    overlay: { x: 861, y: 374, width: 210, height: 150, crestSize: 96 },
   },
   {
     id: 'holyLights',
     name: 'Holy Lights',
     image: new URL('../../img/continents/HolyLights/holylight_continent.png', import.meta.url).href,
-    glowColor: '#ffd66b',
-    glowFill: 'rgba(255, 214, 107, 0.045)',
+    crest: new URL('../../img/herbs/herb_holylight.png', import.meta.url).href,
+    glowColor: '#ffbf00',
+    glowFill: 'rgba(255, 191, 0, 0.115)',
+    glowOpacity: 1.06,
+    glowStrength: 1.18,
+    overlay: { x: 1407, y: 275, width: 260, height: 165, crestSize: 118 },
   },
   {
     id: 'island',
-    name: 'Island',
+    name: 'Magic Island',
     image: new URL('../../img/continents/Island/mage_continent.png', import.meta.url).href,
-    glowColor: '#5da8ff',
-    glowFill: 'rgba(93, 168, 255, 0.045)',
+    crest: new URL('../../img/herbs/herb_mage.png', import.meta.url).href,
+    glowColor: '#003cff',
+    glowFill: 'rgba(0, 60, 255, 0.088)',
+    glowOpacity: 1,
+    glowStrength: 1,
+    overlay: { x: 364, y: 596, width: 180, height: 130, crestSize: 78 },
   },
 ]
