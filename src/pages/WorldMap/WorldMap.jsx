@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 import { FiSun } from 'react-icons/fi'
+import { useNavigate } from 'react-router-dom'
+import FogTransition from '../../components/FogTransition/FogTransition'
 import { birdImage, birdSound, cloudImages, continents, mapSize, windSound, worldMapImage } from '../../data/continents'
+import { buildHitboxPath } from '../../utils/mapHitbox'
 import styles from './WorldMap.module.scss'
 
-const ALPHA_THRESHOLD = 8
-const ROW_STEP = 1
-const EDGE_PADDING = 0
+const EIRIDOR_CONTINENT_ID = 'eiridors'
+const EIRIDOR_TRANSITION_DURATION = 2200
 const TOP_SNOWFLAKES = [
   { x: 6, delay: -2, duration: 18, drift: 12 },
   { x: 14, delay: -9, duration: 22, drift: -10 },
@@ -155,62 +157,16 @@ function getInitialQuality() {
   return QUALITY_MODES.some((mode) => mode.id === storedQuality) ? storedQuality : 'cinematic'
 }
 
-function loadImage(src) {
-  return new Promise((resolve, reject) => {
-    const image = new Image()
-    image.onload = () => resolve(image)
-    image.onerror = reject
-    image.src = src
-  })
-}
-
-async function buildHitboxPath(src) {
-  const image = await loadImage(src)
-  const canvas = document.createElement('canvas')
-  const context = canvas.getContext('2d', { willReadFrequently: true })
-
-  canvas.width = image.naturalWidth
-  canvas.height = image.naturalHeight
-  context.drawImage(image, 0, 0)
-
-  const { data, width, height } = context.getImageData(0, 0, canvas.width, canvas.height)
-  const segments = []
-
-  for (let y = 0; y < height; y += ROW_STEP) {
-    let x = 0
-
-    while (x < width) {
-      const alpha = data[(y * width + x) * 4 + 3]
-
-      if (alpha <= ALPHA_THRESHOLD) {
-        x += 1
-        continue
-      }
-
-      const start = x
-
-      while (x < width && data[(y * width + x) * 4 + 3] > ALPHA_THRESHOLD) {
-        x += 1
-      }
-
-      const left = Math.max(0, start - EDGE_PADDING)
-      const right = Math.min(width, x + EDGE_PADDING)
-      const bottom = Math.min(height, y + ROW_STEP)
-
-      segments.push(`M${left} ${y}H${right}V${bottom}H${left}Z`)
-    }
-  }
-
-  return segments.join('')
-}
-
 function WorldMap() {
   const [hitboxes, setHitboxes] = useState({})
   const [activeContinentId, setActiveContinentId] = useState(null)
   const [quality, setQuality] = useState(getInitialQuality)
   const [isQualityOpen, setIsQualityOpen] = useState(false)
+  const [isEnteringEiridor, setIsEnteringEiridor] = useState(false)
   const windAudioRef = useRef(null)
   const birdAudioRef = useRef(null)
+  const transitionTimeoutRef = useRef(null)
+  const navigate = useNavigate()
 
   useEffect(() => {
     let isMounted = true
@@ -311,9 +267,37 @@ function WorldMap() {
     }
   }, [quality])
 
+  useEffect(() => (
+    () => {
+      window.clearTimeout(transitionTimeoutRef.current)
+    }
+  ), [])
+
   const closeQualityPanelOnBlur = (event) => {
     if (!event.currentTarget.contains(event.relatedTarget)) {
       setIsQualityOpen(false)
+    }
+  }
+
+  const enterEiridor = () => {
+    if (isEnteringEiridor) {
+      return
+    }
+
+    setIsEnteringEiridor(true)
+    transitionTimeoutRef.current = window.setTimeout(() => {
+      navigate('/eiridor')
+    }, EIRIDOR_TRANSITION_DURATION)
+  }
+
+  const handleContinentKeyDown = (event, continentId) => {
+    if (continentId !== EIRIDOR_CONTINENT_ID || isEnteringEiridor) {
+      return
+    }
+
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault()
+      enterEiridor()
     }
   }
 
@@ -423,6 +407,8 @@ function WorldMap() {
                   onMouseLeave={() => setActiveContinentId((current) => (current === continent.id ? null : current))}
                   onFocus={() => setActiveContinentId(continent.id)}
                   onBlur={() => setActiveContinentId((current) => (current === continent.id ? null : current))}
+                  onClick={continent.id === EIRIDOR_CONTINENT_ID ? enterEiridor : undefined}
+                  onKeyDown={(event) => handleContinentKeyDown(event, continent.id)}
                 />
               )}
             </g>
@@ -607,6 +593,7 @@ function WorldMap() {
           </div>
         </div>
       </div>
+      {isEnteringEiridor && <FogTransition />}
     </section>
   )
 }
