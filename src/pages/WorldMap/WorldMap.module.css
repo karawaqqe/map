@@ -21,8 +21,9 @@
   display: block;
   width: 100%;
   height: 100%;
-  animation: mapDrift 34s ease-in-out infinite;
+  animation: mapDrift calc(96s * var(--fx-speed)) ease-in-out infinite;
   transform: translate3d(0, 0, 0);
+  transform-origin: 50% 50%;
   will-change: transform;
 }
 
@@ -36,33 +37,110 @@
   pointer-events: none;
   transform-box: fill-box;
   transform-origin: center;
-  transition: transform 220ms ease, filter 220ms ease;
+  transition: transform 1100ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .glow {
   fill: var(--continent-glow-fill);
-  filter: drop-shadow(0 0 5px var(--continent-glow)) drop-shadow(0 0 12px var(--continent-glow));
+  filter: drop-shadow(0 0 calc(9px * var(--fx-shadow) * var(--continent-glow-strength, 1)) color-mix(in srgb, var(--continent-glow), transparent 0%)) drop-shadow(0 0 calc(26px * var(--fx-shadow) * var(--continent-glow-strength, 1)) color-mix(in srgb, var(--continent-glow), transparent 12%)) drop-shadow(0 0 calc(44px * var(--fx-shadow) * var(--continent-glow-strength, 1)) color-mix(in srgb, var(--continent-glow), transparent 38%));
+  mix-blend-mode: screen;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 220ms ease;
+  transition: filter 360ms ease, opacity 260ms ease;
 }
 
 .hitbox {
   cursor: pointer;
-  fill: rgba(255, 2, 2, 0.01);
+  fill: rgba(255, 255, 255, 0.01);
   outline: none;
   pointer-events: fill;
 }
 
 .continent:hover .continentImage,
-.continent:focus-within .continentImage {
-  filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.38));
-  transform: translateY(-4px);
+.continent:focus-within .continentImage,
+.continent:has(.hitbox:hover) .continentImage,
+.continent:has(.hitbox:focus-visible) .continentImage {
+  transform: translateY(-2px) scale(1.0015);
 }
 
 .continent:hover .glow,
-.continent:focus-within .glow {
+.continent:focus-within .glow,
+.continent:has(.hitbox:hover) .glow,
+.continent:has(.hitbox:focus-visible) .glow {
+  opacity: var(--continent-glow-opacity, 1);
+}
+
+.continentOverlayLayer {
+  pointer-events: none;
+}
+
+.continentOverlay {
+  opacity: 0;
+  overflow: visible;
+  pointer-events: none;
+  transform: translateY(8px) scale(0.95);
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: opacity 260ms ease, transform 340ms cubic-bezier(0.18, 0.82, 0.24, 1);
+  will-change: opacity, transform;
+}
+
+.continentOverlayActive {
   opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.map:has(.hitbox[data-continent-id=eiridors]:hover) .continentOverlay[data-continent-id=eiridors],
+.map:has(.hitbox[data-continent-id=eiridors]:focus-visible) .continentOverlay[data-continent-id=eiridors],
+.map:has(.hitbox[data-continent-id=death]:hover) .continentOverlay[data-continent-id=death],
+.map:has(.hitbox[data-continent-id=death]:focus-visible) .continentOverlay[data-continent-id=death],
+.map:has(.hitbox[data-continent-id=holyLights]:hover) .continentOverlay[data-continent-id=holyLights],
+.map:has(.hitbox[data-continent-id=holyLights]:focus-visible) .continentOverlay[data-continent-id=holyLights],
+.map:has(.hitbox[data-continent-id=island]:hover) .continentOverlay[data-continent-id=island],
+.map:has(.hitbox[data-continent-id=island]:focus-visible) .continentOverlay[data-continent-id=island] {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.continentBadge {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 4px;
+  pointer-events: none;
+  text-align: center;
+}
+
+.continentCrest {
+  width: var(--crest-size);
+  max-width: 48%;
+  height: auto;
+  -o-object-fit: contain;
+     object-fit: contain;
+  filter: drop-shadow(0 7px 10px rgba(0, 0, 0, 0.54)) drop-shadow(0 0 calc(10px * var(--fx-shadow)) rgba(255, 226, 157, 0.16));
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+
+.continentName {
+  max-width: 100%;
+  color: #f6e7bd;
+  font-family: "UnifrakturMaguntia", "Georgia", serif;
+  font-size: calc(var(--crest-size) * 0.25);
+  line-height: 0.95;
+  text-shadow: 0 2px 2px rgba(0, 0, 0, 0.9), 0 0 7px rgba(50, 27, 8, 0.82), 0 0 14px rgba(255, 213, 128, 0.26);
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  white-space: nowrap;
+}
+
+.atmosphereLayer {
+  pointer-events: none;
+  overflow: hidden;
 }
 
 /* Disable this wrapper to remove every atmosphere effect at once. */
@@ -79,6 +157,7 @@
 .oceanCurrent,
 .waterShimmer,
 .lightSweeps,
+.birdLayer,
 .cloudShadow,
 .cloudImageShadows,
 .cloudImages,
@@ -91,49 +170,118 @@
   pointer-events: none;
 }
 
+.oceanDepth,
+.oceanCurrent,
+.waterShimmer,
+.lightSweeps,
+.cloudShadow,
+.colorGrade,
+.vignette {
+  transition: filter 420ms ease, opacity 420ms ease;
+}
+
 .oceanDepth {
-  opacity: 0.2;
+  opacity: calc(0.2 * var(--fx-opacity));
   mix-blend-mode: multiply;
   background: radial-gradient(ellipse at 22% 54%, rgba(2, 17, 26, 0.46), transparent 42%), radial-gradient(ellipse at 66% 46%, rgba(3, 23, 34, 0.38), transparent 48%), linear-gradient(180deg, rgba(15, 35, 44, 0.12), transparent 44%, rgba(5, 12, 20, 0.18));
 }
 
 .oceanCurrent {
-  opacity: 0.1;
+  opacity: calc(0.1 * var(--fx-opacity));
   mix-blend-mode: soft-light;
   background: radial-gradient(ellipse at 18% 38%, rgba(122, 181, 190, 0.11), transparent 34%), radial-gradient(ellipse at 70% 48%, rgba(192, 226, 218, 0.07), transparent 38%), radial-gradient(ellipse at 42% 70%, rgba(73, 126, 145, 0.1), transparent 42%), radial-gradient(ellipse at 86% 26%, rgba(141, 193, 198, 0.07), transparent 34%);
   background-size: 920px 460px, 1180px 600px, 840px 500px, 1320px 720px;
-  animation: oceanCurrent 92s linear infinite;
+  animation: oceanCurrent calc(92s * var(--fx-speed)) linear infinite;
   transform: translate3d(0, 0, 0);
   will-change: background-position;
 }
 
 .waterShimmer {
-  opacity: 0.12;
+  opacity: calc(0.12 * var(--fx-opacity));
   mix-blend-mode: screen;
   background: radial-gradient(ellipse at 16% 42%, rgba(142, 214, 204, 0.13), rgba(84, 174, 174, 0.07) 34%, transparent 68%), radial-gradient(ellipse at 64% 36%, rgba(190, 228, 218, 0.1), rgba(84, 167, 176, 0.05) 32%, transparent 70%), radial-gradient(ellipse at 48% 68%, rgba(94, 169, 183, 0.12), rgba(69, 138, 160, 0.05) 36%, transparent 72%), linear-gradient(116deg, transparent 20%, rgba(96, 209, 185, 0.04) 34%, rgba(155, 232, 211, 0.08) 48%, rgba(95, 201, 187, 0.04) 62%, transparent 78%);
   background-size: 480px 300px, 680px 390px, 860px 500px, 760px 420px;
-  filter: blur(0.6px);
-  animation: waterDrift 58s linear infinite;
+  filter: blur(calc(0.6px * var(--fx-blur))) brightness(var(--fx-brightness));
+  animation: waterDrift calc(58s * var(--fx-speed)) linear infinite;
   transform: translate3d(0, 0, 0);
   will-change: background-position;
 }
 
 .lightSweeps {
-  opacity: 0.055;
+  opacity: calc(0.055 * var(--fx-opacity) * var(--fx-brightness));
   mix-blend-mode: soft-light;
   background: radial-gradient(ellipse at 30% 36%, rgba(136, 177, 181, 0.14), transparent 42%), radial-gradient(ellipse at 76% 66%, rgba(74, 128, 145, 0.11), transparent 46%);
   background-size: 1160px 560px, 1440px 680px;
-  animation: lightSweep 108s linear infinite;
+  animation: lightSweep calc(108s * var(--fx-speed)) linear infinite;
   transform: translate3d(0, 0, 0);
   will-change: background-position;
 }
 
+.birdLayer {
+  overflow: hidden;
+}
+
+.birdFlock {
+  position: absolute;
+  top: var(--flock-y);
+  left: -12%;
+  width: 140px;
+  height: 66px;
+  opacity: calc(0.9 * var(--fx-particles) * var(--fx-opacity));
+  pointer-events: none;
+  animation-duration: calc(var(--flock-duration) * var(--fx-speed));
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-delay: var(--flock-delay);
+  will-change: transform;
+}
+
+.birdFlockPrimary {
+  left: 16%;
+  top: var(--flock-y);
+  animation-name: birdFlockEiridorToDeath;
+}
+
+.birdFlockSecondary {
+  left: -16%;
+  top: var(--flock-y);
+  animation-name: birdFlockAcrossMap;
+}
+
+.birdFlockTertiary {
+  left: 98%;
+  top: var(--flock-y);
+  animation-name: birdFlockHolyLightsArc;
+}
+
+.bird {
+  position: absolute;
+  left: var(--bird-x);
+  top: var(--bird-y);
+  width: 28px;
+  height: auto;
+  opacity: 1;
+  filter: brightness(0) contrast(1.85) drop-shadow(0 0 1px rgba(235, 229, 204, 0.38)) drop-shadow(0 3px 6px rgba(0, 0, 0, 0.72));
+  transform: rotate(var(--bird-rotate)) scale(var(--bird-scale));
+  transform-origin: center;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+
+:global(body.quality-balanced) .birdFlockSecondary,
+:global(body.quality-balanced) .birdFlockTertiary,
+:global(body.quality-performance) .birdLayer {
+  opacity: 0;
+  visibility: hidden;
+}
+
 .cloudShadow {
-  opacity: 0.055;
+  opacity: calc(0.055 * var(--fx-shadow) * var(--fx-opacity) * var(--fx-particles));
   mix-blend-mode: multiply;
   background: radial-gradient(ellipse at 24% 30%, rgba(0, 0, 0, 0.4), transparent 36%), radial-gradient(ellipse at 72% 58%, rgba(0, 0, 0, 0.33), transparent 38%), radial-gradient(ellipse at 46% 78%, rgba(0, 0, 0, 0.26), transparent 34%);
   background-size: 760px 280px, 900px 330px, 680px 260px;
-  animation: shadowSail 96s linear infinite;
+  animation: shadowSail calc(96s * var(--fx-speed)) linear infinite;
   transform: translate3d(0, 0, 0);
   will-change: transform;
 }
@@ -154,15 +302,18 @@
   pointer-events: none;
   transform: translate3d(0, 0, 0) scale(var(--cloud-render-scale));
   transform-origin: center;
-  animation: cloudSail var(--cloud-duration) linear infinite;
+  animation-name: cloudSail;
+  animation-duration: calc(var(--cloud-duration) * var(--fx-speed));
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
   animation-delay: var(--cloud-delay);
   will-change: transform;
 }
 
 .cloudImage {
   --cloud-render-scale: var(--cloud-scale);
-  opacity: var(--cloud-opacity);
-  filter: brightness(0.99) contrast(1.04) saturate(0.34) sepia(0.04) hue-rotate(154deg);
+  opacity: calc(var(--cloud-opacity) * var(--fx-particles));
+  filter: brightness(calc(0.99 * var(--fx-brightness))) contrast(1.04) saturate(0.34) sepia(0.04) hue-rotate(154deg);
   mix-blend-mode: screen;
 }
 
@@ -170,19 +321,26 @@
   --cloud-render-scale: calc(var(--cloud-scale) * 0.96);
   --cloud-shadow-x: 2.6%;
   --cloud-shadow-y: 3.8%;
-  opacity: calc(var(--cloud-opacity) * 0.42);
-  filter: brightness(0) blur(6px);
+  opacity: calc(var(--cloud-opacity) * 0.42 * var(--fx-particles));
+  filter: brightness(0) blur(calc(6px * var(--fx-blur)));
   mix-blend-mode: multiply;
 }
 
+:global(body.quality-performance) .cloudImage,
+:global(body.quality-performance) .cloudImageShadow,
+:global(body.quality-performance) .snowflake {
+  opacity: 0;
+  visibility: hidden;
+}
+
 .colorGrade {
-  opacity: 0.16;
+  opacity: calc(0.16 * var(--fx-opacity) * var(--fx-brightness));
   mix-blend-mode: soft-light;
   background: linear-gradient(180deg, rgba(79, 118, 132, 0.08), transparent 48%, rgba(7, 14, 25, 0.17)), radial-gradient(ellipse at center, transparent 58%, rgba(2, 7, 14, 0.16) 100%);
 }
 
 .vignette {
-  opacity: 0.34;
+  opacity: calc(0.34 * var(--fx-shadow));
   background: radial-gradient(ellipse at center, transparent 48%, rgba(0, 0, 0, 0.2) 74%, rgba(0, 0, 0, 0.44) 100%), linear-gradient(90deg, rgba(0, 0, 0, 0.18), transparent 18%, transparent 82%, rgba(0, 0, 0, 0.18));
 }
 
@@ -205,18 +363,132 @@
   border-radius: 50%;
   opacity: 0;
   background: rgba(238, 246, 250, 0.74);
-  animation: snowFall var(--flake-duration) linear infinite;
+  animation: snowFall calc(var(--flake-duration) * var(--fx-speed)) linear infinite;
   animation-delay: var(--flake-delay);
   transform: translate3d(0, 0, 0);
   will-change: transform, opacity;
 }
 
+.qualityPanel {
+  position: absolute;
+  left: 34px;
+  bottom: 34px;
+  z-index: 5;
+  display: grid;
+  justify-items: start;
+  pointer-events: auto;
+}
+
+.qualityToggle {
+  position: relative;
+  z-index: 2;
+  width: 96px;
+  height: 96px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(238, 216, 159, 0.32);
+  border-radius: 50%;
+  color: rgba(255, 233, 181, 0.92);
+  background: radial-gradient(circle at 35% 28%, rgba(255, 229, 145, 0.28), transparent 38%), linear-gradient(145deg, rgba(41, 31, 18, 0.76), rgba(9, 14, 18, 0.72));
+  box-shadow: 0 0 calc(24px * var(--fx-shadow)) rgba(255, 210, 113, 0.24), 0 14px 32px rgba(0, 0, 0, 0.42), inset 0 0 24px rgba(255, 226, 160, 0.12);
+  cursor: pointer;
+  pointer-events: auto;
+  transition: border-color 220ms ease, box-shadow 220ms ease, transform 220ms ease;
+}
+
+.qualityToggle svg {
+  width: 40px;
+  height: 40px;
+  filter: drop-shadow(0 0 14px rgba(255, 217, 126, 0.64));
+}
+
+.qualityPanel:hover .qualityToggle,
+.qualityPanel:focus-within .qualityToggle,
+.qualityPanelOpen .qualityToggle {
+  border-color: rgba(255, 219, 136, 0.62);
+  box-shadow: 0 0 calc(34px * var(--fx-shadow)) rgba(255, 210, 113, 0.34), 0 18px 38px rgba(0, 0, 0, 0.46), inset 0 0 28px rgba(255, 226, 160, 0.15);
+  transform: translateY(-1px);
+}
+
+.qualityMenu {
+  position: absolute;
+  left: 0;
+  bottom: 112px;
+  width: 360px;
+  padding: 22px;
+  border: 1px solid rgba(226, 204, 153, 0.22);
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(29, 26, 22, 0.86), rgba(8, 13, 16, 0.8)), radial-gradient(ellipse at 20% 0%, rgba(255, 219, 137, 0.12), transparent 58%);
+  box-shadow: 0 22px 48px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  opacity: 0;
+  pointer-events: none;
+  font-family: "MedievalSharp", "Georgia", serif;
+  transform: translateY(14px) scale(0.98);
+  transform-origin: left bottom;
+  transition: opacity 220ms ease, transform 260ms cubic-bezier(0.18, 0.82, 0.24, 1);
+}
+
+.qualityPanel:hover .qualityMenu,
+.qualityPanel:focus-within .qualityMenu,
+.qualityPanelOpen .qualityMenu {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+}
+
+.qualityTitle {
+  display: block;
+  margin: 0 0 16px;
+  color: rgba(242, 226, 191, 0.72);
+  font-size: 18px;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.qualityOptions {
+  display: grid;
+  gap: 12px;
+}
+
+.qualityOption {
+  min-height: 62px;
+  padding: 0 20px;
+  border: 1px solid rgba(215, 197, 151, 0.14);
+  border-radius: 6px;
+  color: rgba(237, 229, 207, 0.72);
+  background: rgba(255, 255, 255, 0.035);
+  cursor: pointer;
+  font-family: "MedievalSharp", "Georgia", serif;
+  font-size: 24px;
+  line-height: 1;
+  text-align: left;
+  transition: background 180ms ease, border-color 180ms ease, color 180ms ease, box-shadow 180ms ease;
+}
+
+.qualityOption:hover,
+.qualityOption:focus-visible {
+  border-color: rgba(255, 218, 137, 0.3);
+  color: rgba(255, 242, 210, 0.92);
+  background: rgba(255, 223, 157, 0.08);
+  outline: none;
+}
+
+.qualityOptionActive {
+  border-color: rgba(255, 210, 113, 0.5);
+  color: rgba(255, 235, 186, 0.98);
+  background: rgba(255, 211, 119, 0.14);
+  box-shadow: inset 0 0 12px rgba(255, 207, 111, 0.08);
+}
+
 @keyframes mapDrift {
   0%, 100% {
-    transform: translate3d(0, 0, 0) scale(1);
+    transform: translate3d(-0.08%, 0.04%, 0) scale(1.001);
   }
-  50% {
-    transform: translate3d(0.18%, -0.14%, 0) scale(1.003);
+  32% {
+    transform: translate3d(0.12%, -0.08%, 0) scale(1.0045);
+  }
+  68% {
+    transform: translate3d(0.02%, 0.12%, 0) scale(1.0025);
   }
 }
 @keyframes waterDrift {
@@ -251,6 +523,39 @@
     transform: translate3d(-12%, 3%, 0);
   }
 }
+@keyframes birdFlockEiridorToDeath {
+  0% {
+    transform: translate3d(-4vw, -1vh, 0);
+  }
+  48% {
+    transform: translate3d(34vw, 5vh, 0);
+  }
+  98.5%, 100% {
+    transform: translate3d(92vw, 10vh, 0);
+  }
+}
+@keyframes birdFlockAcrossMap {
+  0% {
+    transform: translate3d(-8vw, -2vh, 0);
+  }
+  52% {
+    transform: translate3d(58vw, 2vh, 0);
+  }
+  98.5%, 100% {
+    transform: translate3d(124vw, -1vh, 0);
+  }
+}
+@keyframes birdFlockHolyLightsArc {
+  0% {
+    transform: translate3d(8vw, 3vh, 0);
+  }
+  45% {
+    transform: translate3d(-42vw, -3vh, 0);
+  }
+  98.5%, 100% {
+    transform: translate3d(-112vw, 5vh, 0);
+  }
+}
 @keyframes cloudSail {
   from {
     transform: translate3d(var(--cloud-shadow-x, 0%), var(--cloud-shadow-y, 0%), 0) scale(var(--cloud-render-scale));
@@ -265,7 +570,7 @@
     transform: translate3d(0, -8px, 0);
   }
   14% {
-    opacity: 0.75;
+    opacity: calc(0.75 * var(--fx-particles));
   }
   100% {
     opacity: 0;
@@ -277,6 +582,7 @@
   .lightSweeps,
   .oceanCurrent,
   .waterShimmer,
+  .birdFlock,
   .cloudShadow,
   .cloudImage,
   .cloudImageShadow,
