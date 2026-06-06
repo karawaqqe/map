@@ -9,9 +9,9 @@ const TRANSITION_CLOUDS = [
   { image: 5, x: 36, y: 34, scale: 1.56, duration: 5400, delay: 120 },
 ]
 
-function FogTransition() {
+function FogTransition({ mode = 'closing' }) {
   return (
-    <div className={styles.transition} aria-hidden="true">
+    <div className={`${styles.transition} ${styles[mode]}`} aria-hidden="true">
       <div className={styles.blurVeil} />
       <div className={styles.fogMass} />
       <div className={styles.fogMassDeep} />

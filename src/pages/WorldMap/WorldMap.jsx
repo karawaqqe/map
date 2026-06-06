@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 import { FiSun } from 'react-icons/fi'
-import { useNavigate } from 'react-router-dom'
-import FogTransition from '../../components/FogTransition/FogTransition'
+import { ROUTE_TRANSITION_EVENT } from '../../components/Layout/Layout'
 import { birdImage, birdSound, cloudImages, continents, mapSize, windSound, worldMapImage } from '../../data/continents'
 import { buildHitboxPath } from '../../utils/mapHitbox'
 import styles from './WorldMap.module.scss'
 
 const EIRIDOR_CONTINENT_ID = 'eiridors'
-const EIRIDOR_TRANSITION_DURATION = 2200
+const EIRIDOR_NAVIGATION_DELAY = 1150
+const EIRIDOR_TRANSITION_OPENING_DURATION = 1100
 const TOP_SNOWFLAKES = [
   { x: 6, delay: -2, duration: 18, drift: 12 },
   { x: 14, delay: -9, duration: 22, drift: -10 },
@@ -165,8 +165,6 @@ function WorldMap() {
   const [isEnteringEiridor, setIsEnteringEiridor] = useState(false)
   const windAudioRef = useRef(null)
   const birdAudioRef = useRef(null)
-  const transitionTimeoutRef = useRef(null)
-  const navigate = useNavigate()
 
   useEffect(() => {
     let isMounted = true
@@ -267,12 +265,6 @@ function WorldMap() {
     }
   }, [quality])
 
-  useEffect(() => (
-    () => {
-      window.clearTimeout(transitionTimeoutRef.current)
-    }
-  ), [])
-
   const closeQualityPanelOnBlur = (event) => {
     if (!event.currentTarget.contains(event.relatedTarget)) {
       setIsQualityOpen(false)
@@ -285,9 +277,13 @@ function WorldMap() {
     }
 
     setIsEnteringEiridor(true)
-    transitionTimeoutRef.current = window.setTimeout(() => {
-      navigate('/eiridor')
-    }, EIRIDOR_TRANSITION_DURATION)
+    window.dispatchEvent(new CustomEvent(ROUTE_TRANSITION_EVENT, {
+      detail: {
+        to: '/eiridor',
+        navigationDelay: EIRIDOR_NAVIGATION_DELAY,
+        openingDuration: EIRIDOR_TRANSITION_OPENING_DURATION,
+      },
+    }))
   }
 
   const handleContinentKeyDown = (event, continentId) => {
@@ -593,7 +589,6 @@ function WorldMap() {
           </div>
         </div>
       </div>
-      {isEnteringEiridor && <FogTransition />}
     </section>
   )
 }

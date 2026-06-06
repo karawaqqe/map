@@ -1,96 +1,100 @@
 .page {
   width: 100vw;
+  height: 100vh;
   min-height: 100vh;
-  display: grid;
   overflow: hidden;
-  place-items: center;
-  background: radial-gradient(ellipse at 50% 48%, rgba(53, 58, 48, 0.28), transparent 56%), linear-gradient(180deg, #050606 0%, #0b0907 52%, #030303 100%);
+  background: radial-gradient(ellipse at 50% 48%, rgba(76, 83, 61, 0.2), transparent 56%), linear-gradient(180deg, #030504 0%, #0b0906 58%, #020202 100%);
 }
 
 .mapStage {
-  position: relative;
-  width: min(100vw, 122.3vh);
-  height: min(100vh, 81.7661488144vw);
-  display: grid;
-  place-items: center;
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
   opacity: 0;
-  transform: scale(1.024);
-  animation: eiridorArrive 1800ms cubic-bezier(0.18, 0.78, 0.22, 1) 120ms forwards;
+  animation: eiridorArrive 900ms ease-out 80ms forwards;
 }
 
 .mapStage::before,
 .mapStage::after {
   position: absolute;
-  inset: -9%;
+  inset: -8vmax;
+  z-index: 2;
   content: "";
   pointer-events: none;
 }
 
 .mapStage::before {
-  opacity: 0.34;
-  filter: blur(28px);
-  background: radial-gradient(ellipse at 42% 42%, rgba(193, 151, 84, 0.28), transparent 48%), radial-gradient(ellipse at 62% 66%, rgba(67, 87, 70, 0.24), transparent 54%);
+  opacity: calc(0.46 * var(--fx-opacity));
+  background: radial-gradient(ellipse at 33% 42%, rgba(211, 157, 84, 0.24), transparent 44%), radial-gradient(ellipse at 65% 63%, rgba(83, 118, 92, 0.2), transparent 48%), radial-gradient(ellipse at 74% 24%, rgba(129, 150, 141, 0.14), transparent 42%);
+  mix-blend-mode: screen;
 }
 
 .mapStage::after {
-  opacity: 0.72;
-  background: radial-gradient(ellipse at center, transparent 58%, rgba(0, 0, 0, 0.34) 78%, rgba(0, 0, 0, 0.8) 100%), linear-gradient(180deg, rgba(0, 0, 0, 0.16), transparent 28%, transparent 70%, rgba(0, 0, 0, 0.24));
+  opacity: 0.9;
+  background: radial-gradient(ellipse at center, transparent 52%, rgba(0, 0, 0, 0.24) 73%, rgba(0, 0, 0, 0.78) 100%), linear-gradient(90deg, rgba(0, 0, 0, 0.4), transparent 18%, transparent 82%, rgba(0, 0, 0, 0.42)), linear-gradient(180deg, rgba(0, 0, 0, 0.24), transparent 24%, transparent 74%, rgba(0, 0, 0, 0.34));
 }
 
 .map {
-  position: relative;
+  position: absolute;
+  inset: 0;
   z-index: 1;
   display: block;
-  width: 100%;
-  height: 100%;
-  filter: drop-shadow(0 28px 52px rgba(0, 0, 0, 0.62)) saturate(0.92) contrast(1.04);
-  transform: translate3d(0, 0, 0);
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
   transform-origin: center;
-}
-
-.paperLayer {
-  filter: url("#eiridorPaperRipple");
 }
 
 .baseMap,
 .regionImage {
-  width: 1387px;
-  height: 1134px;
+  width: 1935px;
+  height: 812px;
   -webkit-user-select: none;
      -moz-user-select: none;
           user-select: none;
 }
 
+.baseMap {
+  pointer-events: none;
+}
+
 .region {
   cursor: pointer;
-  isolation: isolate;
+}
+
+.regionFloat {
+  pointer-events: none;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: regionFloat calc(6400ms * var(--fx-speed)) ease-in-out infinite;
+  animation-delay: var(--region-float-delay, 0ms);
+  will-change: transform;
 }
 
 .regionLift {
   pointer-events: none;
   transform-box: fill-box;
   transform-origin: center;
-  transition: filter 680ms ease, transform 780ms cubic-bezier(0.17, 0.84, 0.24, 1);
-  will-change: transform, filter;
 }
 
 .regionImage {
   pointer-events: none;
   transform-box: fill-box;
   transform-origin: center;
-  transition: opacity 520ms ease, filter 680ms ease;
+  transition: transform 1100ms cubic-bezier(0.16, 1, 0.3, 1), opacity 420ms ease, filter 520ms ease;
 }
 
 .regionGlow {
   fill: var(--region-glow-fill);
-  filter: drop-shadow(0 0 calc(8px * var(--region-glow-strength, 1)) color-mix(in srgb, var(--region-glow), transparent 10%)) drop-shadow(0 10px calc(22px * var(--region-glow-strength, 1)) color-mix(in srgb, var(--region-glow), transparent 26%)) drop-shadow(0 18px calc(44px * var(--region-glow-strength, 1)) color-mix(in srgb, var(--region-glow), transparent 44%));
+  filter: drop-shadow(0 0 calc(9px * var(--fx-shadow) * var(--region-glow-strength, 1)) color-mix(in srgb, var(--region-glow), transparent 0%)) drop-shadow(0 0 calc(26px * var(--fx-shadow) * var(--region-glow-strength, 1)) color-mix(in srgb, var(--region-glow), transparent 12%)) drop-shadow(0 0 calc(44px * var(--fx-shadow) * var(--region-glow-strength, 1)) color-mix(in srgb, var(--region-glow), transparent 38%));
   mix-blend-mode: screen;
   opacity: 0;
   pointer-events: none;
-  transform: translateY(8px) scale(1.006);
   transform-box: fill-box;
   transform-origin: center;
-  transition: filter 460ms ease, opacity 420ms ease, transform 680ms ease;
+  transition: filter 360ms ease, opacity 260ms ease;
 }
 
 .regionHitbox {
@@ -100,13 +104,18 @@
   pointer-events: fill;
 }
 
-.region:hover .regionLift,
-.region:focus-within .regionLift,
-.region:has(.regionHitbox:hover) .regionLift,
-.region:has(.regionHitbox:focus-visible) .regionLift {
-  filter: drop-shadow(0 10px 12px rgba(0, 0, 0, 0.36)) brightness(1.08) saturate(1.05);
-  transform: translateY(-4px) scale(1.003);
-  animation: regionBreath 2600ms ease-in-out infinite;
+.regionHitbox:focus-visible {
+  fill: rgba(255, 232, 179, 0.08);
+  stroke: rgba(255, 230, 171, 0.72);
+  stroke-width: 3px;
+  vector-effect: non-scaling-stroke;
+}
+
+.region:hover .regionImage,
+.region:focus-within .regionImage,
+.region:has(.regionHitbox:hover) .regionImage,
+.region:has(.regionHitbox:focus-visible) .regionImage {
+  transform: translateY(-4px) scale(1.002);
 }
 
 .region:hover .regionGlow,
@@ -114,7 +123,59 @@
 .region:has(.regionHitbox:hover) .regionGlow,
 .region:has(.regionHitbox:focus-visible) .regionGlow {
   opacity: var(--region-glow-opacity, 0.9);
-  transform: translateY(12px) scale(1.012);
+}
+
+.map:has(.regionHitbox[data-region-id=morveyn]:hover) .capitalOverlay[data-region-id=morveyn],
+.map:has(.regionHitbox[data-region-id=morveyn]:focus-visible) .capitalOverlay[data-region-id=morveyn],
+.map:has(.regionHitbox[data-region-id=valdora]:hover) .capitalOverlay[data-region-id=valdora],
+.map:has(.regionHitbox[data-region-id=valdora]:focus-visible) .capitalOverlay[data-region-id=valdora],
+.map:has(.regionHitbox[data-region-id=drakenholm]:hover) .capitalOverlay[data-region-id=drakenholm],
+.map:has(.regionHitbox[data-region-id=drakenholm]:focus-visible) .capitalOverlay[data-region-id=drakenholm],
+.map:has(.regionHitbox[data-region-id=noktreyn]:hover) .capitalOverlay[data-region-id=noktreyn],
+.map:has(.regionHitbox[data-region-id=noktreyn]:focus-visible) .capitalOverlay[data-region-id=noktreyn],
+.map:has(.regionHitbox[data-region-id=lyumeris]:hover) .capitalOverlay[data-region-id=lyumeris],
+.map:has(.regionHitbox[data-region-id=lyumeris]:focus-visible) .capitalOverlay[data-region-id=lyumeris] {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.capitalOverlayLayer {
+  pointer-events: none;
+}
+
+.capitalOverlay {
+  opacity: 0;
+  overflow: visible;
+  pointer-events: none;
+  transform: translateY(8px) scale(0.95);
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: opacity 260ms ease, transform 340ms cubic-bezier(0.18, 0.82, 0.24, 1);
+  will-change: opacity, transform;
+}
+
+.capitalBadge {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 4px;
+  pointer-events: none;
+  text-align: center;
+}
+
+.capitalName {
+  max-width: 100%;
+  color: #f6e7bd;
+  font-family: "UnifrakturMaguntia", "Georgia", serif;
+  font-size: calc(var(--capital-size) * 0.25);
+  line-height: 0.95;
+  text-shadow: 0 2px 2px rgba(0, 0, 0, 0.9), 0 0 7px rgba(50, 27, 8, 0.82), 0 0 14px rgba(255, 213, 128, 0.26);
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  white-space: nowrap;
 }
 
 .atmosphereLayer {
@@ -123,6 +184,8 @@
 }
 
 .atmosphere,
+.birdLayer,
+.cloudImages,
 .lowMist,
 .highMist,
 .emberGrade,
@@ -132,56 +195,391 @@
   pointer-events: none;
 }
 
+/*
+.oceanCurrent,
+.waterShimmer,
+.lightSweeps,
+*/
+.emberGrade,
+.vignette {
+  transition: filter 420ms ease, opacity 420ms ease;
+}
+
+/*
+.oceanCurrent {
+	opacity: calc(0.08 * var(--fx-opacity));
+	mix-blend-mode: soft-light;
+	background:
+		radial-gradient(ellipse at 18% 38%, rgba(122, 181, 190, 0.11), transparent 34%),
+		radial-gradient(ellipse at 70% 48%, rgba(192, 226, 218, 0.07), transparent 38%),
+		radial-gradient(ellipse at 42% 70%, rgba(73, 126, 145, 0.1), transparent 42%),
+		radial-gradient(ellipse at 86% 26%, rgba(141, 193, 198, 0.07), transparent 34%);
+	background-size:
+		920px 460px,
+		1180px 600px,
+		840px 500px,
+		1320px 720px;
+	animation: oceanCurrent calc(92s * var(--fx-speed)) linear infinite;
+	transform: translate3d(0, 0, 0);
+	will-change: background-position;
+}
+
+.waterShimmer {
+	opacity: calc(0.095 * var(--fx-opacity));
+	mix-blend-mode: screen;
+	background:
+		radial-gradient(ellipse at 16% 42%, rgba(142, 214, 204, 0.11), rgba(84, 174, 174, 0.055) 34%, transparent 68%),
+		radial-gradient(ellipse at 64% 36%, rgba(190, 228, 218, 0.085), rgba(84, 167, 176, 0.04) 32%, transparent 70%),
+		radial-gradient(ellipse at 48% 68%, rgba(94, 169, 183, 0.1), rgba(69, 138, 160, 0.04) 36%, transparent 72%),
+		linear-gradient(116deg, transparent 20%, rgba(96, 209, 185, 0.035) 34%, rgba(155, 232, 211, 0.065) 48%, rgba(95, 201, 187, 0.035) 62%, transparent 78%);
+	background-size:
+		480px 300px,
+		680px 390px,
+		860px 500px,
+		760px 420px;
+	filter:
+		blur(calc(0.6px * var(--fx-blur)))
+		brightness(var(--fx-brightness));
+	animation: waterDrift calc(58s * var(--fx-speed)) linear infinite;
+	transform: translate3d(0, 0, 0);
+	will-change: background-position;
+}
+
+.lightSweeps {
+	opacity: calc(0.048 * var(--fx-opacity) * var(--fx-brightness));
+	mix-blend-mode: soft-light;
+	background:
+		radial-gradient(ellipse at 30% 36%, rgba(136, 177, 181, 0.14), transparent 42%),
+		radial-gradient(ellipse at 76% 66%, rgba(74, 128, 145, 0.11), transparent 46%);
+	background-size:
+		1160px 560px,
+		1440px 680px;
+	animation: lightSweep calc(108s * var(--fx-speed)) linear infinite;
+	transform: translate3d(0, 0, 0);
+	will-change: background-position;
+}
+*/
+.birdLayer,
+.cloudImages {
+  overflow: hidden;
+}
+
+.birdFlock {
+  position: absolute;
+  top: var(--flock-y);
+  left: -12%;
+  width: 140px;
+  height: 66px;
+  opacity: calc(0.74 * var(--fx-particles) * var(--fx-opacity));
+  pointer-events: none;
+  animation-duration: calc(var(--flock-duration) * var(--fx-speed));
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-delay: var(--flock-delay);
+  will-change: transform;
+}
+
+.birdFlockPrimary {
+  left: 10%;
+  top: var(--flock-y);
+  animation-name: birdFlockEiridorRidge;
+}
+
+.birdFlockSecondary {
+  left: -16%;
+  top: var(--flock-y);
+  animation-name: birdFlockAcrossMap;
+}
+
+.bird {
+  position: absolute;
+  left: var(--bird-x);
+  top: var(--bird-y);
+  width: 28px;
+  height: auto;
+  opacity: 1;
+  filter: brightness(0) contrast(1.85) drop-shadow(0 0 1px rgba(235, 229, 204, 0.38)) drop-shadow(0 3px 6px rgba(0, 0, 0, 0.72));
+  transform: rotate(var(--bird-rotate)) scale(var(--bird-scale));
+  transform-origin: center;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+
+:global(body.quality-balanced) .birdFlockSecondary,
+:global(body.quality-performance) .birdLayer {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.cloudImage {
+  position: absolute;
+  left: var(--cloud-x);
+  top: var(--cloud-y);
+  width: 39%;
+  max-width: none;
+  height: auto;
+  pointer-events: none;
+  transform: translate3d(0, 0, 0) scale(var(--cloud-render-scale));
+  transform-origin: center;
+  animation-name: cloudSail;
+  animation-duration: calc(var(--cloud-duration) * var(--fx-speed));
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-delay: var(--cloud-delay);
+  will-change: transform;
+}
+
+.cloudImage {
+  --cloud-render-scale: var(--cloud-scale);
+  opacity: calc(var(--cloud-opacity) * var(--fx-particles));
+  filter: brightness(calc(0.99 * var(--fx-brightness))) contrast(1.04) saturate(0.38) sepia(0.04) hue-rotate(142deg);
+  mix-blend-mode: screen;
+}
+
+:global(body.quality-performance) .cloudImage {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.qualityPanel {
+  position: absolute;
+  left: 34px;
+  bottom: 34px;
+  z-index: 5;
+  display: grid;
+  justify-items: start;
+  pointer-events: auto;
+}
+
+.qualityToggle {
+  position: relative;
+  z-index: 2;
+  width: 96px;
+  height: 96px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(238, 216, 159, 0.32);
+  border-radius: 50%;
+  color: rgba(255, 233, 181, 0.92);
+  background: radial-gradient(circle at 35% 28%, rgba(255, 229, 145, 0.28), transparent 38%), linear-gradient(145deg, rgba(41, 31, 18, 0.76), rgba(9, 14, 18, 0.72));
+  box-shadow: 0 0 calc(24px * var(--fx-shadow)) rgba(255, 210, 113, 0.24), 0 14px 32px rgba(0, 0, 0, 0.42), inset 0 0 24px rgba(255, 226, 160, 0.12);
+  cursor: pointer;
+  pointer-events: auto;
+  transition: border-color 220ms ease, box-shadow 220ms ease, transform 220ms ease;
+}
+
+.qualityToggle svg {
+  width: 40px;
+  height: 40px;
+  filter: drop-shadow(0 0 14px rgba(255, 217, 126, 0.64));
+}
+
+.qualityPanel:hover .qualityToggle,
+.qualityPanel:focus-within .qualityToggle,
+.qualityPanelOpen .qualityToggle {
+  border-color: rgba(255, 219, 136, 0.62);
+  box-shadow: 0 0 calc(34px * var(--fx-shadow)) rgba(255, 210, 113, 0.34), 0 18px 38px rgba(0, 0, 0, 0.46), inset 0 0 28px rgba(255, 226, 160, 0.15);
+  transform: translateY(-1px);
+}
+
+.qualityMenu {
+  position: absolute;
+  left: 0;
+  bottom: 112px;
+  width: 360px;
+  padding: 22px;
+  border: 1px solid rgba(226, 204, 153, 0.22);
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(29, 26, 22, 0.86), rgba(8, 13, 16, 0.8)), radial-gradient(ellipse at 20% 0%, rgba(255, 219, 137, 0.12), transparent 58%);
+  box-shadow: 0 22px 48px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  opacity: 0;
+  pointer-events: none;
+  font-family: "MedievalSharp", "Georgia", serif;
+  transform: translateY(14px) scale(0.98);
+  transform-origin: left bottom;
+  transition: opacity 220ms ease, transform 260ms cubic-bezier(0.18, 0.82, 0.24, 1);
+}
+
+.qualityPanel:hover .qualityMenu,
+.qualityPanel:focus-within .qualityMenu,
+.qualityPanelOpen .qualityMenu {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+}
+
+.qualityTitle {
+  display: block;
+  margin: 0 0 16px;
+  color: rgba(242, 226, 191, 0.72);
+  font-size: 18px;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.qualityOptions {
+  display: grid;
+  gap: 12px;
+}
+
+.qualityOption {
+  min-height: 62px;
+  padding: 0 20px;
+  border: 1px solid rgba(215, 197, 151, 0.14);
+  border-radius: 6px;
+  color: rgba(237, 229, 207, 0.72);
+  background: rgba(255, 255, 255, 0.035);
+  cursor: pointer;
+  font-family: "MedievalSharp", "Georgia", serif;
+  font-size: 24px;
+  line-height: 1;
+  text-align: left;
+  transition: background 180ms ease, border-color 180ms ease, color 180ms ease, box-shadow 180ms ease;
+}
+
+.qualityOption:hover,
+.qualityOption:focus-visible {
+  border-color: rgba(255, 218, 137, 0.3);
+  color: rgba(255, 242, 210, 0.92);
+  background: rgba(255, 223, 157, 0.08);
+  outline: none;
+}
+
+.qualityOptionActive {
+  border-color: rgba(255, 210, 113, 0.5);
+  color: rgba(255, 235, 186, 0.98);
+  background: rgba(255, 211, 119, 0.14);
+  box-shadow: inset 0 0 12px rgba(255, 207, 111, 0.08);
+}
+
 .lowMist,
 .highMist {
-  opacity: 0.34;
-  filter: blur(22px);
+  opacity: calc(0.34 * var(--fx-opacity));
+  filter: blur(calc(22px * var(--fx-blur)));
   mix-blend-mode: screen;
   will-change: background-position, transform;
 }
 
 .lowMist {
-  background: radial-gradient(ellipse at 20% 73%, rgba(207, 207, 184, 0.2), transparent 48%), radial-gradient(ellipse at 80% 69%, rgba(154, 161, 141, 0.16), transparent 50%), linear-gradient(92deg, transparent 10%, rgba(188, 190, 168, 0.16), transparent 92%);
-  background-size: 620px 240px, 700px 260px, 960px 180px;
-  animation: eiridorMist 48s linear infinite;
+  background: radial-gradient(ellipse at 18% 76%, rgba(217, 210, 181, 0.18), transparent 46%), radial-gradient(ellipse at 82% 70%, rgba(147, 164, 138, 0.16), transparent 48%), linear-gradient(92deg, transparent 8%, rgba(190, 192, 161, 0.14), transparent 94%);
+  background-size: 620px 230px, 740px 260px, 1080px 170px;
+  animation: eiridorMist calc(52s * var(--fx-speed)) linear infinite;
 }
 
 .highMist {
-  opacity: 0.19;
-  background: radial-gradient(ellipse at 28% 20%, rgba(190, 206, 196, 0.18), transparent 42%), radial-gradient(ellipse at 72% 18%, rgba(130, 152, 148, 0.16), transparent 46%);
-  background-size: 760px 300px, 900px 320px;
-  animation: eiridorMistHigh 64s linear infinite;
+  opacity: calc(0.18 * var(--fx-opacity));
+  background: radial-gradient(ellipse at 28% 21%, rgba(190, 206, 196, 0.18), transparent 40%), radial-gradient(ellipse at 73% 17%, rgba(130, 152, 148, 0.14), transparent 44%);
+  background-size: 760px 280px, 920px 300px;
+  animation: eiridorMistHigh calc(66s * var(--fx-speed)) linear infinite;
 }
 
 .emberGrade {
-  opacity: 0.2;
+  opacity: 0.24;
   mix-blend-mode: soft-light;
-  background: radial-gradient(ellipse at 47% 64%, rgba(214, 145, 72, 0.22), transparent 44%), radial-gradient(ellipse at 62% 28%, rgba(151, 168, 114, 0.16), transparent 48%), linear-gradient(180deg, rgba(20, 30, 32, 0.16), transparent 44%, rgba(44, 23, 13, 0.2));
+  background: radial-gradient(ellipse at 46% 65%, rgba(218, 146, 70, 0.22), transparent 42%), radial-gradient(ellipse at 64% 28%, rgba(151, 168, 114, 0.16), transparent 46%), linear-gradient(180deg, rgba(20, 30, 32, 0.16), transparent 44%, rgba(44, 23, 13, 0.2));
 }
 
 .vignette {
-  opacity: 0.38;
-  background: radial-gradient(ellipse at center, transparent 54%, rgba(0, 0, 0, 0.2) 76%, rgba(0, 0, 0, 0.54) 100%), linear-gradient(90deg, rgba(0, 0, 0, 0.16), transparent 18%, transparent 82%, rgba(0, 0, 0, 0.16));
+  opacity: 0.44;
+  background: radial-gradient(ellipse at center, transparent 51%, rgba(0, 0, 0, 0.22) 74%, rgba(0, 0, 0, 0.58) 100%), linear-gradient(90deg, rgba(0, 0, 0, 0.18), transparent 16%, transparent 84%, rgba(0, 0, 0, 0.2));
 }
 
 @keyframes eiridorArrive {
   0% {
     opacity: 0;
-    filter: blur(8px);
-    transform: scale(1.045);
   }
   100% {
     opacity: 1;
-    filter: blur(0);
-    transform: scale(1);
   }
 }
-@keyframes regionBreath {
+@keyframes regionFloat {
   0%, 100% {
-    transform: translateY(-4px) scale(1.003);
+    transform: translate3d(0, 0, 0);
   }
   50% {
-    transform: translateY(-6px) scale(1.005);
+    transform: translate3d(0, -3px, 0);
+  }
+}
+/*
+@keyframes waterDrift {
+	from {
+		background-position:
+			0 0,
+			0 0,
+			0 0,
+			0 0;
+	}
+
+	to {
+		background-position:
+			480px 300px,
+			-680px 390px,
+			860px -500px,
+			-760px 420px;
+	}
+}
+
+@keyframes oceanCurrent {
+	from {
+		background-position:
+			0 0,
+			0 0,
+			0 0,
+			0 0;
+	}
+
+	to {
+		background-position:
+			920px -460px,
+			-1180px 600px,
+			840px 500px,
+			-1320px -720px;
+	}
+}
+
+@keyframes lightSweep {
+	from {
+		background-position:
+			-860px -160px,
+			1160px 220px;
+	}
+
+	to {
+		background-position:
+			860px 160px,
+			-1160px -220px;
+	}
+}
+*/
+@keyframes birdFlockEiridorRidge {
+  0% {
+    transform: translate3d(-4vw, -1vh, 0);
+  }
+  48% {
+    transform: translate3d(36vw, 5vh, 0);
+  }
+  98.5%, 100% {
+    transform: translate3d(94vw, 8vh, 0);
+  }
+}
+@keyframes birdFlockAcrossMap {
+  0% {
+    transform: translate3d(-8vw, -2vh, 0);
+  }
+  52% {
+    transform: translate3d(58vw, 2vh, 0);
+  }
+  98.5%, 100% {
+    transform: translate3d(124vw, -1vh, 0);
+  }
+}
+@keyframes cloudSail {
+  from {
+    transform: translate3d(var(--cloud-shadow-x, 0%), var(--cloud-shadow-y, 0%), 0) scale(var(--cloud-render-scale));
+  }
+  to {
+    transform: translate3d(calc(var(--cloud-drift-x) + var(--cloud-shadow-x, 0%)), calc(var(--cloud-drift-y) + var(--cloud-shadow-y, 0%)), 0) scale(var(--cloud-render-scale));
   }
 }
 @keyframes eiridorMist {
@@ -189,7 +587,7 @@
     background-position: -120px 0, 160px 0, -220px 0;
   }
   to {
-    background-position: 620px -30px, -700px 24px, 960px 0;
+    background-position: 620px -30px, -740px 24px, 1080px 0;
   }
 }
 @keyframes eiridorMistHigh {
@@ -197,27 +595,62 @@
     background-position: 0 0, 120px 0;
   }
   to {
-    background-position: -760px 24px, 900px -18px;
+    background-position: -760px 24px, 920px -18px;
   }
 }
-@media (max-aspect-ratio: 4/5) {
-  .mapStage {
-    width: 112vw;
-    height: 91.5780866721vw;
+@media (max-width: 900px) {
+  .map {
+    min-width: 100vw;
+    min-height: 100vh;
+  }
+  .mapStage::before {
+    opacity: calc(0.36 * var(--fx-opacity));
+  }
+  .mapStage::after {
+    opacity: 0.72;
+  }
+}
+@media (max-width: 640px) {
+  .map {
+    width: 100vw;
+    height: 100vh;
+  }
+  .qualityPanel {
+    left: 18px;
+    bottom: 18px;
+  }
+  .qualityToggle {
+    width: 72px;
+    height: 72px;
+  }
+  .qualityToggle svg {
+    width: 30px;
+    height: 30px;
+  }
+  .qualityMenu {
+    bottom: 86px;
+    width: min(300px, 100vw - 36px);
+    padding: 18px;
+  }
+  .lowMist,
+  .highMist {
+    opacity: calc(0.22 * var(--fx-opacity));
   }
 }
 @media (prefers-reduced-motion: reduce) {
   .mapStage,
-  .region:hover .regionLift,
-  .region:focus-within .regionLift,
-  .region:has(.regionHitbox:hover) .regionLift,
-  .region:has(.regionHitbox:focus-visible) .regionLift,
+  .regionFloat,
+  .birdFlock,
+  .cloudImage,
+  .capitalOverlay,
   .lowMist,
   .highMist {
     animation: none;
   }
   .mapStage {
     opacity: 1;
-    transform: none;
+  }
+  .capitalOverlay {
+    transition: none;
   }
 }/*# sourceMappingURL=Eiridor.module.css.map */
