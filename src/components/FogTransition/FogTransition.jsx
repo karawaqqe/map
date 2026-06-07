@@ -12,9 +12,11 @@ const TRANSITION_CLOUDS = [
 function FogTransition({ mode = 'closing' }) {
   return (
     <div className={`${styles.transition} ${styles[mode]}`} aria-hidden="true">
+      {/*
       <div className={styles.blurVeil} />
       <div className={styles.fogMass} />
       <div className={styles.fogMassDeep} />
+      */}
       <div className={styles.clouds}>
         {TRANSITION_CLOUDS.map((cloud, index) => (
           <img
@@ -32,8 +34,10 @@ function FogTransition({ mode = 'closing' }) {
           />
         ))}
       </div>
+      {/*
       <div className={styles.shadow} />
       <div className={styles.vignette} />
+      */}
     </div>
   )
 }

@@ -6,6 +6,7 @@ import CityMap from './pages/CityMap/CityMap'
 
 const WorldMap = lazy(() => import('./pages/WorldMap/WorldMap'))
 const Eiridor = lazy(() => import('./pages/Eiridor/Eiridor'))
+const HolyLight = lazy(() => import('./pages/HolyLight/HolyLight'))
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route element={<Layout />}>
           <Route path="/" element={<WorldMap />} />
           <Route path="/eiridor" element={<Eiridor />} />
+          <Route path="/holy-light" element={<HolyLight />} />
           <Route path="/region/:regionId" element={<RegionMap />} />
           <Route path="/city/:cityId" element={<CityMap />} />
         </Route>

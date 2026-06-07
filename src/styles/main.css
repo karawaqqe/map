@@ -15,7 +15,7 @@
 
 html {
   min-height: 100%;
-  background: var(--color-bg);
+  background: #111;
 }
 
 body {
@@ -29,7 +29,7 @@ body {
   min-height: 100vh;
   margin: 0;
   color: var(--color-text);
-  background: var(--color-bg);
+  background: #111;
   font-family: var(--font-main);
 }
 
@@ -73,4 +73,5 @@ select {
 
 #root {
   min-height: 100vh;
+  background: #111;
 }/*# sourceMappingURL=main.css.map */

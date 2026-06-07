@@ -217,6 +217,11 @@
 	will-change: opacity, transform;
 }
 
+.capitalOverlayActive {
+	opacity: 1;
+	transform: translateY(0) scale(1);
+}
+
 .capitalBadge {
 	width: 100%;
 	height: 100%;
@@ -388,7 +393,7 @@
 	position: absolute;
 	left: var(--cloud-x);
 	top: var(--cloud-y);
-	width: 39%;
+	width: 54%;
 	max-width: none;
 	height: auto;
 	pointer-events: none;
@@ -423,6 +428,61 @@
 	display: grid;
 	justify-items: start;
 	pointer-events: auto;
+}
+
+.backButton {
+	position: absolute;
+	left: 34px;
+	top: 34px;
+	z-index: 5;
+	width: 76px;
+	height: 76px;
+	display: grid;
+	place-items: center;
+	border: 1px solid rgba(238, 216, 159, 0.32);
+	border-radius: 50%;
+	color: rgba(255, 233, 181, 0.92);
+	background:
+		radial-gradient(
+			circle at 35% 28%,
+			rgba(255, 229, 145, 0.22),
+			transparent 38%
+		),
+		linear-gradient(145deg, rgba(41, 31, 18, 0.76), rgba(9, 14, 18, 0.72));
+	box-shadow:
+		0 0 calc(20px * var(--fx-shadow)) rgba(255, 210, 113, 0.2),
+		0 12px 28px rgba(0, 0, 0, 0.42),
+		inset 0 0 20px rgba(255, 226, 160, 0.1);
+	cursor: pointer;
+	pointer-events: auto;
+	transition:
+		border-color 220ms ease,
+		box-shadow 220ms ease,
+		opacity 220ms ease,
+		transform 220ms ease;
+}
+
+.backButton svg {
+	width: 34px;
+	height: 34px;
+	filter: drop-shadow(0 0 12px rgba(255, 217, 126, 0.58));
+}
+
+.backButton:hover,
+.backButton:focus-visible {
+	border-color: rgba(255, 219, 136, 0.62);
+	box-shadow:
+		0 0 calc(30px * var(--fx-shadow)) rgba(255, 210, 113, 0.3),
+		0 16px 34px rgba(0, 0, 0, 0.46),
+		inset 0 0 24px rgba(255, 226, 160, 0.14);
+	outline: none;
+	transform: translateY(-1px);
+}
+
+.backButton:disabled {
+	cursor: default;
+	opacity: 0.58;
+	transform: none;
 }
 
 .qualityToggle {
@@ -824,6 +884,18 @@
 	.qualityPanel {
 		left: 18px;
 		bottom: 18px;
+	}
+
+	.backButton {
+		left: 18px;
+		top: 18px;
+		width: 62px;
+		height: 62px;
+	}
+
+	.backButton svg {
+		width: 28px;
+		height: 28px;
 	}
 
 	.qualityToggle {
