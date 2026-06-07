@@ -3,9 +3,9 @@ import { FiArrowLeft, FiSun } from 'react-icons/fi'
 import { useNavigate } from 'react-router-dom'
 import { ROUTE_TRANSITION_EVENT } from '../../components/Layout/Layout'
 import { birdImage, cloudImages } from '../../data/continents'
-import { eiridorMapImage, eiridorMapSize, eiridorRegions } from '../../data/eiridor'
+import { holyLightMapImage, holyLightMapSize, holyLightRegions } from '../../data/holylight'
 import { buildHitboxPath } from '../../utils/mapHitbox'
-import styles from './Eiridor.module.scss'
+import styles from '../Eiridor/Eiridor.module.scss'
 
 const WORLD_NAVIGATION_DELAY = 1150
 const WORLD_TRANSITION_OPENING_DURATION = 1100
@@ -49,7 +49,7 @@ const BIRD_FLOCKS = [
     ],
   },
 ]
-const QUALITY_STORAGE_KEY = 'eiridor-map-quality'
+const QUALITY_STORAGE_KEY = 'holy-light-map-quality'
 const QUALITY_MODES = [
   { id: 'cinematic', label: 'Cinematic' },
   { id: 'balanced', label: 'Balanced' },
@@ -73,7 +73,13 @@ function getInitialQuality() {
   return QUALITY_MODES.some((mode) => mode.id === storedQuality) ? storedQuality : 'cinematic'
 }
 
-const RegionLayer = memo(function RegionLayer({ hitbox, onEnterRegion, region }) {
+const RegionLayer = memo(function RegionLayer({
+  hitbox,
+  onActivateRegion,
+  onClearRegion,
+  onEnterRegion,
+  region,
+}) {
   const handleKeyDown = (event) => {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault()
@@ -99,8 +105,8 @@ const RegionLayer = memo(function RegionLayer({ hitbox, onEnterRegion, region })
           <image
             className={styles.regionImage}
             href={region.image}
-            width={eiridorMapSize.width}
-            height={eiridorMapSize.height}
+            width={holyLightMapSize.width}
+            height={holyLightMapSize.height}
             loading="lazy"
             decoding="async"
           />
@@ -116,15 +122,22 @@ const RegionLayer = memo(function RegionLayer({ hitbox, onEnterRegion, region })
           tabIndex="0"
           focusable="true"
           onClick={() => onEnterRegion(region.id)}
+          onFocus={() => onActivateRegion(region.id)}
+          onBlur={() => onClearRegion(region.id)}
           onKeyDown={handleKeyDown}
+          onMouseEnter={() => onActivateRegion(region.id)}
+          onMouseLeave={() => onClearRegion(region.id)}
+          onPointerEnter={() => onActivateRegion(region.id)}
+          onPointerLeave={() => onClearRegion(region.id)}
         />
       )}
     </g>
   )
 })
 
-function Eiridor() {
+function HolyLight() {
   const [hitboxes, setHitboxes] = useState({})
+  const [activeRegionId, setActiveRegionId] = useState(null)
   const [quality, setQuality] = useState(getInitialQuality)
   const [isQualityOpen, setIsQualityOpen] = useState(false)
   const [isReturningToWorld, setIsReturningToWorld] = useState(false)
@@ -137,12 +150,20 @@ function Eiridor() {
     [navigate],
   )
 
+  const activateRegion = useCallback((regionId) => {
+    setActiveRegionId(regionId)
+  }, [])
+
+  const clearRegion = useCallback((regionId) => {
+    setActiveRegionId((current) => (current === regionId ? null : current))
+  }, [])
+
   useEffect(() => {
     let isMounted = true
 
     async function createHitboxes() {
       const entries = await Promise.all(
-        eiridorRegions.map(async (region) => [
+        holyLightRegions.map(async (region) => [
           region.id,
           await buildHitboxPath(region.image),
         ]),
@@ -201,26 +222,28 @@ function Eiridor() {
       <div className={styles.mapStage}>
         <svg
           className={styles.map}
-          viewBox={`0 0 ${eiridorMapSize.width} ${eiridorMapSize.height}`}
+          viewBox={`0 0 ${holyLightMapSize.width} ${holyLightMapSize.height}`}
           preserveAspectRatio="xMidYMid slice"
           role="img"
-          aria-label="Eiridor continent map"
+          aria-label="Holy Light continent map"
         >
           <g>
             <image
               className={styles.baseMap}
-              href={eiridorMapImage}
-              width={eiridorMapSize.width}
-              height={eiridorMapSize.height}
+              href={holyLightMapImage}
+              width={holyLightMapSize.width}
+              height={holyLightMapSize.height}
               fetchPriority="high"
               decoding="async"
             />
           </g>
 
-          {eiridorRegions.map((region) => (
+          {holyLightRegions.map((region) => (
             <RegionLayer
               key={region.id}
               hitbox={hitboxes[region.id]}
+              onActivateRegion={activateRegion}
+              onClearRegion={clearRegion}
               onEnterRegion={enterRegion}
               region={region}
             />
@@ -230,16 +253,11 @@ function Eiridor() {
             className={styles.atmosphereLayer}
             x="0"
             y="0"
-            width={eiridorMapSize.width}
-            height={eiridorMapSize.height}
+            width={holyLightMapSize.width}
+            height={holyLightMapSize.height}
             aria-hidden="true"
           >
             <div className={styles.atmosphere}>
-              {/*
-              <div className={styles.oceanCurrent} />
-              <div className={styles.waterShimmer} />
-              <div className={styles.lightSweeps} />
-              */}
               <div className={styles.birdLayer}>
                 {BIRD_FLOCKS.map((flock) => (
                   <div
@@ -296,11 +314,13 @@ function Eiridor() {
           </foreignObject>
 
           <g className={styles.capitalOverlayLayer} aria-hidden="true">
-            {eiridorRegions.map((region) => (
+            {holyLightRegions.map((region) => (
               <foreignObject
                 key={`capital-${region.id}`}
                 data-region-id={region.id}
-                className={styles.capitalOverlay}
+                className={`${styles.capitalOverlay} ${
+                  activeRegionId === region.id ? styles.capitalOverlayActive : ''
+                }`}
                 x={region.label.x}
                 y={region.label.y}
                 width={region.label.width}
@@ -337,14 +357,14 @@ function Eiridor() {
           <button
             className={styles.qualityToggle}
             type="button"
-            aria-label="Eiridor quality settings"
+            aria-label="Holy Light quality settings"
             aria-expanded={isQualityOpen}
             onClick={() => setIsQualityOpen((current) => !current)}
           >
             <FiSun aria-hidden="true" />
           </button>
-          <div className={styles.qualityMenu} aria-label="Eiridor quality">
-            <span className={styles.qualityTitle}>Eiridor Quality</span>
+          <div className={styles.qualityMenu} aria-label="Holy Light quality">
+            <span className={styles.qualityTitle}>Holy Light Quality</span>
             <div className={styles.qualityOptions}>
               {QUALITY_MODES.map((mode) => (
                 <button
@@ -368,4 +388,4 @@ function Eiridor() {
   )
 }
 
-export default Eiridor
+export default HolyLight

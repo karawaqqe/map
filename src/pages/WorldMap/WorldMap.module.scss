@@ -13,6 +13,9 @@
   height: 100vh;
   display: grid;
   place-items: center;
+  opacity: 0;
+  filter: brightness(0.78) saturate(0.86);
+  animation: worldArrive 1600ms ease-out 120ms forwards;
 }
 
 .map {
@@ -338,7 +341,7 @@
   position: absolute;
   left: var(--cloud-x);
   top: var(--cloud-y);
-  width: 39%;
+  width: 54%;
   max-width: none;
   height: auto;
   pointer-events: none;
@@ -562,6 +565,18 @@
   }
 }
 
+@keyframes worldArrive {
+  0% {
+    opacity: 0;
+    filter: brightness(0.72) saturate(0.82);
+  }
+
+  100% {
+    opacity: 1;
+    filter: brightness(1) saturate(1);
+  }
+}
+
 @keyframes waterDrift {
   from {
     background-position:
@@ -701,6 +716,12 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .mapFrame {
+    opacity: 1;
+    filter: none;
+    animation: none;
+  }
+
   .map,
   .lightSweeps,
   .oceanCurrent,

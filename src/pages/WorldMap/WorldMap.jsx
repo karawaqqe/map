@@ -6,8 +6,12 @@ import { buildHitboxPath } from '../../utils/mapHitbox'
 import styles from './WorldMap.module.scss'
 
 const EIRIDOR_CONTINENT_ID = 'eiridors'
-const EIRIDOR_NAVIGATION_DELAY = 1150
-const EIRIDOR_TRANSITION_OPENING_DURATION = 1100
+const CONTINENT_ROUTES = {
+  [EIRIDOR_CONTINENT_ID]: '/eiridor',
+  holyLights: '/holy-light',
+}
+const CONTINENT_NAVIGATION_DELAY = 1150
+const CONTINENT_TRANSITION_OPENING_DURATION = 1100
 const TOP_SNOWFLAKES = [
   { x: 6, delay: -2, duration: 18, drift: 12 },
   { x: 14, delay: -9, duration: 22, drift: -10 },
@@ -162,7 +166,7 @@ function WorldMap() {
   const [activeContinentId, setActiveContinentId] = useState(null)
   const [quality, setQuality] = useState(getInitialQuality)
   const [isQualityOpen, setIsQualityOpen] = useState(false)
-  const [isEnteringEiridor, setIsEnteringEiridor] = useState(false)
+  const [enteringContinentId, setEnteringContinentId] = useState(null)
   const windAudioRef = useRef(null)
   const birdAudioRef = useRef(null)
 
@@ -271,29 +275,31 @@ function WorldMap() {
     }
   }
 
-  const enterEiridor = () => {
-    if (isEnteringEiridor) {
+  const enterContinent = (continentId) => {
+    const route = CONTINENT_ROUTES[continentId]
+
+    if (!route || enteringContinentId) {
       return
     }
 
-    setIsEnteringEiridor(true)
+    setEnteringContinentId(continentId)
     window.dispatchEvent(new CustomEvent(ROUTE_TRANSITION_EVENT, {
       detail: {
-        to: '/eiridor',
-        navigationDelay: EIRIDOR_NAVIGATION_DELAY,
-        openingDuration: EIRIDOR_TRANSITION_OPENING_DURATION,
+        to: route,
+        navigationDelay: CONTINENT_NAVIGATION_DELAY,
+        openingDuration: CONTINENT_TRANSITION_OPENING_DURATION,
       },
     }))
   }
 
   const handleContinentKeyDown = (event, continentId) => {
-    if (continentId !== EIRIDOR_CONTINENT_ID || isEnteringEiridor) {
+    if (!CONTINENT_ROUTES[continentId] || enteringContinentId) {
       return
     }
 
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault()
-      enterEiridor()
+      enterContinent(continentId)
     }
   }
 
@@ -403,7 +409,7 @@ function WorldMap() {
                   onMouseLeave={() => setActiveContinentId((current) => (current === continent.id ? null : current))}
                   onFocus={() => setActiveContinentId(continent.id)}
                   onBlur={() => setActiveContinentId((current) => (current === continent.id ? null : current))}
-                  onClick={continent.id === EIRIDOR_CONTINENT_ID ? enterEiridor : undefined}
+                  onClick={CONTINENT_ROUTES[continent.id] ? () => enterContinent(continent.id) : undefined}
                   onKeyDown={(event) => handleContinentKeyDown(event, continent.id)}
                 />
               )}
