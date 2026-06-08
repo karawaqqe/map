@@ -1,7 +1,6 @@
 import { memo, useCallback, useEffect, useState } from 'react'
 import { FiArrowLeft, FiSun } from 'react-icons/fi'
-import { useNavigate } from 'react-router-dom'
-import { ROUTE_TRANSITION_EVENT } from '../../components/Layout/Layout'
+import { ROUTE_TRANSITION_EVENT } from '../../constants/routeTransition'
 import { birdImage, cloudImages } from '../../data/continents'
 import { eiridorMapImage, eiridorMapSize, eiridorRegions } from '../../data/eiridor'
 import { buildHitboxPath } from '../../utils/mapHitbox'
@@ -9,6 +8,8 @@ import styles from './Eiridor.module.scss'
 
 const WORLD_NAVIGATION_DELAY = 1150
 const WORLD_TRANSITION_OPENING_DURATION = 1100
+const REGION_NAVIGATION_DELAY = 1150
+const REGION_TRANSITION_OPENING_DURATION = 1100
 const CLOUDS = [
   { image: 0, x: -8, y: -18, scale: 0.78, duration: 108, delay: -18, driftX: 25, driftY: 3, opacity: 0.18 },
   { image: 3, x: 18, y: -13, scale: 0.68, duration: 134, delay: -58, driftX: -20, driftY: 5, opacity: 0.16 },
@@ -128,13 +129,24 @@ function Eiridor() {
   const [quality, setQuality] = useState(getInitialQuality)
   const [isQualityOpen, setIsQualityOpen] = useState(false)
   const [isReturningToWorld, setIsReturningToWorld] = useState(false)
-  const navigate = useNavigate()
+  const [isEnteringRegion, setIsEnteringRegion] = useState(false)
 
   const enterRegion = useCallback(
     (regionId) => {
-      navigate(`/region/${regionId}`)
+      if (isEnteringRegion) {
+        return
+      }
+
+      setIsEnteringRegion(true)
+      window.dispatchEvent(new CustomEvent(ROUTE_TRANSITION_EVENT, {
+        detail: {
+          to: `/region/${regionId}`,
+          navigationDelay: REGION_NAVIGATION_DELAY,
+          openingDuration: REGION_TRANSITION_OPENING_DURATION,
+        },
+      }))
     },
-    [navigate],
+    [isEnteringRegion],
   )
 
   useEffect(() => {

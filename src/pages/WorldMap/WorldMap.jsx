@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { FiSun } from 'react-icons/fi'
-import { ROUTE_TRANSITION_EVENT } from '../../components/Layout/Layout'
+import { ROUTE_TRANSITION_EVENT } from '../../constants/routeTransition'
 import { birdImage, birdSound, cloudImages, continents, mapSize, windSound, worldMapImage } from '../../data/continents'
 import { buildHitboxPath } from '../../utils/mapHitbox'
 import styles from './WorldMap.module.scss'

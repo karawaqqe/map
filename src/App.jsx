@@ -1,12 +1,12 @@
 import { lazy, Suspense } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import Layout from './components/Layout/Layout'
-import RegionMap from './pages/RegionMap/RegionMap'
-import CityMap from './pages/CityMap/CityMap'
 
 const WorldMap = lazy(() => import('./pages/WorldMap/WorldMap'))
 const Eiridor = lazy(() => import('./pages/Eiridor/Eiridor'))
 const HolyLight = lazy(() => import('./pages/HolyLight/HolyLight'))
+const RegionMap = lazy(() => import('./pages/RegionMap/RegionMap'))
+const CityMap = lazy(() => import('./pages/CityMap/CityMap'))
 
 function App() {
   return (

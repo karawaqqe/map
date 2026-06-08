@@ -1,7 +1,421 @@
 .page {
-  min-height: 60vh;
-  padding: 24px;
-  border: 1px solid var(--color-border);
+  position: relative;
+  width: 100vw;
+  min-height: 100vh;
+  overflow: hidden;
+  background: #050607;
+}
+
+.mapStage {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  cursor: grab;
+  touch-action: none;
+}
+
+.mapStage:active {
+  cursor: grabbing;
+}
+
+.mapLayer {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  transform-origin: center;
+  transition: transform 160ms ease;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  will-change: transform;
+}
+
+.mapSurface {
+  position: relative;
+  width: min(100%, 200vh);
+  max-height: 100%;
+  aspect-ratio: 2/1;
+}
+
+.regionMap {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  filter: brightness(calc(0.94 * var(--fx-brightness))) saturate(0.94);
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+
+.mapMarkers {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.mapMarker {
+  position: absolute;
+  left: var(--marker-x);
+  top: var(--marker-y);
+  width: clamp(18px, 1.12vw, 32px);
+  height: clamp(18px, 1.12vw, 32px);
+  opacity: calc(0.94 * var(--fx-opacity));
+  pointer-events: auto;
+  transform: translate(-50%, -50%) scale(1);
+  transform-origin: center;
+  transition: filter 180ms ease, opacity 180ms ease, transform 180ms cubic-bezier(0.18, 0.82, 0.24, 1);
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  will-change: transform;
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.76)) drop-shadow(0 0 7px rgba(255, 229, 149, 0.2));
+}
+
+.mapMarker:hover,
+.mapMarker:focus-visible {
+  opacity: 1;
+  outline: none;
+  transform: translate(-50%, -50%) scale(1.16);
+  filter: drop-shadow(0 3px 3px rgba(0, 0, 0, 0.82)) drop-shadow(0 0 10px rgba(255, 229, 149, 0.32));
+}
+
+.churchMarker {
+  width: clamp(20px, 1.18vw, 34px);
+  height: clamp(20px, 1.18vw, 34px);
+}
+
+.tavernMarker {
+  width: clamp(19px, 1.1vw, 31px);
+  height: clamp(19px, 1.1vw, 31px);
+}
+
+.ambientAudio {
+  display: none;
+}
+
+.atmosphereLayer,
+.cloudImages,
+.birdLayer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.atmosphereLayer {
+  z-index: 2;
+}
+
+.cloudImage {
+  position: absolute;
+  left: var(--cloud-x);
+  top: var(--cloud-y);
+  width: min(34vw, 560px);
+  max-width: none;
+  height: auto;
+  opacity: calc(var(--cloud-opacity) * var(--fx-particles));
+  filter: brightness(calc(0.98 * var(--fx-brightness))) contrast(1.04) saturate(0.4) sepia(0.03);
+  mix-blend-mode: screen;
+  transform: translate3d(0, 0, 0) scale(var(--cloud-scale));
+  transform-origin: center;
+  animation: drakenholmCloudSail calc(var(--cloud-duration) * var(--fx-speed)) linear infinite;
+  animation-delay: var(--cloud-delay);
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  will-change: transform;
+}
+
+.birdFlock {
+  position: absolute;
+  top: var(--flock-y);
+  left: -10%;
+  width: 100px;
+  height: 48px;
+  opacity: calc(0.68 * var(--fx-particles) * var(--fx-opacity));
+  animation: drakenholmBirdFlock calc(var(--flock-duration) * var(--fx-speed)) linear infinite;
+  animation-delay: var(--flock-delay);
+  will-change: transform;
+}
+
+.bird {
+  position: absolute;
+  left: var(--bird-x);
+  top: var(--bird-y);
+  width: 22px;
+  height: auto;
+  filter: brightness(0) contrast(1.75) drop-shadow(0 0 1px rgba(236, 228, 205, 0.32)) drop-shadow(0 3px 5px rgba(0, 0, 0, 0.62));
+  transform: rotate(var(--bird-rotate)) scale(var(--bird-scale));
+  transform-origin: center;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+
+.backButton,
+.cameraButton {
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(238, 216, 159, 0.34);
+  color: rgba(255, 236, 188, 0.96);
+  background: radial-gradient(circle at 34% 26%, rgba(255, 229, 145, 0.2), transparent 38%), linear-gradient(145deg, rgba(37, 28, 18, 0.86), rgba(8, 12, 15, 0.84));
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.42), inset 0 0 18px rgba(255, 226, 160, 0.1);
+  cursor: pointer;
+  transition: border-color 180ms ease, box-shadow 180ms ease, opacity 180ms ease, transform 180ms ease;
+}
+
+.backButton {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  z-index: 4;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+}
+
+.qualityPanel {
+  position: absolute;
+  left: 24px;
+  bottom: 24px;
+  z-index: 4;
+  display: grid;
+  justify-items: start;
+  pointer-events: auto;
+}
+
+.qualityToggle {
+  position: relative;
+  z-index: 2;
+  width: 76px;
+  height: 76px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(238, 216, 159, 0.34);
+  border-radius: 50%;
+  color: rgba(255, 236, 188, 0.96);
+  background: radial-gradient(circle at 34% 26%, rgba(255, 229, 145, 0.22), transparent 38%), linear-gradient(145deg, rgba(37, 28, 18, 0.86), rgba(8, 12, 15, 0.84));
+  box-shadow: 0 0 calc(20px * var(--fx-shadow)) rgba(255, 210, 113, 0.2), 0 12px 28px rgba(0, 0, 0, 0.42), inset 0 0 18px rgba(255, 226, 160, 0.1);
+  cursor: pointer;
+  pointer-events: auto;
+  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.qualityToggle svg {
+  width: 32px;
+  height: 32px;
+  filter: drop-shadow(0 0 12px rgba(255, 217, 126, 0.54));
+}
+
+.qualityPanel:hover .qualityToggle,
+.qualityPanel:focus-within .qualityToggle,
+.qualityPanelOpen .qualityToggle {
+  border-color: rgba(255, 219, 136, 0.66);
+  box-shadow: 0 15px 34px rgba(0, 0, 0, 0.48), 0 0 calc(26px * var(--fx-shadow)) rgba(255, 210, 113, 0.26), inset 0 0 22px rgba(255, 226, 160, 0.14);
+  transform: translateY(-1px);
+}
+
+.qualityMenu {
+  position: absolute;
+  left: 0;
+  bottom: 90px;
+  width: 320px;
+  padding: 20px;
+  border: 1px solid rgba(226, 204, 153, 0.22);
   border-radius: 8px;
-  background: var(--color-surface);
+  background: linear-gradient(180deg, rgba(29, 26, 22, 0.88), rgba(8, 13, 16, 0.84)), radial-gradient(ellipse at 20% 0%, rgba(255, 219, 137, 0.12), transparent 58%);
+  box-shadow: 0 22px 48px rgba(0, 0, 0, 0.52), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  opacity: 0;
+  pointer-events: none;
+  font-family: "MedievalSharp", "Georgia", serif;
+  transform: translateY(14px) scale(0.98);
+  transform-origin: left bottom;
+  transition: opacity 220ms ease, transform 260ms cubic-bezier(0.18, 0.82, 0.24, 1);
+}
+
+.qualityPanel:hover .qualityMenu,
+.qualityPanel:focus-within .qualityMenu,
+.qualityPanelOpen .qualityMenu {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+}
+
+.qualityTitle {
+  display: block;
+  margin: 0 0 14px;
+  color: rgba(242, 226, 191, 0.72);
+  font-family: "MedievalSharp", "Georgia", serif;
+  font-size: 16px;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.qualityOptions {
+  display: grid;
+  gap: 10px;
+}
+
+.qualityOption {
+  min-height: 54px;
+  padding: 0 18px;
+  border: 1px solid rgba(215, 197, 151, 0.14);
+  border-radius: 6px;
+  color: rgba(237, 229, 207, 0.72);
+  background: rgba(255, 255, 255, 0.035);
+  cursor: pointer;
+  font-family: "MedievalSharp", "Georgia", serif;
+  font-size: 22px;
+  line-height: 1;
+  text-align: left;
+  transition: background 180ms ease, border-color 180ms ease, color 180ms ease, box-shadow 180ms ease;
+}
+
+.qualityOption:hover,
+.qualityOption:focus-visible {
+  border-color: rgba(255, 218, 137, 0.3);
+  color: rgba(255, 242, 210, 0.92);
+  background: rgba(255, 223, 157, 0.08);
+  outline: none;
+}
+
+.qualityOptionActive {
+  border-color: rgba(255, 210, 113, 0.5);
+  color: rgba(255, 235, 186, 0.98);
+  background: rgba(255, 211, 119, 0.14);
+  box-shadow: inset 0 0 12px rgba(255, 207, 111, 0.08);
+}
+
+.backButton svg,
+.cameraButton svg {
+  width: 25px;
+  height: 25px;
+  filter: drop-shadow(0 0 10px rgba(255, 217, 126, 0.46));
+}
+
+.backButton:hover,
+.backButton:focus-visible,
+.cameraButton:hover,
+.cameraButton:focus-visible {
+  border-color: rgba(255, 219, 136, 0.66);
+  box-shadow: 0 15px 34px rgba(0, 0, 0, 0.48), 0 0 22px rgba(255, 210, 113, 0.22), inset 0 0 20px rgba(255, 226, 160, 0.13);
+  outline: none;
+  transform: translateY(-1px);
+}
+
+.cameraControls {
+  position: absolute;
+  left: 50%;
+  bottom: 24px;
+  z-index: 4;
+  display: grid;
+  grid-template-columns: 46px minmax(112px, auto) 46px;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  border: 1px solid rgba(226, 204, 153, 0.22);
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(29, 26, 22, 0.88), rgba(8, 13, 16, 0.84)), radial-gradient(ellipse at 50% 0%, rgba(255, 219, 137, 0.12), transparent 58%);
+  box-shadow: 0 22px 48px rgba(0, 0, 0, 0.52), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  transform: translateX(-50%);
+}
+
+.cameraButton {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+}
+
+.backButton:disabled,
+.cameraButton:disabled {
+  cursor: default;
+  opacity: 0.38;
+  transform: none;
+}
+
+.regionName {
+  color: #f6e7bd;
+  font-family: "UnifrakturMaguntia", "Georgia", serif;
+  font-size: 24px;
+  line-height: 1;
+  text-align: center;
+  text-shadow: 0 2px 2px rgba(0, 0, 0, 0.9), 0 0 7px rgba(50, 27, 8, 0.82), 0 0 14px rgba(255, 213, 128, 0.26);
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  white-space: nowrap;
+}
+
+@keyframes drakenholmCloudSail {
+  from {
+    transform: translate3d(0, 0, 0) scale(var(--cloud-scale));
+  }
+  to {
+    transform: translate3d(var(--cloud-drift-x), var(--cloud-drift-y), 0) scale(var(--cloud-scale));
+  }
+}
+@keyframes drakenholmBirdFlock {
+  from {
+    transform: translate3d(-8vw, -1vh, 0);
+  }
+  to {
+    transform: translate3d(116vw, 3vh, 0);
+  }
+}
+@media (max-width: 560px) {
+  .backButton {
+    top: 14px;
+    left: 14px;
+    width: 48px;
+    height: 48px;
+  }
+  .qualityPanel {
+    left: 14px;
+    bottom: 82px;
+  }
+  .qualityToggle {
+    width: 58px;
+    height: 58px;
+  }
+  .qualityToggle svg {
+    width: 26px;
+    height: 26px;
+  }
+  .qualityMenu {
+    bottom: 70px;
+    width: min(292px, 100vw - 28px);
+    padding: 16px;
+  }
+  .cameraControls {
+    bottom: 14px;
+    grid-template-columns: 42px minmax(96px, auto) 42px;
+    gap: 8px;
+    max-width: calc(100vw - 28px);
+  }
+  .cameraButton {
+    width: 42px;
+    height: 42px;
+  }
+  .regionName {
+    font-size: 20px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mapLayer,
+  .mapMarker,
+  .cloudImage,
+  .birdFlock,
+  .backButton,
+  .qualityToggle,
+  .qualityMenu,
+  .cameraButton {
+    transition: none;
+  }
 }/*# sourceMappingURL=RegionMap.module.css.map */

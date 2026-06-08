@@ -1,11 +1,12 @@
 import { memo, useCallback, useEffect, useState } from 'react'
 import { FiArrowLeft, FiSun } from 'react-icons/fi'
 import { useNavigate } from 'react-router-dom'
-import { ROUTE_TRANSITION_EVENT } from '../../components/Layout/Layout'
+import { ROUTE_TRANSITION_EVENT } from '../../constants/routeTransition'
 import { birdImage, cloudImages } from '../../data/continents'
 import { holyLightMapImage, holyLightMapSize, holyLightRegions } from '../../data/holylight'
 import { buildHitboxPath } from '../../utils/mapHitbox'
 import styles from '../Eiridor/Eiridor.module.scss'
+import capitalIconUrl from '../../../svg/Capital/holy_capital_sword_shield.svg'
 
 const WORLD_NAVIGATION_DELAY = 1150
 const WORLD_TRANSITION_OPENING_DURATION = 1100
@@ -327,12 +328,17 @@ function HolyLight() {
                 height={region.label.height}
               >
                 <div
-                  className={styles.capitalBadge}
+                  className={`${styles.capitalBadge} ${
+                    region.id === 'solmier' ? styles.capitalBadgeWithIcon : ''
+                  }`}
                   style={{
                     '--capital-size': `${region.label.size}px`,
                   }}
                 >
                   <span className={styles.capitalName}>{region.capitalName}</span>
+                  {region.id === 'solmier' && (
+                    <img className={styles.capitalIcon} src={capitalIconUrl} alt="" />
+                  )}
                 </div>
               </foreignObject>
             ))}
