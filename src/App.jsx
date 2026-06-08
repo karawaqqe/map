@@ -7,6 +7,8 @@ const Eiridor = lazy(() => import('./pages/Eiridor/Eiridor'))
 const HolyLight = lazy(() => import('./pages/HolyLight/HolyLight'))
 const RegionMap = lazy(() => import('./pages/RegionMap/RegionMap'))
 const CityMap = lazy(() => import('./pages/CityMap/CityMap'))
+const Shrine = lazy(() => import('./pages/Shrine/Shrine'))
+const Spindel = lazy(() => import('./pages/Spindel/Spindel'))
 
 function App() {
   return (
@@ -16,6 +18,8 @@ function App() {
           <Route path="/" element={<WorldMap />} />
           <Route path="/eiridor" element={<Eiridor />} />
           <Route path="/holy-light" element={<HolyLight />} />
+          <Route path="/shrine" element={<Shrine />} />
+          <Route path="/spindel" element={<Spindel />} />
           <Route path="/region/:regionId" element={<RegionMap />} />
           <Route path="/city/:cityId" element={<CityMap />} />
         </Route>

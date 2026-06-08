@@ -9,7 +9,13 @@ const TRANSITION_CLOUDS = [
   { image: 5, x: 36, y: 34, scale: 1.56, duration: 5400, delay: 120 },
 ]
 
-function FogTransition({ mode = 'closing' }) {
+function FogTransition({ mode = 'closing', variant = 'clouds' }) {
+  if (variant === 'black') {
+    return (
+      <div className={`${styles.transition} ${styles.blackTransition} ${styles[mode]}`} aria-hidden="true" />
+    )
+  }
+
   return (
     <div className={`${styles.transition} ${styles[mode]}`} aria-hidden="true">
       {/*

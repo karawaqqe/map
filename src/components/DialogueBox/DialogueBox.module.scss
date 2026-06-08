@@ -1,0 +1,387 @@
+.dialoguePanel {
+	position: absolute;
+	left: 50%;
+	bottom: clamp(50px, 4vh, 70px);
+	z-index: 4;
+	width: min(92vw, 1680px);
+	color: rgba(239, 249, 255, 0.96);
+	filter: drop-shadow(0 24px 36px rgba(0, 0, 0, 0.4))
+		drop-shadow(0 0 22px rgba(120, 198, 255, 0.12));
+	transform: translateX(-50%);
+}
+
+.dialogueFrame {
+	position: absolute;
+	inset: 0;
+	z-index: 0;
+	width: 100%;
+	height: 180%;
+	object-fit: fill;
+	pointer-events: none;
+	user-select: none;
+	top: -90px;
+}
+
+.dialogueContent {
+	position: relative;
+	z-index: 1;
+	display: grid;
+	grid-template-rows: auto clamp(190px, 24vh, 300px) minmax(58px, auto);
+	gap: clamp(14px, 2vh, 26px);
+}
+
+.speakerRow {
+	min-width: 0;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 18px;
+}
+
+.speakerName {
+	min-width: 0;
+	overflow: hidden;
+	color: rgba(248, 253, 255, 0.98);
+	font-family: "UnifrakturMaguntia", "Georgia", serif;
+	font-size: clamp(30px, 3vw, 50px);
+	line-height: 1;
+	letter-spacing: 0;
+	text-overflow: ellipsis;
+	text-shadow:
+		0 0 8px rgba(255, 255, 255, 0.48),
+		0 0 18px rgba(157, 220, 255, 0.36),
+		0 3px 10px rgba(0, 0, 0, 0.88);
+	white-space: nowrap;
+}
+
+.textFrame {
+	position: relative;
+	min-height: 0;
+}
+
+.dialogueTools {
+	display: flex;
+	gap: 8px;
+	flex: 0 0 auto;
+}
+
+.toolButton {
+	min-height: 36px;
+	padding: 0 14px;
+	border: 1px solid rgba(188, 226, 255, 0.22);
+	border-radius: 4px;
+	color: rgba(232, 246, 255, 0.82);
+	background: rgba(8, 16, 22, 0.48);
+	cursor: pointer;
+	font-family: "MedievalSharp", "Georgia", serif;
+	font-size: 16px;
+	letter-spacing: 0;
+}
+
+.toolButton:hover,
+.toolButton:focus-visible {
+	border-color: rgba(210, 238, 255, 0.5);
+	color: rgba(248, 253, 255, 0.96);
+	outline: none;
+}
+
+.dialogueLines {
+	position: absolute;
+	inset: 0;
+	z-index: 1;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: clamp(9px, 1.15vh, 15px);
+	overflow-x: hidden;
+	overflow-y: auto;
+	padding: clamp(48px, 5vh, 76px) clamp(92px, 7.8vw, 156px)
+		clamp(42px, 4.4vh, 68px);
+	box-sizing: border-box;
+	scroll-behavior: smooth;
+	animation: segmentIn 420ms cubic-bezier(0.18, 0.82, 0.24, 1);
+	scrollbar-color: rgba(171, 219, 255, 0.28) transparent;
+	scrollbar-width: thin;
+}
+
+.dialogueLine {
+	max-width: 100%;
+	margin: 0;
+	hyphens: auto;
+	overflow-wrap: anywhere;
+	word-break: normal;
+	color: rgba(239, 249, 255, 0.96);
+	font-family: "MedievalSharp", "Georgia", serif;
+	font-size: clamp(19px, 1.75vw, 29px);
+	line-height: 1.28;
+	letter-spacing: 0;
+	text-align: left;
+	text-shadow:
+		0 0 8px rgba(255, 255, 255, 0.42),
+		0 0 18px rgba(157, 220, 255, 0.3),
+		0 3px 10px rgba(0, 0, 0, 0.88);
+}
+
+.activeLine::after {
+	content: "";
+	display: inline-block;
+	width: 0.5em;
+	height: 1em;
+	margin-left: 0.12em;
+	border-right: 2px solid rgba(239, 249, 255, 0.82);
+	transform: translateY(0.16em);
+	animation: caretPulse 720ms steps(2, end) infinite;
+}
+
+.historyPanel {
+	position: fixed;
+	bottom: 4vh;
+	right: 1vw;
+	z-index: 5;
+	width: 320px;
+	max-height: 60vh;
+	padding: 18px 16px 16px;
+	border: 1px solid rgba(188, 226, 255, 0.2);
+	border-radius: 6px;
+	background:
+		linear-gradient(180deg, rgba(9, 16, 21, 0.82), rgba(2, 5, 8, 0.88)),
+		radial-gradient(
+			ellipse at 50% 0%,
+			rgba(120, 198, 255, 0.14),
+			transparent 68%
+		);
+	backdrop-filter: blur(8px);
+	box-shadow:
+		0 20px 46px rgba(0, 0, 0, 0.5),
+		inset 0 1px 0 rgba(255, 255, 255, 0.06),
+		inset 0 0 32px rgba(77, 145, 190, 0.08);
+	animation: archiveIn 360ms cubic-bezier(0.18, 0.82, 0.24, 1);
+}
+
+.historyHeader {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	margin-bottom: 12px;
+	padding-bottom: 10px;
+	border-bottom: 1px solid rgba(188, 226, 255, 0.14);
+}
+
+.historyTitle {
+	color: rgba(248, 253, 255, 0.9);
+	font-family: "MedievalSharp", "Georgia", serif;
+	font-size: 20px;
+	letter-spacing: 0;
+}
+
+.historySigil {
+	color: rgba(171, 219, 255, 0.44);
+	font-family: "Georgia", serif;
+	font-size: 18px;
+	line-height: 1;
+	text-shadow: 0 0 12px rgba(157, 220, 255, 0.32);
+}
+
+.historyLines {
+	max-height: calc(60vh - 72px);
+	overflow: auto;
+	padding-right: 10px;
+	scroll-behavior: smooth;
+	scrollbar-color: rgba(171, 219, 255, 0.28) rgba(2, 5, 8, 0.18);
+	scrollbar-width: thin;
+}
+
+.historyLine {
+	margin: 0 0 14px;
+	padding: 0 0 12px;
+	border-bottom: 1px solid rgba(188, 226, 255, 0.08);
+	color: rgba(224, 239, 248, 0.8);
+	font-family: "Georgia", serif;
+	font-size: 15.5px;
+	line-height: 1.42;
+	letter-spacing: 0;
+	overflow-wrap: anywhere;
+}
+
+.historyLine span {
+	display: block;
+	margin-bottom: 2px;
+	color: rgba(246, 251, 255, 0.9);
+	font-family: "MedievalSharp", "Georgia", serif;
+}
+
+.optionsArea {
+	min-height: 58px;
+	display: flex;
+	align-items: end;
+	justify-content: flex-end;
+	padding-inline: clamp(86px, 7.6vw, 150px);
+}
+
+.options {
+	width: 100%;
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 10px;
+	animation: optionsIn 360ms ease both;
+}
+
+.optionsPlaceholder {
+	width: 100%;
+	min-height: 58px;
+}
+
+.option {
+	min-height: 44px;
+	padding: 8px 14px;
+	border: 1px solid rgba(188, 226, 255, 0.18);
+	border-radius: 4px;
+	color: rgba(229, 244, 255, 0.9);
+	background: linear-gradient(
+		180deg,
+		rgba(20, 34, 44, 0.54),
+		rgba(5, 9, 14, 0.58)
+	);
+	cursor: pointer;
+	font-family: "MedievalSharp", "Georgia", serif;
+	font-size: clamp(16px, 1.45vw, 21px);
+	line-height: 1.18;
+	letter-spacing: 0;
+	text-align: left;
+	overflow-wrap: anywhere;
+}
+
+.continueOption {
+	grid-column: 2;
+	justify-self: end;
+	min-width: min(220px, 100%);
+	text-align: center;
+}
+
+.option:hover,
+.option:focus-visible {
+	border-color: rgba(210, 238, 255, 0.5);
+	color: rgba(248, 253, 255, 0.98);
+	background: linear-gradient(
+		180deg,
+		rgba(42, 65, 80, 0.68),
+		rgba(8, 14, 20, 0.7)
+	);
+	outline: none;
+}
+
+.option:disabled {
+	cursor: default;
+	opacity: 0.44;
+}
+
+.dialogueAudio {
+	display: none;
+}
+
+@keyframes segmentIn {
+	from {
+		opacity: 0;
+		transform: translate3d(0, 14px, 0);
+	}
+
+	to {
+		opacity: 1;
+		transform: translate3d(0, 0, 0);
+	}
+}
+
+@keyframes optionsIn {
+	from {
+		opacity: 0;
+		transform: translateY(8px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes archiveIn {
+	from {
+		opacity: 0;
+		transform: translate3d(18px, 10px, 0);
+	}
+
+	to {
+		opacity: 1;
+		transform: translate3d(0, 0, 0);
+	}
+}
+
+@keyframes caretPulse {
+	0%,
+	45% {
+		opacity: 1;
+	}
+
+	46%,
+	100% {
+		opacity: 0;
+	}
+}
+
+@media (max-width: 720px) {
+	.dialoguePanel {
+		bottom: clamp(12px, 3vh, 24px);
+		width: 96vw;
+	}
+
+	.dialogueContent {
+		grid-template-rows: auto clamp(176px, 28vh, 260px) minmax(52px, auto);
+		gap: 12px;
+	}
+
+	.speakerRow {
+		align-items: flex-start;
+	}
+
+	.speakerName {
+		font-size: 30px;
+	}
+
+	.dialogueLine {
+		font-size: 18px;
+		line-height: 1.32;
+	}
+
+	.dialogueLines {
+		padding: 48px 38px 40px;
+	}
+
+	.options {
+		grid-template-columns: 1fr;
+	}
+
+	.optionsArea {
+		padding-inline: 36px;
+	}
+
+	.optionsArea,
+	.optionsPlaceholder {
+		min-height: 52px;
+	}
+
+	.continueOption {
+		grid-column: 1;
+	}
+
+	.historyPanel {
+		top: 12vh;
+		right: 50%;
+		transform: translateX(50%);
+		width: min(340px, calc(100vw - 28px));
+		max-height: 42vh;
+	}
+
+	.historyLines {
+		max-height: calc(42vh - 72px);
+	}
+}

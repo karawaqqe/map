@@ -22,9 +22,11 @@ const LEGEND_ITEMS = [
 
 function Layout() {
   const [transitionMode, setTransitionMode] = useState('idle')
+  const [transitionVariant, setTransitionVariant] = useState('clouds')
   const [isLegendOpen, setIsLegendOpen] = useState(false)
   const location = useLocation()
   const navigate = useNavigate()
+  const isShrineRoute = location.pathname === '/shrine'
   const legendRef = useRef(null)
   const navigationTimeoutRef = useRef(null)
   const cleanupTimeoutRef = useRef(null)
@@ -44,6 +46,7 @@ function Layout() {
       clearTransitionTimeouts()
       targetPathRef.current = null
       hasNavigatedRef.current = false
+      setTransitionVariant('clouds')
       setTransitionMode('idle')
     }
 
@@ -52,16 +55,22 @@ function Layout() {
         to,
         navigationDelay = DEFAULT_NAVIGATION_DELAY,
         openingDuration = DEFAULT_OPENING_DURATION,
+        variant = 'clouds',
       } = event.detail ?? {}
 
       if (!to) {
         return
       }
 
+      if (to === '/shrine') {
+        setIsLegendOpen(false)
+      }
+
       clearTransitionTimeouts()
       targetPathRef.current = to
       openingDurationRef.current = openingDuration
       hasNavigatedRef.current = false
+      setTransitionVariant(variant)
       setTransitionMode('closing')
 
       navigationTimeoutRef.current = window.setTimeout(() => {
@@ -100,6 +109,7 @@ function Layout() {
       window.clearTimeout(fallbackTimeoutRef.current)
       targetPathRef.current = null
       hasNavigatedRef.current = false
+      setTransitionVariant('clouds')
       setTransitionMode('idle')
     }, openingDurationRef.current)
 
@@ -144,7 +154,7 @@ function Layout() {
 
   return (
     <div className={styles.layout}>
-      <div
+      {!isShrineRoute && <div
         ref={legendRef}
         className={`${styles.legend} ${isLegendOpen ? styles.legendOpen : ''}`}
         onBlur={closeLegendOnBlur}
@@ -176,11 +186,11 @@ function Layout() {
             ))}
           </ul>
         </div>
-      </div>
+      </div>}
       <main className={styles.main}>
         <Outlet />
       </main>
-      {transitionMode !== 'idle' && <FogTransition mode={transitionMode} />}
+      {transitionMode !== 'idle' && <FogTransition mode={transitionMode} variant={transitionVariant} />}
     </div>
   )
 }

@@ -9,6 +9,7 @@ const EIRIDOR_CONTINENT_ID = 'eiridors'
 const CONTINENT_ROUTES = {
   [EIRIDOR_CONTINENT_ID]: '/eiridor',
   holyLights: '/holy-light',
+  spindel: '/shrine',
 }
 const CONTINENT_NAVIGATION_DELAY = 1150
 const CONTINENT_TRANSITION_OPENING_DURATION = 1100
@@ -382,7 +383,7 @@ function WorldMap() {
                 '--continent-glow-strength': continent.glowStrength,
               }}
             >
-              <title>{continent.name}</title>
+              {!continent.hideInfo && <title>{continent.name}</title>}
               <g className={styles.fabricLayer}>
                 {hitboxes[continent.id] && (
                   <path className={styles.glow} d={hitboxes[continent.id]} />
@@ -403,11 +404,11 @@ function WorldMap() {
                   aria-label={continent.name}
                   tabIndex="0"
                   focusable="true"
-                  onPointerEnter={() => setActiveContinentId(continent.id)}
+                  onPointerEnter={() => setActiveContinentId(continent.hideInfo ? null : continent.id)}
                   onPointerLeave={() => setActiveContinentId((current) => (current === continent.id ? null : current))}
-                  onMouseEnter={() => setActiveContinentId(continent.id)}
+                  onMouseEnter={() => setActiveContinentId(continent.hideInfo ? null : continent.id)}
                   onMouseLeave={() => setActiveContinentId((current) => (current === continent.id ? null : current))}
-                  onFocus={() => setActiveContinentId(continent.id)}
+                  onFocus={() => setActiveContinentId(continent.hideInfo ? null : continent.id)}
                   onBlur={() => setActiveContinentId((current) => (current === continent.id ? null : current))}
                   onClick={CONTINENT_ROUTES[continent.id] ? () => enterContinent(continent.id) : undefined}
                   onKeyDown={(event) => handleContinentKeyDown(event, continent.id)}
@@ -426,10 +427,6 @@ function WorldMap() {
           >
             <div className={styles.atmosphere}>
               {/* All atmosphere layers are CSS-only and ignore pointer events. */}
-              <div className={styles.oceanDepth} />
-              <div className={styles.oceanCurrent} />
-              <div className={styles.waterShimmer} />
-              <div className={styles.lightSweeps} />
               <div className={styles.birdLayer}>
                 {BIRD_FLOCKS.map((flock) => (
                   <div
@@ -533,7 +530,7 @@ function WorldMap() {
           </foreignObject>
 
           <g className={styles.continentOverlayLayer} aria-hidden="true">
-            {continents.map((continent) => (
+            {continents.filter((continent) => !continent.hideInfo).map((continent) => (
               <foreignObject
                 key={`overlay-${continent.id}`}
                 data-continent-id={continent.id}

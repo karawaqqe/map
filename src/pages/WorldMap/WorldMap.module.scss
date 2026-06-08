@@ -163,10 +163,6 @@
 }
 
 /* Lightweight CSS overlays: no canvas loop, no particle engine. */
-.oceanDepth,
-.oceanCurrent,
-.waterShimmer,
-.lightSweeps,
 .birdLayer,
 .cloudShadow,
 .cloudImageShadows,
@@ -180,78 +176,12 @@
   pointer-events: none;
 }
 
-.oceanDepth,
-.oceanCurrent,
-.waterShimmer,
-.lightSweeps,
 .cloudShadow,
 .colorGrade,
 .vignette {
   transition:
     filter 420ms ease,
     opacity 420ms ease;
-}
-
-.oceanDepth {
-  opacity: calc(0.2 * var(--fx-opacity));
-  mix-blend-mode: multiply;
-  background:
-    radial-gradient(ellipse at 22% 54%, rgba(2, 17, 26, 0.46), transparent 42%),
-    radial-gradient(ellipse at 66% 46%, rgba(3, 23, 34, 0.38), transparent 48%),
-    linear-gradient(180deg, rgba(15, 35, 44, 0.12), transparent 44%, rgba(5, 12, 20, 0.18));
-}
-
-.oceanCurrent {
-  opacity: calc(0.1 * var(--fx-opacity));
-  mix-blend-mode: soft-light;
-  background:
-    radial-gradient(ellipse at 18% 38%, rgba(122, 181, 190, 0.11), transparent 34%),
-    radial-gradient(ellipse at 70% 48%, rgba(192, 226, 218, 0.07), transparent 38%),
-    radial-gradient(ellipse at 42% 70%, rgba(73, 126, 145, 0.1), transparent 42%),
-    radial-gradient(ellipse at 86% 26%, rgba(141, 193, 198, 0.07), transparent 34%);
-  background-size:
-    920px 460px,
-    1180px 600px,
-    840px 500px,
-    1320px 720px;
-  animation: oceanCurrent calc(92s * var(--fx-speed)) linear infinite;
-  transform: translate3d(0, 0, 0);
-  will-change: background-position;
-}
-
-.waterShimmer {
-  opacity: calc(0.12 * var(--fx-opacity));
-  mix-blend-mode: screen;
-  background:
-    radial-gradient(ellipse at 16% 42%, rgba(142, 214, 204, 0.13), rgba(84, 174, 174, 0.07) 34%, transparent 68%),
-    radial-gradient(ellipse at 64% 36%, rgba(190, 228, 218, 0.1), rgba(84, 167, 176, 0.05) 32%, transparent 70%),
-    radial-gradient(ellipse at 48% 68%, rgba(94, 169, 183, 0.12), rgba(69, 138, 160, 0.05) 36%, transparent 72%),
-    linear-gradient(116deg, transparent 20%, rgba(96, 209, 185, 0.04) 34%, rgba(155, 232, 211, 0.08) 48%, rgba(95, 201, 187, 0.04) 62%, transparent 78%);
-  background-size:
-    480px 300px,
-    680px 390px,
-    860px 500px,
-    760px 420px;
-  filter:
-    blur(calc(0.6px * var(--fx-blur)))
-    brightness(var(--fx-brightness));
-  animation: waterDrift calc(58s * var(--fx-speed)) linear infinite;
-  transform: translate3d(0, 0, 0);
-  will-change: background-position;
-}
-
-.lightSweeps {
-  opacity: calc(0.055 * var(--fx-opacity) * var(--fx-brightness));
-  mix-blend-mode: soft-light;
-  background:
-    radial-gradient(ellipse at 30% 36%, rgba(136, 177, 181, 0.14), transparent 42%),
-    radial-gradient(ellipse at 76% 66%, rgba(74, 128, 145, 0.11), transparent 46%);
-  background-size:
-    1160px 560px,
-    1440px 680px;
-  animation: lightSweep calc(108s * var(--fx-speed)) linear infinite;
-  transform: translate3d(0, 0, 0);
-  will-change: background-position;
 }
 
 .birdLayer {
@@ -577,56 +507,6 @@
   }
 }
 
-@keyframes waterDrift {
-  from {
-    background-position:
-      0 0,
-      0 0,
-      0 0,
-      0 0;
-  }
-
-  to {
-    background-position:
-      480px 300px,
-      -680px 390px,
-      860px -500px,
-      -760px 420px;
-  }
-}
-
-@keyframes oceanCurrent {
-  from {
-    background-position:
-      0 0,
-      0 0,
-      0 0,
-      0 0;
-  }
-
-  to {
-    background-position:
-      920px -460px,
-      -1180px 600px,
-      840px 500px,
-      -1320px -720px;
-  }
-}
-
-@keyframes lightSweep {
-  from {
-    background-position:
-      -860px -160px,
-      1160px 220px;
-  }
-
-  to {
-    background-position:
-      860px 160px,
-      -1160px -220px;
-  }
-}
-
 @keyframes shadowSail {
   from {
     transform: translate3d(8%, -2%, 0);
@@ -723,9 +603,6 @@
   }
 
   .map,
-  .lightSweeps,
-  .oceanCurrent,
-  .waterShimmer,
   .birdFlock,
   .cloudShadow,
   .cloudImage,

@@ -23,21 +23,18 @@
 .mapLayer {
   position: absolute;
   inset: 0;
-  display: grid;
-  place-items: center;
+}
+
+.mapSurface {
+  position: absolute;
+  width: max(100vw, 200vh);
+  aspect-ratio: 2/1;
   transform-origin: center;
   transition: transform 160ms ease;
   -webkit-user-select: none;
      -moz-user-select: none;
           user-select: none;
   will-change: transform;
-}
-
-.mapSurface {
-  position: relative;
-  width: min(100%, 200vh);
-  max-height: 100%;
-  aspect-ratio: 2/1;
 }
 
 .regionMap {
@@ -56,7 +53,7 @@
 .mapMarkers {
   position: absolute;
   inset: 0;
-  z-index: 1;
+  z-index: 2;
   pointer-events: none;
 }
 
@@ -66,7 +63,7 @@
   top: var(--marker-y);
   width: clamp(18px, 1.12vw, 32px);
   height: clamp(18px, 1.12vw, 32px);
-  opacity: calc(0.94 * var(--fx-opacity));
+  opacity: 0.94;
   pointer-events: auto;
   transform: translate(-50%, -50%) scale(1);
   transform-origin: center;
@@ -86,6 +83,15 @@
   filter: drop-shadow(0 3px 3px rgba(0, 0, 0, 0.82)) drop-shadow(0 0 10px rgba(255, 229, 149, 0.32));
 }
 
+:global(body.quality-performance) .mapMarker {
+  opacity: 0.68;
+}
+
+:global(body.quality-performance) .mapMarker:hover,
+:global(body.quality-performance) .mapMarker:focus-visible {
+  opacity: 0.9;
+}
+
 .churchMarker {
   width: clamp(20px, 1.18vw, 34px);
   height: clamp(20px, 1.18vw, 34px);
@@ -96,12 +102,23 @@
   height: clamp(19px, 1.1vw, 31px);
 }
 
+.forgeMarker {
+  width: clamp(20px, 1.16vw, 33px);
+  height: clamp(20px, 1.16vw, 33px);
+}
+
+.marketMarker {
+  width: clamp(20px, 1.14vw, 32px);
+  height: clamp(20px, 1.14vw, 32px);
+}
+
 .ambientAudio {
   display: none;
 }
 
-.atmosphereLayer,
+.mapAtmosphere,
 .cloudImages,
+.fogLayer,
 .birdLayer {
   position: absolute;
   inset: 0;
@@ -109,19 +126,59 @@
   pointer-events: none;
 }
 
-.atmosphereLayer {
+.mapAtmosphere {
+  z-index: 1;
+}
+
+.birdLayer {
+  z-index: 3;
+}
+
+.fogLayer {
+  z-index: 1;
+  opacity: 0.48;
+  mix-blend-mode: screen;
+}
+
+.cloudImages {
   z-index: 2;
+}
+
+.fogLayer::before,
+.fogLayer::after {
+  position: absolute;
+  content: "";
+  width: 46%;
+  height: 76%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 38% 48%, rgba(235, 238, 226, 0.24), transparent 55%), radial-gradient(ellipse at 62% 54%, rgba(235, 238, 226, 0.16), transparent 60%), radial-gradient(ellipse at 50% 50%, rgba(255, 255, 255, 0.1), transparent 70%);
+  filter: blur(calc(22px * var(--fx-blur)));
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+}
+
+.fogLayer::before {
+  left: -8%;
+  top: 58%;
+  animation: drakenholmFogDrift calc(94s * var(--fx-speed)) linear infinite;
+}
+
+.fogLayer::after {
+  right: -10%;
+  top: 20%;
+  opacity: 0.74;
+  animation: drakenholmFogDriftReverse calc(118s * var(--fx-speed)) linear infinite;
 }
 
 .cloudImage {
   position: absolute;
   left: var(--cloud-x);
   top: var(--cloud-y);
-  width: min(34vw, 560px);
+  width: 28%;
   max-width: none;
   height: auto;
   opacity: calc(var(--cloud-opacity) * var(--fx-particles));
-  filter: brightness(calc(0.98 * var(--fx-brightness))) contrast(1.04) saturate(0.4) sepia(0.03);
+  filter: brightness(calc(1.18 * var(--fx-brightness))) contrast(1.08) saturate(0.32) sepia(0.02);
   mix-blend-mode: screen;
   transform: translate3d(0, 0, 0) scale(var(--cloud-scale));
   transform-origin: center;
@@ -361,6 +418,22 @@
     transform: translate3d(var(--cloud-drift-x), var(--cloud-drift-y), 0) scale(var(--cloud-scale));
   }
 }
+@keyframes drakenholmFogDrift {
+  from {
+    transform: translate3d(-8%, 0, 0);
+  }
+  to {
+    transform: translate3d(74%, -8%, 0);
+  }
+}
+@keyframes drakenholmFogDriftReverse {
+  from {
+    transform: translate3d(10%, 0, 0);
+  }
+  to {
+    transform: translate3d(-66%, 10%, 0);
+  }
+}
 @keyframes drakenholmBirdFlock {
   from {
     transform: translate3d(-8vw, -1vh, 0);
@@ -408,9 +481,11 @@
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .mapLayer,
+  .mapSurface,
   .mapMarker,
   .cloudImage,
+  .fogLayer::before,
+  .fogLayer::after,
   .birdFlock,
   .backButton,
   .qualityToggle,

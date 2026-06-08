@@ -63,4 +63,15 @@ export const continents = [
     glowStrength: 1,
     overlay: { x: 364, y: 596, width: 180, height: 130, crestSize: 78 },
   },
+  {
+    id: 'spindel',
+    name: 'Spindel',
+    image: new URL('../../img/continents/Spindel/secret_continent.png', import.meta.url).href,
+    glowColor: '#d7f2ff',
+    glowFill: 'rgba(215, 242, 255, 0.08)',
+    glowOpacity: 0.94,
+    glowStrength: 1.32,
+    hideInfo: true,
+    overlay: { x: 0, y: 0, width: 1, height: 1, crestSize: 1 },
+  },
 ]

@@ -21,6 +21,16 @@
 	transition: opacity 1100ms ease-in-out;
 }
 
+.blackTransition {
+	background: #000;
+	animation: fadeToBlack 1150ms ease-in-out forwards;
+}
+
+.blackTransition.opening {
+	opacity: 1;
+	animation: fadeFromBlack 1100ms ease-in-out forwards;
+}
+
 .blurVeil,
 .fogMass,
 .fogMassDeep,
@@ -242,6 +252,26 @@
 @keyframes transitionVignette {
 	to {
 		opacity: 1;
+	}
+}
+
+@keyframes fadeToBlack {
+	from {
+		opacity: 0;
+	}
+
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes fadeFromBlack {
+	from {
+		opacity: 1;
+	}
+
+	to {
+		opacity: 0;
 	}
 }
 

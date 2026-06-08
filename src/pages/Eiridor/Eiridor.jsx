@@ -247,11 +247,6 @@ function Eiridor() {
             aria-hidden="true"
           >
             <div className={styles.atmosphere}>
-              {/*
-              <div className={styles.oceanCurrent} />
-              <div className={styles.waterShimmer} />
-              <div className={styles.lightSweeps} />
-              */}
               <div className={styles.birdLayer}>
                 {BIRD_FLOCKS.map((flock) => (
                   <div
