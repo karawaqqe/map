@@ -57,6 +57,7 @@ function getNodePages(node) {
 function DialogueBox({
 	clickSound,
 	dialogue,
+	enableSkip = false,
 	frameImage,
 	isOpen,
 	linePause = DEFAULT_LINE_PAUSE,
@@ -218,6 +219,26 @@ function DialogueBox({
 		return null;
 	}
 
+	const clearTypingTimers = () => {
+		timeoutIdsRef.current.forEach((timeoutId) =>
+			window.clearTimeout(timeoutId),
+		);
+		timeoutIdsRef.current = [];
+	};
+
+	const completeCurrentPage = () => {
+		clearTypingTimers();
+		setHistory((current) => [
+			...current,
+			...currentPage
+				.slice(shownLines.length)
+				.map((line) => ({ speaker: node.speaker, text: line.text })),
+		]);
+		setShownLines(currentPage.map((line) => line.text));
+		setTypedLine("");
+		setIsTyping(false);
+	};
+
 	const chooseOption = (option) => {
 		if (!canChoose) {
 			return;
@@ -249,6 +270,22 @@ function DialogueBox({
 		onAction(node.action);
 	};
 
+	const skipDialogue = () => {
+		if (isTyping || typedLine) {
+			completeCurrentPage();
+			return;
+		}
+
+		if (canContinue) {
+			continueDialogue();
+			return;
+		}
+
+		if (canContinueToAction) {
+			continueToAction();
+		}
+	};
+
 	return (
 		<>
 			<section className={styles.dialoguePanel} aria-live="polite">
@@ -273,6 +310,15 @@ function DialogueBox({
 							>
 								Log
 							</button>
+							{enableSkip && (
+								<button
+									className={styles.toolButton}
+									type="button"
+									onClick={skipDialogue}
+								>
+									Skip
+								</button>
+							)}
 							<button
 								className={styles.toolButton}
 								type="button"

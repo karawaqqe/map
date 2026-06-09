@@ -249,6 +249,7 @@ function Shrine() {
 				<DialogueBox
 					clickSound={dialogueClick}
 					dialogue={statueDialogue}
+					enableSkip
 					frameImage={dialogueWindow}
 					isOpen={isDialogueOpen}
 					linePause={680}

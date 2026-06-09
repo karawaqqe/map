@@ -26,7 +26,7 @@ function Layout() {
   const [isLegendOpen, setIsLegendOpen] = useState(false)
   const location = useLocation()
   const navigate = useNavigate()
-  const isShrineRoute = location.pathname === '/shrine'
+  const hidesLegend = location.pathname === '/shrine' || location.pathname === '/spindel'
   const legendRef = useRef(null)
   const navigationTimeoutRef = useRef(null)
   const cleanupTimeoutRef = useRef(null)
@@ -62,7 +62,7 @@ function Layout() {
         return
       }
 
-      if (to === '/shrine') {
+      if (to === '/shrine' || to === '/spindel') {
         setIsLegendOpen(false)
       }
 
@@ -154,7 +154,7 @@ function Layout() {
 
   return (
     <div className={styles.layout}>
-      {!isShrineRoute && <div
+      {!hidesLegend && <div
         ref={legendRef}
         className={`${styles.legend} ${isLegendOpen ? styles.legendOpen : ''}`}
         onBlur={closeLegendOnBlur}

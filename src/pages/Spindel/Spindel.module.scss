@@ -1,64 +1,223 @@
 .page {
-  position: relative;
-  width: 100vw;
-  min-height: 100vh;
-  overflow: hidden;
-  background: #020507;
+	position: relative;
+	width: 100vw;
+	height: 100vh;
+	min-height: 100vh;
+	overflow: hidden;
+	background: #020507;
 }
 
-.mapImage {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: brightness(0.9) saturate(0.96);
-  user-select: none;
+.ambientAudio {
+	display: none;
+}
+
+.mapStage {
+	position: fixed;
+	inset: 0;
+	width: 100vw;
+	height: 100vh;
+	overflow: hidden;
+	opacity: 0;
+	animation: spindelArrive 900ms ease-out 80ms forwards;
+}
+
+.mapStage::before {
+	position: absolute;
+	inset: -8vmax;
+	z-index: 2;
+	content: "";
+	pointer-events: none;
+	opacity: 0.36;
+	background:
+		radial-gradient(
+			ellipse at 38% 46%,
+			rgba(137, 179, 206, 0.18),
+			transparent 44%
+		),
+		radial-gradient(
+			ellipse at 66% 58%,
+			rgba(191, 174, 157, 0.14),
+			transparent 50%
+		);
+	mix-blend-mode: screen;
+}
+
+.map {
+	position: absolute;
+	inset: 0;
+	z-index: 1;
+	display: block;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	transform-origin: center;
+}
+
+.baseMap,
+.regionImage {
+	width: 1774px;
+	height: 887px;
+	user-select: none;
+}
+
+.baseMap {
+	pointer-events: none;
+	filter: brightness(0.72) saturate(0.84);
+}
+
+.region {
+	pointer-events: none;
+}
+
+.regionFloat {
+	pointer-events: none;
+	transform-box: fill-box;
+	transform-origin: center;
+	animation: spindelFloat 6400ms ease-in-out infinite;
+	animation-delay: var(--region-float-delay, 0ms);
+	will-change: transform;
+}
+
+.regionLift {
+	pointer-events: none;
+	transform-box: fill-box;
+	transform-origin: center;
+}
+
+.regionImage {
+	pointer-events: none;
+	transform-box: fill-box;
+	transform-origin: center;
+	filter: brightness(0.98) saturate(0.95)
+		drop-shadow(0 18px 18px rgba(0, 0, 0, 0.3));
+}
+
+.regionGlow {
+	fill: var(--region-glow-fill);
+	filter:
+		drop-shadow(
+			0 0 calc(9px * var(--region-glow-strength, 1))
+				color-mix(in srgb, var(--region-glow), transparent 0%)
+		)
+		drop-shadow(
+			0 0 calc(28px * var(--region-glow-strength, 1))
+				color-mix(in srgb, var(--region-glow), transparent 18%)
+		)
+		drop-shadow(
+			0 0 calc(48px * var(--region-glow-strength, 1))
+				color-mix(in srgb, var(--region-glow), transparent 46%)
+		);
+	mix-blend-mode: screen;
+	opacity: var(--region-glow-opacity, 0.5);
+	pointer-events: none;
+	transform-box: fill-box;
+	transform-origin: center;
 }
 
 .vignette {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background:
-    radial-gradient(ellipse at center, transparent 42%, rgba(0, 0, 0, 0.34) 76%, rgba(0, 0, 0, 0.72) 100%),
-    linear-gradient(180deg, rgba(0, 0, 0, 0.18), transparent 28%, rgba(0, 0, 0, 0.28));
+	position: absolute;
+	inset: 0;
+	z-index: 3;
+	pointer-events: none;
+	background:
+		radial-gradient(
+			ellipse at center,
+			transparent 42%,
+			rgba(0, 0, 0, 0.34) 76%,
+			rgba(0, 0, 0, 0.72) 100%
+		),
+		linear-gradient(
+			180deg,
+			rgba(0, 0, 0, 0.18),
+			transparent 28%,
+			rgba(0, 0, 0, 0.28)
+		);
 }
 
 .backButton {
-  position: absolute;
-  left: 34px;
-  top: 34px;
-  z-index: 3;
-  width: 76px;
-  height: 76px;
-  display: grid;
-  place-items: center;
-  border: 1px solid rgba(180, 221, 255, 0.26);
-  border-radius: 50%;
-  color: rgba(229, 246, 255, 0.92);
-  background:
-    radial-gradient(circle at 34% 28%, rgba(151, 211, 255, 0.16), transparent 40%),
-    linear-gradient(145deg, rgba(11, 21, 28, 0.78), rgba(2, 5, 8, 0.74));
-  box-shadow:
-    0 0 24px rgba(82, 170, 229, 0.16),
-    0 16px 34px rgba(0, 0, 0, 0.48),
-    inset 0 0 22px rgba(160, 222, 255, 0.08);
-  cursor: pointer;
+	position: absolute;
+	left: 34px;
+	top: 34px;
+	z-index: 4;
+	width: 76px;
+	height: 76px;
+	display: grid;
+	place-items: center;
+	border: 1px solid rgba(180, 221, 255, 0.26);
+	border-radius: 50%;
+	color: rgba(229, 246, 255, 0.92);
+	background:
+		radial-gradient(
+			circle at 34% 28%,
+			rgba(151, 211, 255, 0.16),
+			transparent 40%
+		),
+		linear-gradient(145deg, rgba(11, 21, 28, 0.78), rgba(2, 5, 8, 0.74));
+	box-shadow:
+		0 0 24px rgba(82, 170, 229, 0.16),
+		0 16px 34px rgba(0, 0, 0, 0.48),
+		inset 0 0 22px rgba(160, 222, 255, 0.08);
+	cursor: pointer;
 }
 
 .backButton:hover,
 .backButton:focus-visible {
-  border-color: rgba(198, 232, 255, 0.58);
-  outline: none;
+	border-color: rgba(198, 232, 255, 0.58);
+	outline: none;
 }
 
 .backButton svg {
-  width: 32px;
-  height: 32px;
+	width: 32px;
+	height: 32px;
 }
 
 .backButton:disabled {
-  cursor: default;
-  opacity: 0.56;
+	cursor: default;
+	opacity: 0.56;
+}
+
+@keyframes spindelArrive {
+	0% {
+		opacity: 0;
+	}
+
+	100% {
+		opacity: 1;
+	}
+}
+
+@keyframes spindelFloat {
+	0%,
+	100% {
+		transform: translate3d(0, 0, 0);
+	}
+
+	50% {
+		transform: translate3d(0, -3px, 0);
+	}
+}
+
+@media (max-width: 640px) {
+	.backButton {
+		left: 18px;
+		top: 18px;
+		width: 62px;
+		height: 62px;
+	}
+
+	.backButton svg {
+		width: 28px;
+		height: 28px;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.mapStage,
+	.regionFloat {
+		animation: none;
+	}
+
+	.mapStage {
+		opacity: 1;
+	}
 }
