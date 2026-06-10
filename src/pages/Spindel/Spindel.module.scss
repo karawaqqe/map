@@ -17,40 +17,145 @@
 	width: 100vw;
 	height: 100vh;
 	overflow: hidden;
-	opacity: 0;
-	animation: spindelArrive 900ms ease-out 80ms forwards;
 }
 
-.mapStage::before {
-	position: absolute;
-	inset: -8vmax;
-	z-index: 2;
-	content: "";
-	pointer-events: none;
-	opacity: 0.36;
-	background:
-		radial-gradient(
-			ellipse at 38% 46%,
-			rgba(137, 179, 206, 0.18),
-			transparent 44%
-		),
-		radial-gradient(
-			ellipse at 66% 58%,
-			rgba(191, 174, 157, 0.14),
-			transparent 50%
-		);
-	mix-blend-mode: screen;
-}
-
-.map {
+.baseMapLayer,
+.terrainMapLayer,
+.buildingBackHazeLayer,
+.buildingBackFogLayer,
+.buildingMapLayer,
+.buildingFrontFogLayer {
 	position: absolute;
 	inset: 0;
-	z-index: 1;
 	display: block;
 	width: 100%;
 	height: 100%;
 	overflow: hidden;
 	transform-origin: center;
+}
+
+.behindBaseFogLayer {
+	position: absolute;
+	inset: -12vmax;
+	z-index: 1;
+	pointer-events: none;
+	opacity: 0.37;
+	background:
+		radial-gradient(
+			ellipse at 28% 44%,
+			rgba(214, 232, 242, 0.34),
+			rgba(182, 207, 222, 0.14) 34%,
+			transparent 62%
+		),
+		radial-gradient(
+			ellipse at 72% 54%,
+			rgba(230, 241, 247, 0.3),
+			rgba(161, 190, 210, 0.13) 36%,
+			transparent 64%
+		),
+		linear-gradient(
+			104deg,
+			transparent 0%,
+			rgba(224, 238, 246, 0.18) 34%,
+			rgba(170, 198, 216, 0.16) 58%,
+			transparent 100%
+		);
+	animation: spindelBackFogDrift 18s linear infinite;
+}
+
+.baseMapLayer {
+	z-index: 2;
+}
+
+.terrainMapLayer {
+	z-index: 4;
+}
+
+.buildingBackHazeLayer {
+	z-index: 5;
+	pointer-events: none;
+	opacity: calc(0.24 * var(--fx-opacity));
+	background:
+		radial-gradient(
+			ellipse at 34% 38%,
+			rgba(226, 235, 241, 0.08),
+			rgba(172, 194, 208, 0.04) 38%,
+			transparent 68%
+		),
+		radial-gradient(
+			ellipse at 66% 48%,
+			rgba(238, 243, 247, 0.07),
+			rgba(155, 179, 195, 0.04) 42%,
+			transparent 70%
+		),
+		linear-gradient(
+			100deg,
+			transparent 4%,
+			rgba(196, 214, 226, 0.06) 32%,
+			rgba(235, 241, 245, 0.05) 54%,
+			transparent 88%
+		);
+	animation: spindelBuildingBackHazeDrift
+		calc(11s / var(--fx-speed)) ease-in-out infinite alternate;
+}
+
+.buildingBackFogLayer {
+	z-index: 6;
+	pointer-events: none;
+	opacity: var(--fx-opacity);
+}
+
+.buildingMapLayer {
+	z-index: 7;
+}
+
+.buildingFrontFogLayer {
+	z-index: 8;
+	pointer-events: none;
+	opacity: calc(0.78 * var(--fx-opacity));
+}
+
+.fogSprite {
+	pointer-events: none;
+	transform-box: fill-box;
+	transform-origin: center;
+	animation: spindelFogSpriteDrift
+		calc(9s / var(--fx-speed)) ease-in-out infinite alternate;
+	animation-delay: var(--fog-delay, 0s);
+}
+
+.frontHazeLayer {
+	position: absolute;
+	inset: -8vmax;
+	z-index: 10;
+	pointer-events: none;
+	opacity: calc(0.7 * var(--fx-opacity));
+	background:
+		linear-gradient(
+			105deg,
+			rgba(179, 198, 211, 0.14),
+			rgba(232, 240, 245, 0.17) 42%,
+			rgba(132, 157, 174, 0.11) 72%,
+			rgba(9, 18, 26, 0.08)
+		),
+		radial-gradient(
+			ellipse at 48% 44%,
+			rgba(225, 235, 240, 0.16),
+			transparent 58%
+		);
+	animation: spindelFrontHazeDrift
+		calc(14s / var(--fx-speed)) ease-in-out infinite alternate;
+}
+
+:global(body.quality-performance) .buildingBackHazeLayer,
+:global(body.quality-performance) .buildingFrontFogLayer,
+:global(body.quality-performance) .frontHazeLayer {
+	opacity: 0;
+	visibility: hidden;
+}
+
+:global(body.quality-performance) .fogSprite {
+	animation: none;
 }
 
 .baseMap,
@@ -62,7 +167,6 @@
 
 .baseMap {
 	pointer-events: none;
-	filter: brightness(0.72) saturate(0.84);
 }
 
 .region {
@@ -88,57 +192,13 @@
 	pointer-events: none;
 	transform-box: fill-box;
 	transform-origin: center;
-	filter: brightness(0.98) saturate(0.95)
-		drop-shadow(0 18px 18px rgba(0, 0, 0, 0.3));
-}
-
-.regionGlow {
-	fill: var(--region-glow-fill);
-	filter:
-		drop-shadow(
-			0 0 calc(9px * var(--region-glow-strength, 1))
-				color-mix(in srgb, var(--region-glow), transparent 0%)
-		)
-		drop-shadow(
-			0 0 calc(28px * var(--region-glow-strength, 1))
-				color-mix(in srgb, var(--region-glow), transparent 18%)
-		)
-		drop-shadow(
-			0 0 calc(48px * var(--region-glow-strength, 1))
-				color-mix(in srgb, var(--region-glow), transparent 46%)
-		);
-	mix-blend-mode: screen;
-	opacity: var(--region-glow-opacity, 0.5);
-	pointer-events: none;
-	transform-box: fill-box;
-	transform-origin: center;
-}
-
-.vignette {
-	position: absolute;
-	inset: 0;
-	z-index: 3;
-	pointer-events: none;
-	background:
-		radial-gradient(
-			ellipse at center,
-			transparent 42%,
-			rgba(0, 0, 0, 0.34) 76%,
-			rgba(0, 0, 0, 0.72) 100%
-		),
-		linear-gradient(
-			180deg,
-			rgba(0, 0, 0, 0.18),
-			transparent 28%,
-			rgba(0, 0, 0, 0.28)
-		);
 }
 
 .backButton {
 	position: absolute;
 	left: 34px;
 	top: 34px;
-	z-index: 4;
+	z-index: 11;
 	width: 76px;
 	height: 76px;
 	display: grid;
@@ -160,6 +220,146 @@
 	cursor: pointer;
 }
 
+.qualityPanel {
+	position: absolute;
+	left: 34px;
+	bottom: 34px;
+	z-index: 11;
+	display: grid;
+	justify-items: start;
+	pointer-events: auto;
+}
+
+.qualityToggle {
+	position: relative;
+	z-index: 2;
+	width: 76px;
+	height: 76px;
+	display: grid;
+	place-items: center;
+	border: 1px solid rgba(180, 221, 255, 0.26);
+	border-radius: 50%;
+	color: rgba(229, 246, 255, 0.92);
+	background:
+		radial-gradient(
+			circle at 34% 28%,
+			rgba(151, 211, 255, 0.18),
+			transparent 40%
+		),
+		linear-gradient(145deg, rgba(11, 21, 28, 0.78), rgba(2, 5, 8, 0.74));
+	box-shadow:
+		0 0 calc(24px * var(--fx-shadow)) rgba(82, 170, 229, 0.18),
+		0 16px 34px rgba(0, 0, 0, 0.48),
+		inset 0 0 22px rgba(160, 222, 255, 0.1);
+	cursor: pointer;
+	transition:
+		border-color 220ms ease,
+		box-shadow 220ms ease,
+		transform 220ms ease;
+}
+
+.qualityToggle svg {
+	width: 32px;
+	height: 32px;
+	filter: drop-shadow(0 0 12px rgba(166, 224, 255, 0.58));
+}
+
+.qualityPanel:hover .qualityToggle,
+.qualityPanel:focus-within .qualityToggle,
+.qualityPanelOpen .qualityToggle {
+	border-color: rgba(198, 232, 255, 0.58);
+	box-shadow:
+		0 0 calc(32px * var(--fx-shadow)) rgba(82, 170, 229, 0.26),
+		0 18px 38px rgba(0, 0, 0, 0.5),
+		inset 0 0 26px rgba(160, 222, 255, 0.14);
+	outline: none;
+	transform: translateY(-1px);
+}
+
+.qualityMenu {
+	position: absolute;
+	left: 0;
+	bottom: 92px;
+	width: 330px;
+	padding: 20px;
+	border: 1px solid rgba(180, 221, 255, 0.2);
+	border-radius: 8px;
+	background:
+		linear-gradient(180deg, rgba(10, 20, 28, 0.9), rgba(2, 5, 8, 0.84)),
+		radial-gradient(
+			ellipse at 18% 0%,
+			rgba(140, 202, 242, 0.14),
+			transparent 58%
+		);
+	box-shadow:
+		0 22px 48px rgba(0, 0, 0, 0.52),
+		inset 0 1px 0 rgba(255, 255, 255, 0.05);
+	opacity: 0;
+	pointer-events: none;
+	font-family: "MedievalSharp", "Georgia", serif;
+	transform: translateY(14px) scale(0.98);
+	transform-origin: left bottom;
+	transition:
+		opacity 220ms ease,
+		transform 260ms cubic-bezier(0.18, 0.82, 0.24, 1);
+}
+
+.qualityPanel:hover .qualityMenu,
+.qualityPanel:focus-within .qualityMenu,
+.qualityPanelOpen .qualityMenu {
+	opacity: 1;
+	pointer-events: auto;
+	transform: translateY(0) scale(1);
+}
+
+.qualityTitle {
+	display: block;
+	margin: 0 0 14px;
+	color: rgba(218, 238, 247, 0.74);
+	font-size: 17px;
+	line-height: 1;
+	text-transform: uppercase;
+}
+
+.qualityOptions {
+	display: grid;
+	gap: 10px;
+}
+
+.qualityOption {
+	min-height: 56px;
+	padding: 0 18px;
+	border: 1px solid rgba(180, 221, 255, 0.14);
+	border-radius: 6px;
+	color: rgba(226, 239, 246, 0.72);
+	background: rgba(255, 255, 255, 0.035);
+	cursor: pointer;
+	font-family: "MedievalSharp", "Georgia", serif;
+	font-size: 21px;
+	line-height: 1;
+	text-align: left;
+	transition:
+		background 180ms ease,
+		border-color 180ms ease,
+		color 180ms ease,
+		box-shadow 180ms ease;
+}
+
+.qualityOption:hover,
+.qualityOption:focus-visible {
+	border-color: rgba(190, 230, 255, 0.34);
+	color: rgba(245, 251, 255, 0.94);
+	background: rgba(154, 214, 255, 0.08);
+	outline: none;
+}
+
+.qualityOptionActive {
+	border-color: rgba(167, 223, 255, 0.52);
+	color: rgba(243, 251, 255, 0.98);
+	background: rgba(130, 203, 255, 0.14);
+	box-shadow: inset 0 0 12px rgba(134, 211, 255, 0.08);
+}
+
 .backButton:hover,
 .backButton:focus-visible {
 	border-color: rgba(198, 232, 255, 0.58);
@@ -176,16 +376,6 @@
 	opacity: 0.56;
 }
 
-@keyframes spindelArrive {
-	0% {
-		opacity: 0;
-	}
-
-	100% {
-		opacity: 1;
-	}
-}
-
 @keyframes spindelFloat {
 	0%,
 	100% {
@@ -194,6 +384,46 @@
 
 	50% {
 		transform: translate3d(0, -3px, 0);
+	}
+}
+
+@keyframes spindelBackFogDrift {
+	0% {
+		transform: translate3d(-3%, 1%, 0);
+	}
+
+	100% {
+		transform: translate3d(5%, -1%, 0);
+	}
+}
+
+@keyframes spindelFrontHazeDrift {
+	0% {
+		transform: translate3d(-2%, 0, 0);
+	}
+
+	100% {
+		transform: translate3d(3%, -1.5%, 0);
+	}
+}
+
+@keyframes spindelBuildingBackHazeDrift {
+	0% {
+		transform: translate3d(-3.5%, 0.8%, 0);
+	}
+
+	100% {
+		transform: translate3d(5%, -1.2%, 0);
+	}
+}
+
+@keyframes spindelFogSpriteDrift {
+	0% {
+		transform: translate3d(-4.5%, 1.6%, 0) scale(1);
+	}
+
+	100% {
+		transform: translate3d(6.5%, -1.4%, 0) scale(1.05);
 	}
 }
 
@@ -212,12 +442,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.mapStage,
 	.regionFloat {
 		animation: none;
-	}
-
-	.mapStage {
-		opacity: 1;
 	}
 }

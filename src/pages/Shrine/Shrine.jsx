@@ -4,8 +4,10 @@ import DialogueBox from "../../components/DialogueBox/DialogueBox";
 import { ROUTE_TRANSITION_EVENT } from "../../constants/routeTransition";
 import {
 	DIALOGUE_ACTIONS,
+	statueRepeatDialogue,
 	statueDialogue,
 } from "../../data/dialogues/statueDialogue";
+import useSessionDialogMemory from "../../hooks/useSessionDialogMemory";
 import { buildHitboxPath } from "../../utils/mapHitbox";
 import styles from "./Shrine.module.scss";
 
@@ -16,6 +18,7 @@ const shrineSize = {
 const ROUTE_NAVIGATION_DELAY = 1150;
 const ROUTE_TRANSITION_OPENING_DURATION = 1100;
 const VISION_DURATION = 3200;
+const STATUE_DIALOG_ID = "statue_depths";
 
 const shrineBg = new URL(
 	"../../../img/cubes/Spindel/shrine/shrine_bg.png",
@@ -62,9 +65,12 @@ function dispatchRouteTransition(to) {
 function Shrine() {
 	const [statueHitbox, setStatueHitbox] = useState("");
 	const [isDialogueOpen, setIsDialogueOpen] = useState(false);
+	const [activeDialogue, setActiveDialogue] = useState(statueDialogue);
 	const [isEyesVisible, setIsEyesVisible] = useState(false);
 	const [isVisionPlaying, setIsVisionPlaying] = useState(false);
 	const [isReturningToWorld, setIsReturningToWorld] = useState(false);
+	const [hasSeenStatueDialogue, markStatueDialogueAsSeen] =
+		useSessionDialogMemory(STATUE_DIALOG_ID);
 	const ambienceRef = useRef(null);
 	const visionTimeoutRef = useRef(null);
 
@@ -162,6 +168,14 @@ function Shrine() {
 			return;
 		}
 
+		setActiveDialogue(
+			hasSeenStatueDialogue ? statueRepeatDialogue : statueDialogue,
+		);
+
+		if (!hasSeenStatueDialogue) {
+			markStatueDialogueAsSeen();
+		}
+
 		setIsEyesVisible(true);
 		setIsDialogueOpen(true);
 	};
@@ -248,7 +262,7 @@ function Shrine() {
 			{isDialogueOpen && (
 				<DialogueBox
 					clickSound={dialogueClick}
-					dialogue={statueDialogue}
+					dialogue={activeDialogue}
 					enableSkip
 					frameImage={dialogueWindow}
 					isOpen={isDialogueOpen}

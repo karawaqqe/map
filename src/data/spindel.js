@@ -12,7 +12,8 @@ export const spindelRegions = [
 	{
 		id: "spindel-base-1",
 		name: "Spindel base 1",
-		image: new URL("../../img/cubes/Spindel/base1.png", import.meta.url).href,
+		image: new URL("../../img/cubes/Spindel_new/base_new1.png", import.meta.url)
+			.href,
 		glowColor: "#000000",
 		glowFill: "rgba(126, 117, 111, 0.3)",
 		glowOpacity: 0.58,
@@ -22,7 +23,8 @@ export const spindelRegions = [
 	{
 		id: "spindel-base-2",
 		name: "Spindel base 2",
-		image: new URL("../../img/cubes/Spindel/base2.png", import.meta.url).href,
+		image: new URL("../../img/cubes/Spindel_new/base_new2.png", import.meta.url)
+			.href,
 		glowColor: "#000000",
 		glowFill: "rgba(126, 117, 111, 0.3)",
 		glowOpacity: 0.56,
@@ -32,7 +34,8 @@ export const spindelRegions = [
 	{
 		id: "spindel-base-3",
 		name: "Spindel base 3",
-		image: new URL("../../img/cubes/Spindel/base3.png", import.meta.url).href,
+		image: new URL("../../img/cubes/Spindel_new/base_new3.png", import.meta.url)
+			.href,
 		glowColor: "#000000",
 		glowFill: "rgba(126, 117, 111, 0.3)",
 		glowOpacity: 0.54,
@@ -42,7 +45,8 @@ export const spindelRegions = [
 	{
 		id: "spindel-base-4",
 		name: "Spindel base 4",
-		image: new URL("../../img/cubes/Spindel/base4.png", import.meta.url).href,
+		image: new URL("../../img/cubes/Spindel_new/base_new4.png", import.meta.url)
+			.href,
 		glowColor: "#000000",
 		glowFill: "rgba(126, 117, 111, 0.3)",
 		glowOpacity: 0.55,
@@ -52,7 +56,8 @@ export const spindelRegions = [
 	{
 		id: "spindel-base-5",
 		name: "Spindel base 5",
-		image: new URL("../../img/cubes/Spindel/base5.png", import.meta.url).href,
+		image: new URL("../../img/cubes/Spindel_new/base_new5.png", import.meta.url)
+			.href,
 		glowColor: "#000000",
 		glowFill: "rgba(126, 117, 111, 0.3)",
 		glowOpacity: 0.54,
@@ -62,7 +67,8 @@ export const spindelRegions = [
 	{
 		id: "spindel-base-6",
 		name: "Spindel base 6",
-		image: new URL("../../img/cubes/Spindel/base6.png", import.meta.url).href,
+		image: new URL("../../img/cubes/Spindel_new/base_new6.png", import.meta.url)
+			.href,
 		glowColor: "#000000",
 		glowFill: "rgba(126, 117, 111, 0.3)",
 		glowOpacity: 0.56,
@@ -72,7 +78,8 @@ export const spindelRegions = [
 	{
 		id: "spindel-base-7",
 		name: "Spindel base 7",
-		image: new URL("../../img/cubes/Spindel/base7.png", import.meta.url).href,
+		image: new URL("../../img/cubes/Spindel_new/base_new7.png", import.meta.url)
+			.href,
 		glowColor: "#000000",
 		glowFill: "rgba(126, 117, 111, 0.3)",
 		glowOpacity: 0.52,
@@ -82,7 +89,7 @@ export const spindelRegions = [
 	{
 		id: "spindel-bridges-1",
 		name: "Spindel bridges 1",
-		image: new URL("../../img/cubes/Spindel/bridges1.png", import.meta.url)
+		image: new URL("../../img/cubes/Spindel_new/bridges_new1.png", import.meta.url)
 			.href,
 		glowColor: "#000000",
 		glowFill: "rgba(126, 117, 111, 0.3)",
@@ -93,7 +100,7 @@ export const spindelRegions = [
 	{
 		id: "spindel-bridges-2",
 		name: "Spindel bridges 2",
-		image: new URL("../../img/cubes/Spindel/bridges2.png", import.meta.url)
+		image: new URL("../../img/cubes/Spindel_new/bridges_new2.png", import.meta.url)
 			.href,
 		glowColor: "#000000",
 		glowFill: "rgba(126, 117, 111, 0.3)",
@@ -104,7 +111,7 @@ export const spindelRegions = [
 	{
 		id: "spindel-bridges-3",
 		name: "Spindel bridges 3",
-		image: new URL("../../img/cubes/Spindel/bridges3.png", import.meta.url)
+		image: new URL("../../img/cubes/Spindel_new/bridges_new3.png", import.meta.url)
 			.href,
 		glowColor: "#000000",
 		glowFill: "rgba(126, 117, 111, 0.3)",
@@ -115,7 +122,7 @@ export const spindelRegions = [
 	{
 		id: "spindel-columns-1",
 		name: "Spindel columns 1",
-		image: new URL("../../img/cubes/Spindel/columns1.png", import.meta.url)
+		image: new URL("../../img/cubes/Spindel_new/columns_new1.png", import.meta.url)
 			.href,
 		glowColor: "#000000",
 		glowFill: "rgba(126, 117, 111, 0.3)",
@@ -126,7 +133,7 @@ export const spindelRegions = [
 	{
 		id: "spindel-columns-2",
 		name: "Spindel columns 2",
-		image: new URL("../../img/cubes/Spindel/columns2.png", import.meta.url)
+		image: new URL("../../img/cubes/Spindel_new/columns_new2.png", import.meta.url)
 			.href,
 		glowColor: "#000000",
 		glowFill: "rgba(126, 117, 111, 0.3)",
@@ -137,7 +144,7 @@ export const spindelRegions = [
 	{
 		id: "spindel-columns-3",
 		name: "Spindel columns 3",
-		image: new URL("../../img/cubes/Spindel/columns3.png", import.meta.url)
+		image: new URL("../../img/cubes/Spindel_new/columns_new3.png", import.meta.url)
 			.href,
 		glowColor: "#000000",
 		glowFill: "rgba(126, 117, 111, 0.3)",
@@ -148,7 +155,7 @@ export const spindelRegions = [
 	{
 		id: "spindel-columns-4",
 		name: "Spindel columns 4",
-		image: new URL("../../img/cubes/Spindel/columns4.png", import.meta.url)
+		image: new URL("../../img/cubes/Spindel_new/columns_new4.png", import.meta.url)
 			.href,
 		glowColor: "#000000",
 		glowFill: "rgba(126, 117, 111, 0.3)",
@@ -159,7 +166,7 @@ export const spindelRegions = [
 	{
 		id: "spindel-columns-5",
 		name: "Spindel columns 5",
-		image: new URL("../../img/cubes/Spindel/columns5.png", import.meta.url)
+		image: new URL("../../img/cubes/Spindel_new/columns_new5.png", import.meta.url)
 			.href,
 		glowColor: "#000000",
 		glowFill: "rgba(126, 117, 111, 0.3)",
@@ -167,6 +174,58 @@ export const spindelRegions = [
 		glowStrength: 0.5,
 		floatDelay: "-1040ms",
 	},
+];
+
+export const spindelBuildingLayers = [
+	{
+		id: "spindel-buildings-1",
+		name: "Spindel buildings 1",
+		image: new URL("../../img/cubes/Spindel_new/buildings1.png", import.meta.url)
+			.href,
+		floatDelay: "-180ms",
+	},
+	{
+		id: "spindel-buildings-2",
+		name: "Spindel buildings 2",
+		image: new URL("../../img/cubes/Spindel_new/buildings2.png", import.meta.url)
+			.href,
+		floatDelay: "-720ms",
+	},
+	{
+		id: "spindel-buildings-3",
+		name: "Spindel buildings 3",
+		image: new URL("../../img/cubes/Spindel_new/buildings3.png", import.meta.url)
+			.href,
+		floatDelay: "-1120ms",
+	},
+	{
+		id: "spindel-buildings-4",
+		name: "Spindel buildings 4",
+		image: new URL("../../img/cubes/Spindel_new/buildings4.png", import.meta.url)
+			.href,
+		floatDelay: "-1480ms",
+	},
+	{
+		id: "spindel-buildings-5",
+		name: "Spindel buildings 5",
+		image: new URL("../../img/cubes/Spindel_new/buildings5.png", import.meta.url)
+			.href,
+		floatDelay: "-1980ms",
+	},
+	{
+		id: "spindel-buildings-7",
+		name: "Spindel buildings 7",
+		image: new URL("../../img/cubes/Spindel_new/buildings7.png", import.meta.url)
+			.href,
+		floatDelay: "-2380ms",
+	},
+];
+
+export const spindelFogParticles = [
+	new URL("../../img/particles/fog_particle1.png", import.meta.url).href,
+	new URL("../../img/particles/fog_particle2.png", import.meta.url).href,
+	new URL("../../img/particles/fog_particle3.png", import.meta.url).href,
+	new URL("../../img/particles/fog_particle4.png", import.meta.url).href,
 ];
 
 export const spindelOst = new URL(

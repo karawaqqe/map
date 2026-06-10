@@ -5,26 +5,26 @@ export const DIALOGUE_ACTIONS = {
 	visionThenWorld: "visionThenWorld",
 };
 
+const statueStartOptions = [
+	{ text: "I seek knowledge.", next: "knowledge" },
+	{ text: "I seek the great sword Frostmourne.", next: "frostmourne" },
+	{ text: "None of your business.", next: "defiance" },
+	{ text: "What even are you?", next: "what_are_you" },
+];
+
 export const statueDialogue = {
 	start: {
 		speaker: "Statue",
-		text: `...
-		
-You are not meant to stand within these depths...
+		text: `You are not meant to stand within these depths…
 
 Not as flesh.
 Not as memory.
 
 Yet here you are.
 
-Tell me then, little wanderer...
+Tell me then, little wanderer…
 What is it you seek?`,
-		options: [
-			{ text: "I seek knowledge.", next: "knowledge" },
-			{ text: "I seek the great sword Frostmourne.", next: "frostmourne" },
-			{ text: "None of your business.", next: "defiance" },
-			{ text: "What even are you?", next: "what_are_you" },
-		],
+		options: statueStartOptions,
 	},
 	knowledge: {
 		speaker: "Statue",
@@ -270,5 +270,16 @@ Now leave.`,
 		text: "",
 		options: [],
 		action: DIALOGUE_ACTIONS.close,
+	},
+};
+
+export const statueRepeatDialogue = {
+	...statueDialogue,
+	start: {
+		...statueDialogue.start,
+		text: `You again...
+		
+		Tell me then, little wanderer…
+		What is it you seek?`,
 	},
 };
