@@ -21,6 +21,7 @@ function App() {
           <Route path="/shrine" element={<Shrine />} />
           <Route path="/spindel" element={<Spindel />} />
           <Route path="/region/:regionId" element={<RegionMap />} />
+          <Route path="/holy-light/region/:regionId" element={<RegionMap parentRoute="/holy-light" parentName="Holy Light" />} />
           <Route path="/city/:cityId" element={<CityMap />} />
         </Route>
       </Routes>

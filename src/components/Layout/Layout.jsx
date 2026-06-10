@@ -26,7 +26,7 @@ function Layout() {
   const [isLegendOpen, setIsLegendOpen] = useState(false)
   const location = useLocation()
   const navigate = useNavigate()
-  const hidesLegend = location.pathname === '/shrine' || location.pathname === '/spindel'
+  const hidesLegend = ['/', '/eiridor', '/holy-light', '/shrine', '/spindel'].includes(location.pathname)
   const legendRef = useRef(null)
   const navigationTimeoutRef = useRef(null)
   const cleanupTimeoutRef = useRef(null)
@@ -62,7 +62,7 @@ function Layout() {
         return
       }
 
-      if (to === '/shrine' || to === '/spindel') {
+      if (['/', '/eiridor', '/holy-light', '/shrine', '/spindel'].includes(to)) {
         setIsLegendOpen(false)
       }
 

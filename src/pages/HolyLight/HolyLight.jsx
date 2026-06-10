@@ -1,5 +1,5 @@
 import { memo, useCallback, useEffect, useState } from 'react'
-import { FiArrowLeft, FiSun } from 'react-icons/fi'
+import { FiArrowLeft, FiSliders } from 'react-icons/fi'
 import { useNavigate } from 'react-router-dom'
 import { ROUTE_TRANSITION_EVENT } from '../../constants/routeTransition'
 import { birdImage, cloudImages } from '../../data/continents'
@@ -146,7 +146,7 @@ function HolyLight() {
 
   const enterRegion = useCallback(
     (regionId) => {
-      navigate(`/region/${regionId}`)
+      navigate(`/holy-light/region/${regionId}`)
     },
     [navigate],
   )
@@ -367,7 +367,7 @@ function HolyLight() {
             aria-expanded={isQualityOpen}
             onClick={() => setIsQualityOpen((current) => !current)}
           >
-            <FiSun aria-hidden="true" />
+            <FiSliders aria-hidden="true" />
           </button>
           <div className={styles.qualityMenu} aria-label="Holy Light quality">
             <span className={styles.qualityTitle}>Holy Light Quality</span>

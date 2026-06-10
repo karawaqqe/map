@@ -19,6 +19,30 @@ const ROUTE_NAVIGATION_DELAY = 1150;
 const ROUTE_TRANSITION_OPENING_DURATION = 1100;
 const VISION_DURATION = 3200;
 const STATUE_DIALOG_ID = "statue_depths";
+const SMOKE_PLUMES = [
+	{ x: 18, y: 58, delay: "-8s", duration: "26s", scale: 1.1 },
+	{ x: 35, y: 68, delay: "-16s", duration: "31s", scale: 0.86 },
+	{ x: 73, y: 60, delay: "-4s", duration: "28s", scale: 1 },
+	{ x: 84, y: 72, delay: "-21s", duration: "34s", scale: 0.78 },
+];
+const DUST_PARTICLES = [
+	{ x: 12, y: 18, delay: "-2s", duration: "18s", drift: 26 },
+	{ x: 24, y: 42, delay: "-11s", duration: "23s", drift: -18 },
+	{ x: 38, y: 24, delay: "-7s", duration: "20s", drift: 22 },
+	{ x: 51, y: 54, delay: "-15s", duration: "25s", drift: -24 },
+	{ x: 64, y: 33, delay: "-5s", duration: "19s", drift: 18 },
+	{ x: 76, y: 46, delay: "-18s", duration: "27s", drift: -20 },
+	{ x: 88, y: 22, delay: "-9s", duration: "21s", drift: 24 },
+	{ x: 44, y: 76, delay: "-13s", duration: "24s", drift: -14 },
+	{ x: 68, y: 70, delay: "-20s", duration: "29s", drift: 16 },
+];
+const WATER_DRIPS = [
+	{ x: 18, delay: "-1s", duration: "1s", length: 42 },
+	{ x: 31, delay: "-4s", duration: "1.3s", length: 34 },
+	{ x: 57, delay: "-2.8s", duration: "2s", length: 48 },
+	{ x: 79, delay: "-5.2s", duration: "1s", length: 38 },
+	{ x: 91, delay: "-3.3s", duration: "1.5s", length: 30 },
+];
 
 const shrineBg = new URL(
 	"../../../img/cubes/Spindel/shrine/shrine_bg.png",
@@ -253,6 +277,52 @@ function Shrine() {
 					/>
 				)}
 			</svg>
+			<div className={styles.caveAtmosphere} aria-hidden="true">
+				<div className={styles.blackSmokeLayer}>
+					{SMOKE_PLUMES.map((smoke, index) => (
+						<span
+							key={`smoke-${index}`}
+							className={styles.smokePlume}
+							style={{
+								"--smoke-x": `${smoke.x}%`,
+								"--smoke-y": `${smoke.y}%`,
+								"--smoke-delay": smoke.delay,
+								"--smoke-duration": smoke.duration,
+								"--smoke-scale": smoke.scale,
+							}}
+						/>
+					))}
+				</div>
+				<div className={styles.dustLayer}>
+					{DUST_PARTICLES.map((dust, index) => (
+						<span
+							key={`dust-${index}`}
+							className={styles.dustParticle}
+							style={{
+								"--dust-x": `${dust.x}%`,
+								"--dust-y": `${dust.y}%`,
+								"--dust-delay": dust.delay,
+								"--dust-duration": dust.duration,
+								"--dust-drift": `${dust.drift}px`,
+							}}
+						/>
+					))}
+				</div>
+				<div className={styles.dripLayer}>
+					{WATER_DRIPS.map((drip, index) => (
+						<span
+							key={`drip-${index}`}
+							className={styles.waterDrip}
+							style={{
+								"--drip-x": `${drip.x}%`,
+								"--drip-delay": drip.delay,
+								"--drip-duration": drip.duration,
+								"--drip-length": `${drip.length}px`,
+							}}
+						/>
+					))}
+				</div>
+			</div>
 			<div className={styles.caveVeil} aria-hidden="true" />
 			{isVisionPlaying && (
 				<div className={styles.visionOverlay} aria-hidden="true">

@@ -168,6 +168,7 @@
 .cloudImageShadows,
 .cloudImages,
 .colorGrade,
+.glacierFog,
 .vignette,
 .snowBandTop,
 .snowBandBottom {
@@ -178,6 +179,7 @@
 
 .cloudShadow,
 .colorGrade,
+.glacierFog,
 .vignette {
   transition:
     filter 420ms ease,
@@ -303,7 +305,8 @@
 
 :global(body.quality-performance) .cloudImage,
 :global(body.quality-performance) .cloudImageShadow,
-:global(body.quality-performance) .snowflake {
+:global(body.quality-performance) .snowflake,
+:global(body.quality-performance) .glacierFog {
   opacity: 0;
   visibility: hidden;
 }
@@ -314,6 +317,24 @@
   background:
     linear-gradient(180deg, rgba(79, 118, 132, 0.08), transparent 48%, rgba(7, 14, 25, 0.17)),
     radial-gradient(ellipse at center, transparent 58%, rgba(2, 7, 14, 0.16) 100%);
+}
+
+.glacierFog {
+  opacity: calc(0.34 * var(--fx-opacity) * var(--fx-particles));
+  mix-blend-mode: screen;
+  filter: blur(calc(14px * var(--fx-blur)));
+  background:
+    radial-gradient(ellipse at 13% 12%, rgba(230, 244, 250, 0.22), transparent 32%),
+    radial-gradient(ellipse at 82% 16%, rgba(226, 241, 248, 0.2), transparent 34%),
+    radial-gradient(ellipse at 54% 91%, rgba(230, 244, 250, 0.16), transparent 30%),
+    linear-gradient(180deg, rgba(229, 243, 250, 0.12), transparent 24%, transparent 74%, rgba(225, 240, 248, 0.1));
+  background-size:
+    52% 36%,
+    48% 38%,
+    44% 24%,
+    100% 100%;
+  animation: glacierFogDrift calc(88s * var(--fx-speed)) linear infinite;
+  will-change: background-position;
 }
 
 .vignette {
@@ -579,6 +600,24 @@
   }
 }
 
+@keyframes glacierFogDrift {
+  from {
+    background-position:
+      -8% 0,
+      108% 0,
+      50% 112%,
+      0 0;
+  }
+
+  to {
+    background-position:
+      12% 3%,
+      88% -2%,
+      56% 96%,
+      0 0;
+  }
+}
+
 @keyframes snowFall {
   0% {
     opacity: 0;
@@ -605,6 +644,7 @@
   .map,
   .birdFlock,
   .cloudShadow,
+  .glacierFog,
   .cloudImage,
   .cloudImageShadow,
   .snowflake {

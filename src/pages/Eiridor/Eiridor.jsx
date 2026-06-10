@@ -1,5 +1,5 @@
 import { memo, useCallback, useEffect, useState } from 'react'
-import { FiArrowLeft, FiSun } from 'react-icons/fi'
+import { FiArrowLeft, FiSliders } from 'react-icons/fi'
 import { ROUTE_TRANSITION_EVENT } from '../../constants/routeTransition'
 import { birdImage, cloudImages } from '../../data/continents'
 import { eiridorMapImage, eiridorMapSize, eiridorRegions } from '../../data/eiridor'
@@ -324,6 +324,7 @@ function Eiridor() {
               </foreignObject>
             ))}
           </g>
+
         </svg>
         <button
           className={styles.backButton}
@@ -348,7 +349,7 @@ function Eiridor() {
             aria-expanded={isQualityOpen}
             onClick={() => setIsQualityOpen((current) => !current)}
           >
-            <FiSun aria-hidden="true" />
+            <FiSliders aria-hidden="true" />
           </button>
           <div className={styles.qualityMenu} aria-label="Eiridor quality">
             <span className={styles.qualityTitle}>Eiridor Quality</span>

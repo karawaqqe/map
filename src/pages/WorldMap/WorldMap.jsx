@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { FiSun } from 'react-icons/fi'
+import { FiSliders } from 'react-icons/fi'
 import { ROUTE_TRANSITION_EVENT } from '../../constants/routeTransition'
 import { birdImage, birdSound, cloudImages, continents, mapSize, windSound, worldMapImage } from '../../data/continents'
 import { buildHitboxPath } from '../../utils/mapHitbox'
@@ -91,6 +91,10 @@ const CLOUDS = [
   { image: 4, x: 36, y: 31, scale: 0.78, duration: 108, delay: -28, driftX: -22, driftY: 5, opacity: 0.19 },
   { image: 2, x: 72, y: 23, scale: 0.76, duration: 148, delay: -84, driftX: 22, driftY: 3, opacity: 0.2 },
   { image: 5, x: 18, y: 61, scale: 0.9, duration: 128, delay: -46, driftX: -28, driftY: -4, opacity: 0.19 },
+  { image: 6, x: 44, y: -2, scale: 0.58, duration: 164, delay: -104, driftX: 18, driftY: 6, opacity: 0.14 },
+  { image: 0, x: 6, y: 44, scale: 0.62, duration: 176, delay: -128, driftX: 24, driftY: -5, opacity: 0.13 },
+  { image: 3, x: 78, y: 58, scale: 0.64, duration: 188, delay: -148, driftX: -20, driftY: -4, opacity: 0.12 },
+  { image: 1, x: 52, y: 72, scale: 0.54, duration: 152, delay: -66, driftX: -18, driftY: 3, opacity: 0.12 },
 ]
 const BIRD_FLOCKS = [
   {
@@ -164,7 +168,6 @@ function getInitialQuality() {
 
 function WorldMap() {
   const [hitboxes, setHitboxes] = useState({})
-  const [activeContinentId, setActiveContinentId] = useState(null)
   const [quality, setQuality] = useState(getInitialQuality)
   const [isQualityOpen, setIsQualityOpen] = useState(false)
   const [enteringContinentId, setEnteringContinentId] = useState(null)
@@ -383,7 +386,7 @@ function WorldMap() {
                 '--continent-glow-strength': continent.glowStrength,
               }}
             >
-              {!continent.hideInfo && <title>{continent.name}</title>}
+              <title>{continent.name}</title>
               <g className={styles.fabricLayer}>
                 {hitboxes[continent.id] && (
                   <path className={styles.glow} d={hitboxes[continent.id]} />
@@ -404,12 +407,6 @@ function WorldMap() {
                   aria-label={continent.name}
                   tabIndex="0"
                   focusable="true"
-                  onPointerEnter={() => setActiveContinentId(continent.hideInfo ? null : continent.id)}
-                  onPointerLeave={() => setActiveContinentId((current) => (current === continent.id ? null : current))}
-                  onMouseEnter={() => setActiveContinentId(continent.hideInfo ? null : continent.id)}
-                  onMouseLeave={() => setActiveContinentId((current) => (current === continent.id ? null : current))}
-                  onFocus={() => setActiveContinentId(continent.hideInfo ? null : continent.id)}
-                  onBlur={() => setActiveContinentId((current) => (current === continent.id ? null : current))}
                   onClick={CONTINENT_ROUTES[continent.id] ? () => enterContinent(continent.id) : undefined}
                   onKeyDown={(event) => handleContinentKeyDown(event, continent.id)}
                 />
@@ -497,6 +494,7 @@ function WorldMap() {
                 ))}
               </div>
               <div className={styles.colorGrade} />
+              <div className={styles.glacierFog} />
               <div className={styles.vignette} />
               <div className={styles.snowBandTop}>
                 {TOP_SNOW.map((flake) => (
@@ -529,31 +527,6 @@ function WorldMap() {
             </div>
           </foreignObject>
 
-          <g className={styles.continentOverlayLayer} aria-hidden="true">
-            {continents.filter((continent) => !continent.hideInfo).map((continent) => (
-              <foreignObject
-                key={`overlay-${continent.id}`}
-                data-continent-id={continent.id}
-                className={`${styles.continentOverlay} ${
-                  activeContinentId === continent.id ? styles.continentOverlayActive : ''
-                }`}
-                x={continent.overlay.x}
-                y={continent.overlay.y}
-                width={continent.overlay.width}
-                height={continent.overlay.height}
-              >
-                <div
-                  className={styles.continentBadge}
-                  style={{
-                    '--crest-size': `${continent.overlay.crestSize}px`,
-                  }}
-                >
-                  <img className={styles.continentCrest} src={continent.crest} alt="" />
-                  <span className={styles.continentName}>{continent.name}</span>
-                </div>
-              </foreignObject>
-            ))}
-          </g>
         </svg>
         <div
           className={`${styles.qualityPanel} ${isQualityOpen ? styles.qualityPanelOpen : ''}`}
@@ -569,7 +542,7 @@ function WorldMap() {
             aria-expanded={isQualityOpen}
             onClick={() => setIsQualityOpen((current) => !current)}
           >
-            <FiSun aria-hidden="true" />
+            <FiSliders aria-hidden="true" />
           </button>
           <div className={styles.qualityMenu} aria-label="World quality">
             <span className={styles.qualityTitle}>World Quality</span>

@@ -3,13 +3,16 @@ import { FiArrowLeft, FiSliders } from "react-icons/fi";
 import SpindelWeatherVolume from "../../components/SpindelWeatherVolume/SpindelWeatherVolume";
 import { ROUTE_TRANSITION_EVENT } from "../../constants/routeTransition";
 import {
+	spindelBlizzardAmbience,
 	spindelBuildingLayers,
 	spindelFogParticles,
+	spindelInteractiveCastle,
 	spindelMapImage,
 	spindelMapSize,
 	spindelOst,
 	spindelRegions,
 } from "../../data/spindel";
+import { buildHitboxPath } from "../../utils/mapHitbox";
 import styles from "./Spindel.module.scss";
 
 const WORLD_NAVIGATION_DELAY = 1150;
@@ -127,32 +130,62 @@ function FogSpriteLayer({ className, fogSprites }) {
 }
 
 function Spindel() {
+	const [castleHitbox, setCastleHitbox] = useState("");
+	const [isCastleAwake, setIsCastleAwake] = useState(false);
 	const [quality, setQuality] = useState(getInitialQuality);
 	const [isQualityOpen, setIsQualityOpen] = useState(false);
 	const [isReturningToWorld, setIsReturningToWorld] = useState(false);
 	const ostAudioRef = useRef(null);
+	const blizzardAudioRef = useRef(null);
 
 	useEffect(() => {
-		const audio = ostAudioRef.current;
+		let isMounted = true;
 
-		if (!audio) {
+		async function createCastleHitbox() {
+			const hitbox = await buildHitboxPath(spindelInteractiveCastle);
+
+			if (isMounted) {
+				setCastleHitbox(hitbox);
+			}
+		}
+
+		createCastleHitbox();
+
+		return () => {
+			isMounted = false;
+		};
+	}, []);
+
+	useEffect(() => {
+		const audioEntries = [
+			{ audio: ostAudioRef.current, volume: 0.05 },
+			{ audio: blizzardAudioRef.current, volume: 0.18 },
+		].filter(({ audio }) => audio);
+
+		if (!audioEntries.length) {
 			return undefined;
 		}
 
-		audio.volume = 0.05;
+		audioEntries.forEach(({ audio, volume }) => {
+			audio.volume = volume;
+		});
 
-		const playOst = () => {
-			audio.play().catch(() => {});
+		const playAmbience = () => {
+			audioEntries.forEach(({ audio }) => {
+				audio.play().catch(() => {});
+			});
 		};
 
-		playOst();
-		window.addEventListener("pointerdown", playOst, { once: true });
-		window.addEventListener("keydown", playOst, { once: true });
+		playAmbience();
+		window.addEventListener("pointerdown", playAmbience, { once: true });
+		window.addEventListener("keydown", playAmbience, { once: true });
 
 		return () => {
-			window.removeEventListener("pointerdown", playOst);
-			window.removeEventListener("keydown", playOst);
-			audio.pause();
+			window.removeEventListener("pointerdown", playAmbience);
+			window.removeEventListener("keydown", playAmbience);
+			audioEntries.forEach(({ audio }) => {
+				audio.pause();
+			});
 		};
 	}, []);
 
@@ -195,12 +228,32 @@ function Spindel() {
 		);
 	};
 
+	const awakenCastle = () => {
+		setIsCastleAwake(true);
+	};
+
+	const handleCastleKeyDown = (event) => {
+		if (event.key === "Enter" || event.key === " ") {
+			event.preventDefault();
+			awakenCastle();
+		}
+	};
+
 	return (
 		<section className={styles.page}>
 			<audio
 				ref={ostAudioRef}
 				className={styles.ambientAudio}
 				src={spindelOst}
+				loop
+				autoPlay
+				preload="auto"
+				aria-hidden="true"
+			/>
+			<audio
+				ref={blizzardAudioRef}
+				className={styles.ambientAudio}
+				src={spindelBlizzardAmbience}
 				loop
 				autoPlay
 				preload="auto"
@@ -257,6 +310,36 @@ function Spindel() {
 					))}
 				</svg>
 
+				<svg
+					className={`${styles.castleInteractionLayer} ${
+						isCastleAwake ? styles.castleInteractionLayerAwake : ""
+					}`}
+					viewBox={`0 0 ${spindelMapSize.width} ${spindelMapSize.height}`}
+					preserveAspectRatio="xMidYMid slice"
+					aria-hidden="false"
+				>
+					<image
+						className={styles.castleInteractionImage}
+						href={spindelInteractiveCastle}
+						width={spindelMapSize.width}
+						height={spindelMapSize.height}
+						loading="lazy"
+						decoding="async"
+					/>
+					{castleHitbox && (
+						<path
+							className={styles.castleHitbox}
+							d={castleHitbox}
+							role="button"
+							tabIndex="0"
+							focusable="true"
+							aria-label="Awaken the frostbound castle"
+							onClick={awakenCastle}
+							onKeyDown={handleCastleKeyDown}
+						/>
+					)}
+				</svg>
+
 				<FogSpriteLayer
 					className={styles.buildingFrontFogLayer}
 					fogSprites={FRONT_FOG_SPRITES}
@@ -269,6 +352,7 @@ function Spindel() {
 					zIndex={9}
 				/>
 				<div className={styles.frontHazeLayer} aria-hidden="true" />
+				<div className={styles.vignetteLayer} aria-hidden="true" />
 			</div>
 			<button
 				className={styles.backButton}

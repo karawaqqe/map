@@ -214,10 +214,12 @@ Will you take it?`,
 		text: `Then listen carefully...
 
 To claim Frostmourne,
+
 you must walk where time rots
 and reality bends upon itself.
 
 You will cross forgotten shores,
+
 hear voices that do not belong to the living,
 and witness kingdoms long consumed by the abyss.
 

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { FiArrowLeft, FiMinus, FiPlus, FiSun } from 'react-icons/fi'
+import { FiArrowLeft, FiMinus, FiPlus, FiSliders } from 'react-icons/fi'
 import { useParams } from 'react-router-dom'
 import { ROUTE_TRANSITION_EVENT } from '../../constants/routeTransition'
 import styles from './RegionMap.module.scss'
@@ -193,7 +193,7 @@ function getFocusedPan(stage, surface, zoom, focus = INITIAL_FOCUS) {
   }, zoom, stage, surface)
 }
 
-function RegionMap() {
+function RegionMap({ parentName = 'Eiridor', parentRoute = '/eiridor' }) {
   const { regionId } = useParams()
   const stageRef = useRef(null)
   const mapSurfaceRef = useRef(null)
@@ -204,7 +204,7 @@ function RegionMap() {
   const [pan, setPan] = useState({ x: 0, y: 0 })
   const [quality, setQuality] = useState(getInitialQuality)
   const [isQualityOpen, setIsQualityOpen] = useState(false)
-  const [isReturningToEiridor, setIsReturningToEiridor] = useState(false)
+  const [isReturningToParent, setIsReturningToParent] = useState(false)
   const region = REGION_MAPS[regionId]
 
   const setStageElement = useCallback((node) => {
@@ -376,15 +376,15 @@ function RegionMap() {
     dragRef.current = null
   }
 
-  const returnToEiridor = () => {
-    if (isReturningToEiridor) {
+  const returnToParent = () => {
+    if (isReturningToParent) {
       return
     }
 
-    setIsReturningToEiridor(true)
+    setIsReturningToParent(true)
     window.dispatchEvent(new CustomEvent(ROUTE_TRANSITION_EVENT, {
       detail: {
-        to: '/eiridor',
+        to: parentRoute,
         navigationDelay: EIRIDOR_NAVIGATION_DELAY,
         openingDuration: EIRIDOR_TRANSITION_OPENING_DURATION,
       },
@@ -403,9 +403,9 @@ function RegionMap() {
         <button
           className={styles.backButton}
           type="button"
-          aria-label="Back to Eiridor"
-          disabled={isReturningToEiridor}
-          onClick={returnToEiridor}
+          aria-label={`Back to ${parentName}`}
+          disabled={isReturningToParent}
+          onClick={returnToParent}
         >
           <FiArrowLeft aria-hidden="true" />
         </button>
@@ -521,9 +521,9 @@ function RegionMap() {
       <button
         className={styles.backButton}
         type="button"
-        aria-label="Back to Eiridor"
-        disabled={isReturningToEiridor}
-        onClick={returnToEiridor}
+        aria-label={`Back to ${parentName}`}
+        disabled={isReturningToParent}
+        onClick={returnToParent}
       >
         <FiArrowLeft aria-hidden="true" />
       </button>
@@ -541,7 +541,7 @@ function RegionMap() {
           aria-expanded={isQualityOpen}
           onClick={() => setIsQualityOpen((current) => !current)}
         >
-          <FiSun aria-hidden="true" />
+          <FiSliders aria-hidden="true" />
         </button>
         <div className={styles.qualityMenu} aria-label="Drakenholm quality">
           <span className={styles.qualityTitle}>Drakenholm Quality</span>

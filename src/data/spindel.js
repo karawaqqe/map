@@ -228,7 +228,17 @@ export const spindelFogParticles = [
 	new URL("../../img/particles/fog_particle4.png", import.meta.url).href,
 ];
 
+export const spindelInteractiveCastle = new URL(
+	"../../img/cubes/Spindel_new/interactable_castle.png",
+	import.meta.url,
+).href;
+
 export const spindelOst = new URL(
 	"../../sounds/spindel/ost/Naktigonis - The Storm That Speaks (Deepwoken OST).mp3",
+	import.meta.url,
+).href;
+
+export const spindelBlizzardAmbience = new URL(
+	"../../sounds/blizzard/blizzard2.mp3",
 	import.meta.url,
 ).href;
