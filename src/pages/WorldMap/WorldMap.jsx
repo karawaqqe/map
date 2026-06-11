@@ -527,6 +527,32 @@ function WorldMap() {
             </div>
           </foreignObject>
 
+          <g className={styles.continentOverlayLayer} aria-hidden="true">
+            {continents
+              .filter((continent) => !continent.hideInfo && continent.crest)
+              .map((continent) => (
+                <foreignObject
+                  key={`overlay-${continent.id}`}
+                  data-continent-id={continent.id}
+                  className={styles.continentOverlay}
+                  x={continent.overlay.x}
+                  y={continent.overlay.y}
+                  width={continent.overlay.width}
+                  height={continent.overlay.height}
+                >
+                  <div
+                    className={styles.continentBadge}
+                    style={{
+                      '--crest-size': `${continent.overlay.crestSize}px`,
+                    }}
+                  >
+                    <img className={styles.continentCrest} src={continent.crest} alt="" />
+                    <span className={styles.continentName}>{continent.name}</span>
+                  </div>
+                </foreignObject>
+              ))}
+          </g>
+
         </svg>
         <div
           className={`${styles.qualityPanel} ${isQualityOpen ? styles.qualityPanelOpen : ''}`}

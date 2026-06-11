@@ -4,6 +4,8 @@ import { useParams } from 'react-router-dom'
 import { ROUTE_TRANSITION_EVENT } from '../../constants/routeTransition'
 import styles from './RegionMap.module.scss'
 import drakenholmMapImage from '../../../img/continents/Regions/Eiridor/Drakenholm/Untitled23_20260607205818.png'
+import everdanMapImage from '../../../img/continents/Regions/Holylight/Everdawn/Everdan.png'
+import kaelmoreMapImage from '../../../img/continents/Regions/Holylight/Kaelmore/kaelmore.png'
 import birdImage from '../../../img/bird/newbird.png'
 import birdSound from '../../../sounds/birds/birdsound.mp3'
 import cloud1 from '../../../img/clouds/cloud1.png'
@@ -17,11 +19,21 @@ import churchIcon from '../../../svg/Eiridor/Church/cross3.svg'
 import tavernIcon from '../../../svg/Eiridor/Bar/drakenholm_tavern_icon.svg'
 import forgeIcon from '../../../svg/Eiridor/Forge/forge_transparent.svg'
 import marketIcon from '../../../svg/Eiridor/Market/market_scalesdrakenholm.svg'
+import everdanChurchIcon from '../../../svg/HolyLight/Church/cross11.svg'
+import everdanForgeIcon from '../../../svg/HolyLight/Forge/everdane_forge_icon.svg'
+import everdanMarketIcon from '../../../svg/HolyLight/Market/everdane_market_scales_detailed.svg'
+import everdanMonasteryIcon from '../../../svg/HolyLight/Monastery/golden_monastery_cross.svg'
+import everdanTavernIcon from '../../../svg/HolyLight/Bar/everdan_tavern_icon.svg'
+import kaelmoreChurchIcon from '../../../svg/HolyLight/Church/cross8.svg'
+import kaelmoreForgeIcon from '../../../svg/HolyLight/Forge/kaelmore_forge_icon.svg'
+import kaelmoreMarketIcon from '../../../svg/HolyLight/Market/kaelmore_market_icon_no_bg.svg'
+import kaelmoreMonasteryIcon from '../../../svg/HolyLight/Monastery/dark_monastery_shield.svg'
+import kaelmoreTavernIcon from '../../../svg/HolyLight/Bar/kaelmor_tavern_icon.svg'
 
 const MIN_ZOOM = 1
 const MAX_VISIBLE_AREA_PERCENT = 20
 const MAX_ZOOM = 100 / MAX_VISIBLE_AREA_PERCENT
-const INITIAL_ZOOM = 2.35
+const INITIAL_ZOOM = MAX_ZOOM
 const INITIAL_FOCUS = { x: 0.49, y: 0.47 }
 const ZOOM_STEP = 0.35
 const EIRIDOR_NAVIGATION_DELAY = 1150
@@ -88,25 +100,92 @@ const DRAKENHOLM_MARKERS = [
   { id: 'marker-50', type: 'forge', x: 47.3137, y: 72.1513 },
   { id: 'marker-51', type: 'forge', x: 11.7768, y: 72.8254, offsetX: 3.75, offsetY: 2.5 },
 ]
+
+const EVERDAN_MARKERS = [
+  { id: 'everdan-tavern-01', type: 'tavern', x: 46.9383, y: 11.2865 },
+  { id: 'everdan-monastery-01', type: 'monastery', x: 80.8004, y: 14.1196 },
+  { id: 'everdan-church-01', type: 'church', x: 71.4449, y: 49.6366 },
+  { id: 'everdan-market-01', type: 'market', x: 69.5654, y: 55.1489 },
+  { id: 'everdan-forge-01', type: 'forge', x: 74.2297, y: 54.8820 },
+]
+
+const KAELMORE_MARKERS = [
+  { id: 'kaelmore-market-01', type: 'market', x: 69.3889, y: 20.2484 },
+  { id: 'kaelmore-market-02', type: 'market', x: 74.0042, y: 49.5873 },
+  { id: 'kaelmore-market-03', type: 'market', x: 39.6330, y: 54.0496 },
+  { id: 'kaelmore-church-01', type: 'church', x: 12.2440, y: 45.4210 },
+  { id: 'kaelmore-church-02', type: 'church', x: 54.7865, y: 61.7665 },
+  { id: 'kaelmore-tavern-01', type: 'tavern', x: 67.8542, y: 5.7063 },
+  { id: 'kaelmore-tavern-02', type: 'tavern', x: 57.3009, y: 14.7126 },
+  { id: 'kaelmore-tavern-03', type: 'tavern', x: 36.7824, y: 23.5133 },
+  { id: 'kaelmore-tavern-04', type: 'tavern', x: 50.3398, y: 30.7476 },
+  { id: 'kaelmore-tavern-05', type: 'tavern', x: 58.3293, y: 31.8691 },
+  { id: 'kaelmore-tavern-06', type: 'tavern', x: 40.7501, y: 33.7235 },
+  { id: 'kaelmore-tavern-07', type: 'tavern', x: 28.6943, y: 34.0479 },
+  { id: 'kaelmore-tavern-08', type: 'tavern', x: 63.2728, y: 35.0263 },
+  { id: 'kaelmore-tavern-09', type: 'tavern', x: 47.2961, y: 41.8106 },
+  { id: 'kaelmore-tavern-10', type: 'tavern', x: 76.1272, y: 42.5649 },
+  { id: 'kaelmore-tavern-11', type: 'tavern', x: 71.0992, y: 44.0726 },
+  { id: 'kaelmore-tavern-12', type: 'tavern', x: 79.2213, y: 44.9930 },
+  { id: 'kaelmore-tavern-13', type: 'tavern', x: 56.2157, y: 45.4787 },
+  { id: 'kaelmore-tavern-14', type: 'tavern', x: 38.6796, y: 47.1099 },
+  { id: 'kaelmore-tavern-15', type: 'tavern', x: 94.2363, y: 48.1683 },
+  { id: 'kaelmore-tavern-16', type: 'tavern', x: 78.4093, y: 50.3689 },
+  { id: 'kaelmore-tavern-17', type: 'tavern', x: 67.5043, y: 55.5455 },
+  { id: 'kaelmore-tavern-18', type: 'tavern', x: 22.8969, y: 58.0519 },
+  { id: 'kaelmore-tavern-19', type: 'tavern', x: 31.3676, y: 60.4562 },
+  { id: 'kaelmore-tavern-20', type: 'tavern', x: 45.0586, y: 61.3128 },
+  { id: 'kaelmore-tavern-21', type: 'tavern', x: 86.7933, y: 64.5078 },
+  { id: 'kaelmore-tavern-22', type: 'tavern', x: 52.3677, y: 68.5438 },
+  { id: 'kaelmore-tavern-23', type: 'tavern', x: 36.9029, y: 68.9711 },
+  { id: 'kaelmore-tavern-24', type: 'tavern', x: 64.3701, y: 70.3384 },
+  { id: 'kaelmore-tavern-25', type: 'tavern', x: 60.1620, y: 76.2689 },
+  { id: 'kaelmore-tavern-26', type: 'tavern', x: 36.9042, y: 76.8974 },
+  { id: 'kaelmore-tavern-27', type: 'tavern', x: 40.5854, y: 80.9921 },
+  { id: 'kaelmore-tavern-28', type: 'tavern', x: 27.3807, y: 81.6447 },
+  { id: 'kaelmore-tavern-29', type: 'tavern', x: 48.0166, y: 83.5591 },
+  { id: 'kaelmore-forge-01', type: 'forge', x: 23.6419, y: 33.0923 },
+  { id: 'kaelmore-forge-02', type: 'forge', x: 85.7625, y: 47.8299 },
+  { id: 'kaelmore-forge-03', type: 'forge', x: 72.0204, y: 48.3951 },
+  { id: 'kaelmore-monastery-01', type: 'monastery', x: 75.2077, y: 44.8671 },
+  { id: 'kaelmore-monastery-02', type: 'monastery', x: 12.4729, y: 54.6873 },
+]
+
 const MARKER_ICONS = {
   church: churchIcon,
   forge: forgeIcon,
   market: marketIcon,
   tavern: tavernIcon,
 }
+const EVERDAN_MARKER_ICONS = {
+  church: everdanChurchIcon,
+  forge: everdanForgeIcon,
+  market: everdanMarketIcon,
+  monastery: everdanMonasteryIcon,
+  tavern: everdanTavernIcon,
+}
+const KAELMORE_MARKER_ICONS = {
+  church: kaelmoreChurchIcon,
+  forge: kaelmoreForgeIcon,
+  market: kaelmoreMarketIcon,
+  monastery: kaelmoreMonasteryIcon,
+  tavern: kaelmoreTavernIcon,
+}
 const MARKER_LABELS = {
   church: 'Church',
   forge: 'Forge',
   market: 'Market',
+  monastery: 'Monastery',
   tavern: 'Tavern',
 }
-const REGION_MAPS = {
-  drakenholm: {
-    image: drakenholmMapImage,
-    markers: DRAKENHOLM_MARKERS,
-    name: 'Drakenholm',
-  },
-}
+const DEBUG_REGION_TILES = false
+
+// Region tile coordinates are controlled here. Use map pixel coordinates:
+// { image, x, y, width, height }. Future 1333x666 tiles can be added in this array.
+const createFullRegionTile = (image, width, height) => [
+  { id: 'base-0', image, x: 0, y: 0, width, height },
+]
+
 const cloudImages = [cloud1, cloud2, cloud3, cloud4, cloud5, cloud6, cloud7]
 const CINEMATIC_CLOUDS = [
   { image: 0, x: 6, y: 9, scale: 0.84, duration: 132, delay: -24, driftX: 18, driftY: 2, opacity: 0.44 },
@@ -114,6 +193,11 @@ const CINEMATIC_CLOUDS = [
   { image: 5, x: 48, y: 7, scale: 0.88, duration: 148, delay: -48, driftX: 16, driftY: 4, opacity: 0.34 },
   { image: 2, x: 67, y: 34, scale: 0.72, duration: 170, delay: -108, driftX: -12, driftY: 3, opacity: 0.32 },
   { image: 6, x: 82, y: 16, scale: 0.78, duration: 142, delay: -92, driftX: 13, driftY: -2, opacity: 0.34 },
+]
+const BALANCED_CLOUDS = [
+  { image: 0, x: 10, y: 12, scale: 0.72, duration: 76, delay: -34, driftX: 18, driftY: 3, opacity: 0.2 },
+  { image: 3, x: 42, y: 8, scale: 0.66, duration: 86, delay: -60, driftX: -16, driftY: 4, opacity: 0.18 },
+  { image: 6, x: 70, y: 32, scale: 0.64, duration: 82, delay: -48, driftX: 14, driftY: -3, opacity: 0.16 },
 ]
 const CINEMATIC_BIRD_FLOCKS = [
   {
@@ -141,6 +225,66 @@ const CINEMATIC_BIRD_FLOCKS = [
     ],
   },
 ]
+const QUALITY_ATMOSPHERE = {
+  cinematic: {
+    clouds: CINEMATIC_CLOUDS,
+    fogClassName: '',
+    showBirds: true,
+  },
+  balanced: {
+    clouds: BALANCED_CLOUDS,
+    fogClassName: 'fogLayerBalanced',
+    showBirds: false,
+  },
+  performance: {
+    clouds: [],
+    fogClassName: 'fogLayerPerformance',
+    showBirds: false,
+  },
+}
+const REGION_MAPS = {
+  drakenholm: {
+    aspectRatio: '2 / 1',
+    focus: INITIAL_FOCUS,
+    height: 2000,
+    markers: DRAKENHOLM_MARKERS,
+    name: 'Drakenholm',
+    tiles: createFullRegionTile(drakenholmMapImage, 4000, 2000),
+    width: 4000,
+  },
+  everdan: {
+    aspectRatio: '4500 / 2500',
+    birdFlocks: [],
+    focus: { x: 0.5, y: 0.5 },
+    height: 2500,
+    markerIcons: EVERDAN_MARKER_ICONS,
+    markers: EVERDAN_MARKERS,
+    name: 'Everdan',
+    tiles: createFullRegionTile(everdanMapImage, 4500, 2500),
+    width: 4500,
+  },
+  everdawn: {
+    aspectRatio: '4500 / 2500',
+    birdFlocks: [],
+    focus: { x: 0.5, y: 0.5 },
+    height: 2500,
+    markerIcons: EVERDAN_MARKER_ICONS,
+    markers: EVERDAN_MARKERS,
+    name: 'Everdan',
+    tiles: createFullRegionTile(everdanMapImage, 4500, 2500),
+    width: 4500,
+  },
+  kaelmore: {
+    aspectRatio: '4566 / 2403',
+    focus: { x: 0.5, y: 0.48 },
+    height: 2403,
+    markerIcons: KAELMORE_MARKER_ICONS,
+    markers: KAELMORE_MARKERS,
+    name: 'Kaelmore',
+    tiles: createFullRegionTile(kaelmoreMapImage, 4566, 2403),
+    width: 4566,
+  },
+}
 
 function getInitialQuality() {
   if (typeof window === 'undefined') {
@@ -193,6 +337,15 @@ function getFocusedPan(stage, surface, zoom, focus = INITIAL_FOCUS) {
   }, zoom, stage, surface)
 }
 
+function getTileStyle(tile, region) {
+  return {
+    '--tile-left': `${(tile.x / region.width) * 100}%`,
+    '--tile-top': `${(tile.y / region.height) * 100}%`,
+    '--tile-width': `${(tile.width / region.width) * 100}%`,
+    '--tile-height': `${(tile.height / region.height) * 100}%`,
+  }
+}
+
 function RegionMap({ parentName = 'Eiridor', parentRoute = '/eiridor' }) {
   const { regionId } = useParams()
   const stageRef = useRef(null)
@@ -202,6 +355,7 @@ function RegionMap({ parentName = 'Eiridor', parentRoute = '/eiridor' }) {
   const hasInitialCameraRef = useRef(false)
   const [zoom, setZoom] = useState(INITIAL_ZOOM)
   const [pan, setPan] = useState({ x: 0, y: 0 })
+  const [mapSize, setMapSize] = useState({ width: 0, height: 0 })
   const [quality, setQuality] = useState(getInitialQuality)
   const [isQualityOpen, setIsQualityOpen] = useState(false)
   const [isReturningToParent, setIsReturningToParent] = useState(false)
@@ -224,10 +378,21 @@ function RegionMap({ parentName = 'Eiridor', parentRoute = '/eiridor' }) {
         return
       }
 
+      setMapSize((currentSize) => {
+        const nextSize = {
+          width: surface.clientWidth,
+          height: surface.clientHeight,
+        }
+
+        return currentSize.width === nextSize.width && currentSize.height === nextSize.height
+          ? currentSize
+          : nextSize
+      })
+
       setPan((currentPan) => {
         if (!hasInitialCameraRef.current) {
           hasInitialCameraRef.current = true
-          return getFocusedPan(stage, surface, INITIAL_ZOOM)
+          return getFocusedPan(stage, surface, INITIAL_ZOOM, region?.focus)
         }
 
         return clampPan(currentPan, zoom, stage, surface)
@@ -415,6 +580,49 @@ function RegionMap({ parentName = 'Eiridor', parentRoute = '/eiridor' }) {
     )
   }
 
+  const atmosphere = QUALITY_ATMOSPHERE[quality] ?? QUALITY_ATMOSPHERE.cinematic
+  const birdFlocks = region.birdFlocks ?? CINEMATIC_BIRD_FLOCKS
+  const hasRegionBirdFlocks = region.birdFlocks !== undefined
+  const showMapAtmosphere = atmosphere.clouds.length > 0 || atmosphere.fogClassName !== null
+  const showBirdFlocks = atmosphere.showBirds && birdFlocks.length > 0
+  const renderBirdFlocks = (className = styles.birdLayer, isMapBound = false) => (
+    <div className={className} aria-hidden="true">
+      {birdFlocks.map((flock) => (
+        <div
+          key={flock.id}
+          className={styles.birdFlock}
+          style={{
+            '--flock-x': `${flock.x ?? -10}%`,
+            '--flock-y': `${flock.y}%`,
+            '--flock-travel-x': isMapBound
+              ? `${((flock.travelX ?? 0) * mapSize.width) / 100}px`
+              : `${flock.travelX ?? 120}vw`,
+            '--flock-travel-y': isMapBound
+              ? `${((flock.travelY ?? 0) * mapSize.height) / 100}px`
+              : `${flock.travelY ?? 4}vh`,
+            '--flock-duration': `${flock.duration}s`,
+            '--flock-delay': `${flock.delay}s`,
+          }}
+        >
+          {flock.birds.map((bird, index) => (
+            <img
+              key={`${flock.id}-${index}`}
+              className={styles.bird}
+              src={birdImage}
+              alt=""
+              style={{
+                '--bird-x': `${bird.x}px`,
+                '--bird-y': `${bird.y}px`,
+                '--bird-scale': isMapBound ? (bird.scale * INITIAL_ZOOM) / zoom : bird.scale,
+                '--bird-rotate': `${bird.rotate}deg`,
+              }}
+            />
+          ))}
+        </div>
+      ))}
+    </div>
+  )
+
   return (
     <section className={styles.page}>
       <div
@@ -430,48 +638,72 @@ function RegionMap({ parentName = 'Eiridor', parentRoute = '/eiridor' }) {
             ref={setMapSurfaceElement}
             className={styles.mapSurface}
             style={{
+              '--region-aspect-ratio': region.aspectRatio ?? '2 / 1',
               left: `calc(50% + ${pan.x}px)`,
               top: `calc(50% + ${pan.y}px)`,
               transform: `translate(-50%, -50%) scale(${zoom})`,
             }}
           >
-            <img
-              className={styles.regionMap}
-              src={region.image}
-              alt={`${region.name} region map`}
-              draggable="false"
-            />
-            {quality === 'cinematic' && (
-              <div className={styles.mapAtmosphere} aria-hidden="true">
-                <div className={styles.fogLayer} />
-                <div className={styles.cloudImages}>
-                  {CINEMATIC_CLOUDS.map((cloud, index) => (
-                    <img
-                      key={`cloud-${index}`}
-                      className={styles.cloudImage}
-                      src={cloudImages[cloud.image]}
-                      alt=""
-                      style={{
-                        '--cloud-x': `${cloud.x}%`,
-                        '--cloud-y': `${cloud.y}%`,
-                        '--cloud-scale': cloud.scale,
-                        '--cloud-duration': `${cloud.duration}s`,
-                        '--cloud-delay': `${cloud.delay}s`,
-                        '--cloud-drift-x': `${cloud.driftX}%`,
-                        '--cloud-drift-y': `${cloud.driftY}%`,
-                        '--cloud-opacity': cloud.opacity,
-                      }}
-                    />
-                  ))}
+            <div
+              className={`${styles.mapTiles} ${DEBUG_REGION_TILES ? styles.mapTilesDebug : ''}`}
+              aria-label={`${region.name} region map`}
+              role="img"
+            >
+              {region.tiles.map((tile) => (
+                <div
+                  key={tile.id}
+                  className={styles.mapTile}
+                  style={getTileStyle(tile, region)}
+                >
+                  <img
+                    className={styles.regionMap}
+                    src={tile.image}
+                    alt=""
+                    draggable="false"
+                  />
                 </div>
+              ))}
+            </div>
+            {showMapAtmosphere && (
+              <div className={styles.mapAtmosphere} aria-hidden="true">
+                <div
+                  className={`${styles.fogLayer} ${
+                    atmosphere.fogClassName ? styles[atmosphere.fogClassName] : ''
+                  }`}
+                />
+                {atmosphere.clouds.length > 0 && (
+                  <div className={styles.cloudImages}>
+                    {atmosphere.clouds.map((cloud, index) => (
+                      <img
+                        key={`cloud-${index}`}
+                        className={styles.cloudImage}
+                        src={cloudImages[cloud.image]}
+                        alt=""
+                        style={{
+                          '--cloud-x': `${cloud.x}%`,
+                          '--cloud-y': `${cloud.y}%`,
+                          '--cloud-scale': cloud.scale,
+                          '--cloud-duration': `${cloud.duration}s`,
+                          '--cloud-delay': `${cloud.delay}s`,
+                          '--cloud-drift-x': `${cloud.driftX}%`,
+                          '--cloud-drift-y': `${cloud.driftY}%`,
+                          '--cloud-opacity': cloud.opacity,
+                        }}
+                      />
+                    ))}
+                  </div>
+                )}
               </div>
             )}
+            {showBirdFlocks &&
+              hasRegionBirdFlocks &&
+              renderBirdFlocks(`${styles.birdLayer} ${styles.mapBirdLayer}`, true)}
             <div className={styles.mapMarkers}>
               {region.markers.map((marker) => (
                 <img
                   key={marker.id}
                   className={`${styles.mapMarker} ${styles[`${marker.type}Marker`]}`}
-                  src={MARKER_ICONS[marker.type]}
+                  src={(region.markerIcons ?? MARKER_ICONS)[marker.type]}
                   alt={MARKER_LABELS[marker.type]}
                   draggable="false"
                   tabIndex={0}
@@ -485,37 +717,10 @@ function RegionMap({ parentName = 'Eiridor', parentRoute = '/eiridor' }) {
           </div>
         </div>
       </div>
-      {quality === 'cinematic' && (
+      {atmosphere.showBirds && (
         <>
           <audio ref={birdAudioRef} className={styles.ambientAudio} src={birdSound} preload="none" />
-          <div className={styles.birdLayer} aria-hidden="true">
-            {CINEMATIC_BIRD_FLOCKS.map((flock) => (
-              <div
-                key={flock.id}
-                className={styles.birdFlock}
-                style={{
-                  '--flock-y': `${flock.y}%`,
-                  '--flock-duration': `${flock.duration}s`,
-                  '--flock-delay': `${flock.delay}s`,
-                }}
-              >
-                {flock.birds.map((bird, index) => (
-                  <img
-                    key={`${flock.id}-${index}`}
-                    className={styles.bird}
-                    src={birdImage}
-                    alt=""
-                    style={{
-                      '--bird-x': `${bird.x}px`,
-                      '--bird-y': `${bird.y}px`,
-                      '--bird-scale': bird.scale,
-                      '--bird-rotate': `${bird.rotate}deg`,
-                    }}
-                  />
-                ))}
-              </div>
-            ))}
-          </div>
+          {!hasRegionBirdFlocks && showBirdFlocks && renderBirdFlocks()}
         </>
       )}
       <button
@@ -589,3 +794,6 @@ function RegionMap({ parentName = 'Eiridor', parentRoute = '/eiridor' }) {
 }
 
 export default RegionMap
+
+
+

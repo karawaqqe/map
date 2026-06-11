@@ -101,13 +101,9 @@
 }
 
 .map:has(.hitbox[data-continent-id='eiridors']:hover) .continentOverlay[data-continent-id='eiridors'],
-.map:has(.hitbox[data-continent-id='eiridors']:focus-visible) .continentOverlay[data-continent-id='eiridors'],
 .map:has(.hitbox[data-continent-id='death']:hover) .continentOverlay[data-continent-id='death'],
-.map:has(.hitbox[data-continent-id='death']:focus-visible) .continentOverlay[data-continent-id='death'],
 .map:has(.hitbox[data-continent-id='holyLights']:hover) .continentOverlay[data-continent-id='holyLights'],
-.map:has(.hitbox[data-continent-id='holyLights']:focus-visible) .continentOverlay[data-continent-id='holyLights'],
-.map:has(.hitbox[data-continent-id='island']:hover) .continentOverlay[data-continent-id='island'],
-.map:has(.hitbox[data-continent-id='island']:focus-visible) .continentOverlay[data-continent-id='island'] {
+.map:has(.hitbox[data-continent-id='island']:hover) .continentOverlay[data-continent-id='island'] {
   opacity: 1;
   transform: translateY(0) scale(1);
 }

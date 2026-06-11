@@ -3,7 +3,9 @@
   width: 100vw;
   min-height: 100vh;
   overflow: hidden;
-  background: #050607;
+  background:
+    radial-gradient(ellipse at center, rgba(206, 178, 117, 0.2), transparent 58%),
+    linear-gradient(180deg, #24322f 0%, #44513c 48%, #191f19 100%);
 }
 
 .mapStage {
@@ -28,21 +30,53 @@
 .mapSurface {
   position: absolute;
   width: max(100vw, 200vh);
-  aspect-ratio: 2 / 1;
+  aspect-ratio: var(--region-aspect-ratio, 2 / 1);
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 42% 40%, rgba(255, 219, 148, 0.2), transparent 58%),
+    linear-gradient(135deg, #7f9184 0%, #a7ad82 44%, #697f72 100%);
   transform-origin: center;
   transition: transform 160ms ease;
   user-select: none;
   will-change: transform;
 }
 
+.mapTiles,
+.mapTile,
 .regionMap {
   position: absolute;
+}
+
+.mapTiles {
+  inset: 0;
+  z-index: 0;
+}
+
+.mapTile {
+  left: var(--tile-left);
+  top: var(--tile-top);
+  width: var(--tile-width);
+  height: var(--tile-height);
+  overflow: hidden;
+}
+
+.mapTilesDebug .mapTile {
+  outline: 2px solid rgba(255, 80, 80, 0.72);
+  outline-offset: -2px;
+}
+
+.regionMap {
   inset: 0;
   width: 100%;
   height: 100%;
+  display: block;
   object-fit: cover;
-  filter: brightness(calc(0.94 * var(--fx-brightness))) saturate(0.94);
+  filter: brightness(calc(1.03 * var(--fx-brightness))) saturate(1.14) contrast(1.03);
   user-select: none;
+}
+
+:global(body.quality-balanced) .regionMap {
+  filter: brightness(1.03) saturate(1.14) contrast(1.03);
 }
 
 .mapMarkers {
@@ -112,6 +146,11 @@
   height: clamp(20px, 1.14vw, 32px);
 }
 
+.monasteryMarker {
+  width: clamp(21px, 1.2vw, 34px);
+  height: clamp(21px, 1.2vw, 34px);
+}
+
 .ambientAudio {
   display: none;
 }
@@ -134,10 +173,22 @@
   z-index: 3;
 }
 
+.mapBirdLayer {
+  z-index: 2;
+}
+
 .fogLayer {
   z-index: 1;
-  opacity: 0.48;
+  opacity: 0.56;
   mix-blend-mode: screen;
+}
+
+.fogLayerBalanced {
+  opacity: 0.28;
+}
+
+.fogLayerPerformance {
+  opacity: 0.16;
 }
 
 .cloudImages {
@@ -152,12 +203,25 @@
   height: 76%;
   border-radius: 50%;
   background:
-    radial-gradient(ellipse at 38% 48%, rgba(235, 238, 226, 0.24), transparent 55%),
-    radial-gradient(ellipse at 62% 54%, rgba(235, 238, 226, 0.16), transparent 60%),
-    radial-gradient(ellipse at 50% 50%, rgba(255, 255, 255, 0.1), transparent 70%);
+    radial-gradient(ellipse at 38% 48%, rgba(255, 236, 198, 0.22), transparent 55%),
+    radial-gradient(ellipse at 62% 54%, rgba(245, 232, 188, 0.14), transparent 60%),
+    radial-gradient(ellipse at 50% 50%, rgba(255, 249, 224, 0.08), transparent 70%);
   filter: blur(calc(22px * var(--fx-blur)));
   transform: translate3d(0, 0, 0);
   will-change: transform;
+}
+
+.fogLayerBalanced::before,
+.fogLayerBalanced::after {
+  filter: blur(calc(18px * max(var(--fx-blur), 0.35)));
+}
+
+.fogLayerPerformance::before,
+.fogLayerPerformance::after {
+  background:
+    radial-gradient(ellipse at 42% 52%, rgba(255, 236, 198, 0.14), transparent 58%),
+    radial-gradient(ellipse at 58% 48%, rgba(255, 249, 224, 0.06), transparent 70%);
+  filter: blur(18px);
 }
 
 .fogLayer::before {
@@ -181,8 +245,8 @@
   max-width: none;
   height: auto;
   opacity: calc(var(--cloud-opacity) * var(--fx-particles));
-  filter: brightness(calc(1.18 * var(--fx-brightness))) contrast(1.08)
-    saturate(0.32) sepia(0.02);
+  filter: brightness(calc(1.26 * var(--fx-brightness))) contrast(1.03)
+    saturate(0.62) sepia(0.14) hue-rotate(-8deg);
   mix-blend-mode: screen;
   transform: translate3d(0, 0, 0) scale(var(--cloud-scale));
   transform-origin: center;
@@ -192,16 +256,25 @@
   will-change: transform;
 }
 
+:global(body.quality-balanced) .cloudImage {
+  filter: brightness(1.26) contrast(1.03) saturate(0.62) sepia(0.14)
+    hue-rotate(-8deg);
+}
+
 .birdFlock {
   position: absolute;
   top: var(--flock-y);
-  left: -10%;
+  left: var(--flock-x, -10%);
   width: 100px;
   height: 48px;
   opacity: calc(0.68 * var(--fx-particles) * var(--fx-opacity));
   animation: drakenholmBirdFlock calc(var(--flock-duration) * var(--fx-speed)) linear infinite;
   animation-delay: var(--flock-delay);
   will-change: transform;
+}
+
+.mapBirdLayer .birdFlock {
+  animation-name: regionBirdFlock;
 }
 
 .bird {
@@ -487,6 +560,17 @@
 
   to {
     transform: translate3d(116vw, 3vh, 0);
+  }
+}
+
+@keyframes regionBirdFlock {
+  from {
+    transform: translate3d(0, -1%, 0);
+  }
+
+  to {
+    left: calc(var(--flock-x, -10%) + var(--flock-travel-x, 120%));
+    transform: translate3d(0, var(--flock-travel-y, 4%), 0);
   }
 }
 

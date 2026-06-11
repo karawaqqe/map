@@ -65,10 +65,80 @@
   transform: translateY(-1px) scale(1.001);
 }
 
-.caveVeil {
+.caveAtmosphere,
+.blackSmokeLayer,
+.dustLayer,
+.dripLayer {
   position: absolute;
   inset: 0;
   z-index: 2;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.blackSmokeLayer {
+  mix-blend-mode: multiply;
+  opacity: 0.72;
+}
+
+.smokePlume {
+  position: absolute;
+  left: var(--smoke-x);
+  top: var(--smoke-y);
+  width: 18vmax;
+  height: 14vmax;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 42% 58%, rgba(0, 0, 0, 0.42), transparent 62%), radial-gradient(ellipse at 62% 38%, rgba(3, 5, 7, 0.28), transparent 58%);
+  filter: blur(calc(18px * var(--fx-blur)));
+  opacity: 0;
+  transform: translate3d(-50%, -50%, 0) scale(var(--smoke-scale));
+  animation: smokeBreathe calc(var(--smoke-duration) * var(--fx-speed)) ease-in-out infinite;
+  animation-delay: var(--smoke-delay);
+  will-change: transform, opacity;
+}
+
+.dustLayer {
+  opacity: calc(0.68 * var(--fx-particles));
+}
+
+.dustParticle {
+  position: absolute;
+  left: var(--dust-x);
+  top: var(--dust-y);
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: rgba(203, 221, 224, 0.54);
+  box-shadow: 0 0 8px rgba(205, 232, 238, 0.28), 0 0 18px rgba(118, 164, 180, 0.12);
+  opacity: 0;
+  animation: dustFloat calc(var(--dust-duration) * var(--fx-speed)) linear infinite;
+  animation-delay: var(--dust-delay);
+  will-change: transform, opacity;
+}
+
+.dripLayer {
+  opacity: calc(0.72 * var(--fx-particles));
+}
+
+.waterDrip {
+  position: absolute;
+  top: -8px;
+  left: var(--drip-x);
+  width: 1px;
+  height: var(--drip-length);
+  border-radius: 999px;
+  background: linear-gradient(180deg, transparent, rgba(191, 231, 248, 0.42) 42%, rgba(238, 252, 255, 0.78));
+  filter: drop-shadow(0 0 5px rgba(130, 208, 244, 0.28));
+  opacity: 0;
+  animation: waterDrip calc(var(--drip-duration) * var(--fx-speed)) linear infinite;
+  animation-delay: var(--drip-delay);
+  will-change: transform, opacity;
+}
+
+.caveVeil {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
   pointer-events: none;
   background: radial-gradient(ellipse at 50% 54%, transparent 28%, rgba(0, 0, 0, 0.24) 64%, rgba(0, 0, 0, 0.64) 100%), linear-gradient(180deg, rgba(0, 0, 0, 0.2), transparent 28%, rgba(0, 0, 0, 0.3));
   opacity: 0.82;
@@ -200,6 +270,52 @@
     transform: translateY(-16px) scale(1.06) skewX(-3deg);
   }
 }
+@keyframes smokeBreathe {
+  0% {
+    opacity: 0;
+    transform: translate3d(-50%, -40%, 0) scale(calc(var(--smoke-scale) * 0.86));
+  }
+  30%, 72% {
+    opacity: calc(0.58 * var(--fx-opacity));
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(calc(-50% + 34px), calc(-78% - 26px), 0) scale(calc(var(--smoke-scale) * 1.18));
+  }
+}
+@keyframes dustFloat {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0);
+  }
+  18%, 72% {
+    opacity: 0.72;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--dust-drift), -92px, 0);
+  }
+}
+@keyframes waterDrip {
+  0%, 18% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0) scaleY(0.28);
+  }
+  24% {
+    opacity: 0.72;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(0, 82vh, 0) scaleY(1);
+  }
+}
+:global(body.quality-performance) .blackSmokeLayer,
+:global(body.quality-performance) .dustLayer,
+:global(body.quality-performance) .dripLayer {
+  opacity: 0;
+  visibility: hidden;
+}
+
 @media (max-width: 720px) {
   .backButton {
     left: 18px;
@@ -216,6 +332,9 @@
   .scene,
   .effectsLayer,
   .eyesLayerVisible,
+  .smokePlume,
+  .dustParticle,
+  .waterDrip,
   .visionOverlay,
   .visionGlyph {
     animation: none;
