@@ -19,16 +19,27 @@ import churchIcon from '../../../svg/Eiridor/Church/cross3.svg'
 import tavernIcon from '../../../svg/Eiridor/Bar/drakenholm_tavern_icon.svg'
 import forgeIcon from '../../../svg/Eiridor/Forge/forge_transparent.svg'
 import marketIcon from '../../../svg/Eiridor/Market/market_scalesdrakenholm.svg'
+import lyumerisTavernIcon from '../../../svg/Eiridor/Bar/lumeris_tavern_icon_transparent.svg'
 import everdanChurchIcon from '../../../svg/HolyLight/Church/cross11.svg'
 import everdanForgeIcon from '../../../svg/HolyLight/Forge/everdane_forge_icon.svg'
 import everdanMarketIcon from '../../../svg/HolyLight/Market/everdane_market_scales_detailed.svg'
 import everdanMonasteryIcon from '../../../svg/HolyLight/Monastery/golden_monastery_cross.svg'
 import everdanTavernIcon from '../../../svg/HolyLight/Bar/everdan_tavern_icon.svg'
+import lyumerisChurchIcon from '../../../svg/infopanel/cross2.svg'
+import lyumerisForgeIcon from '../../../svg/infopanel/forge_icon.svg'
+import lyumerisMarketIcon from '../../../svg/infopanel/market_scales.svg'
 import kaelmoreChurchIcon from '../../../svg/HolyLight/Church/cross8.svg'
 import kaelmoreForgeIcon from '../../../svg/HolyLight/Forge/kaelmore_forge_icon.svg'
 import kaelmoreMarketIcon from '../../../svg/HolyLight/Market/kaelmore_market_icon_no_bg.svg'
 import kaelmoreMonasteryIcon from '../../../svg/HolyLight/Monastery/dark_monastery_shield.svg'
 import kaelmoreTavernIcon from '../../../svg/HolyLight/Bar/kaelmor_tavern_icon.svg'
+
+const lyumerisTileImages = Object.entries(import.meta.glob(
+  '../../../img/continents/Regions/Eiridor/lumeris/tiles/*.png',
+  { eager: true, import: 'default' },
+))
+  .sort(([leftPath], [rightPath]) => leftPath.localeCompare(rightPath))
+  .map(([, image]) => image)
 
 const MIN_ZOOM = 1
 const MAX_VISIBLE_AREA_PERCENT = 20
@@ -151,6 +162,30 @@ const KAELMORE_MARKERS = [
   { id: 'kaelmore-monastery-02', type: 'monastery', x: 12.4729, y: 54.6873 },
 ]
 
+const LYUMERIS_MARKERS = [
+  { id: 'lyumeris-tavern-01', type: 'tavern', x: 49.9526, y: 8.4895 },
+  { id: 'lyumeris-tavern-02', type: 'tavern', x: 22.2391, y: 12.6516 },
+  { id: 'lyumeris-tavern-03', type: 'tavern', x: 35.3476, y: 16.1797 },
+  { id: 'lyumeris-tavern-04', type: 'tavern', x: 29.7973, y: 19.6527 },
+  { id: 'lyumeris-tavern-05', type: 'tavern', x: 36.3989, y: 28.2387 },
+  { id: 'lyumeris-tavern-06', type: 'tavern', x: 26.3118, y: 29.4101 },
+  { id: 'lyumeris-tavern-07', type: 'tavern', x: 47.2912, y: 32.0149 },
+  { id: 'lyumeris-tavern-08', type: 'tavern', x: 74.5785, y: 35.5292 },
+  { id: 'lyumeris-tavern-09', type: 'tavern', x: 56.5732, y: 39.6775 },
+  { id: 'lyumeris-tavern-10', type: 'tavern', x: 46.2303, y: 40.3390 },
+  { id: 'lyumeris-tavern-11', type: 'tavern', x: 70.8846, y: 43.7155 },
+  { id: 'lyumeris-tavern-12', type: 'tavern', x: 12.1502, y: 44.8563 },
+  { id: 'lyumeris-tavern-13', type: 'tavern', x: 33.8132, y: 53.8589 },
+  { id: 'lyumeris-tavern-14', type: 'tavern', x: 64.3872, y: 61.6455 },
+  { id: 'lyumeris-forge-01', type: 'forge', x: 52.6331, y: 7.4283 },
+  { id: 'lyumeris-forge-02', type: 'forge', x: 36.3137, y: 23.6218 },
+  { id: 'lyumeris-forge-03', type: 'forge', x: 9.6514, y: 42.8749 },
+  { id: 'lyumeris-market-01', type: 'market', x: 51.4220, y: 36.0410 },
+  { id: 'lyumeris-church-01', type: 'church', x: 37.7827, y: 26.1859 },
+  { id: 'lyumeris-church-02', type: 'church', x: 48.6460, y: 41.0426 },
+  { id: 'lyumeris-church-03', type: 'church', x: 66.3297, y: 53.2256 },
+]
+
 const MARKER_ICONS = {
   church: churchIcon,
   forge: forgeIcon,
@@ -171,6 +206,12 @@ const KAELMORE_MARKER_ICONS = {
   monastery: kaelmoreMonasteryIcon,
   tavern: kaelmoreTavernIcon,
 }
+const LYUMERIS_MARKER_ICONS = {
+  church: lyumerisChurchIcon,
+  forge: lyumerisForgeIcon,
+  market: lyumerisMarketIcon,
+  tavern: lyumerisTavernIcon,
+}
 const MARKER_LABELS = {
   church: 'Church',
   forge: 'Forge',
@@ -186,6 +227,34 @@ const createFullRegionTile = (image, width, height) => [
   { id: 'base-0', image, x: 0, y: 0, width, height },
 ]
 
+const createOverlappedRegionTiles = (images, width, height, columns, rows, overlap) => {
+  const tiles = []
+
+  for (let row = 0; row < rows; row += 1) {
+    for (let column = 0; column < columns; column += 1) {
+      const baseX = Math.floor((column * width) / columns)
+      const baseY = Math.floor((row * height) / rows)
+      const baseRight = Math.floor(((column + 1) * width) / columns)
+      const baseBottom = Math.floor(((row + 1) * height) / rows)
+      const x = Math.max(0, baseX - overlap)
+      const y = Math.max(0, baseY - overlap)
+      const right = Math.min(width, baseRight + overlap)
+      const bottom = Math.min(height, baseBottom + overlap)
+
+      tiles.push({
+        id: `tile-${row}-${column}`,
+        image: images[row * columns + column],
+        x,
+        y,
+        width: right - x,
+        height: bottom - y,
+      })
+    }
+  }
+
+  return tiles
+}
+
 const cloudImages = [cloud1, cloud2, cloud3, cloud4, cloud5, cloud6, cloud7]
 const CINEMATIC_CLOUDS = [
   { image: 0, x: 6, y: 9, scale: 0.84, duration: 132, delay: -24, driftX: 18, driftY: 2, opacity: 0.44 },
@@ -198,6 +267,16 @@ const BALANCED_CLOUDS = [
   { image: 0, x: 10, y: 12, scale: 0.72, duration: 76, delay: -34, driftX: 18, driftY: 3, opacity: 0.2 },
   { image: 3, x: 42, y: 8, scale: 0.66, duration: 86, delay: -60, driftX: -16, driftY: 4, opacity: 0.18 },
   { image: 6, x: 70, y: 32, scale: 0.64, duration: 82, delay: -48, driftX: 14, driftY: -3, opacity: 0.16 },
+]
+const LYUMERIS_CINEMATIC_CLOUDS = [
+  { image: 0, x: 6, y: 8, scale: 0.9, duration: 150, delay: -30, driftX: 12, driftY: 2, opacity: 0.2 },
+  { image: 3, x: 28, y: 20, scale: 0.78, duration: 172, delay: -84, driftX: -10, driftY: 3, opacity: 0.16 },
+  { image: 5, x: 58, y: 11, scale: 0.82, duration: 160, delay: -52, driftX: 11, driftY: -2, opacity: 0.15 },
+  { image: 6, x: 78, y: 34, scale: 0.7, duration: 184, delay: -112, driftX: -8, driftY: 2, opacity: 0.13 },
+]
+const LYUMERIS_BALANCED_CLOUDS = [
+  { image: 0, x: 12, y: 13, scale: 0.74, duration: 104, delay: -28, driftX: 9, driftY: 1, opacity: 0.07 },
+  { image: 6, x: 66, y: 29, scale: 0.64, duration: 118, delay: -64, driftX: -8, driftY: 2, opacity: 0.06 },
 ]
 const CINEMATIC_BIRD_FLOCKS = [
   {
@@ -284,6 +363,35 @@ const REGION_MAPS = {
     tiles: createFullRegionTile(kaelmoreMapImage, 4566, 2403),
     width: 4566,
   },
+  lyumeris: {
+    aspectRatio: '5279 / 3628',
+    birdFlocks: [],
+    focus: { x: 0.5, y: 0.5 },
+    height: 3628,
+    markerIcons: LYUMERIS_MARKER_ICONS,
+    markers: LYUMERIS_MARKERS,
+    name: 'Lyumeris',
+    qualityAtmosphere: {
+      cinematic: {
+        clouds: LYUMERIS_CINEMATIC_CLOUDS,
+        fogClassName: 'lumerisFogLayer',
+        showBirds: false,
+      },
+      balanced: {
+        clouds: LYUMERIS_BALANCED_CLOUDS,
+        fogClassName: 'lumerisFogLayerBalanced',
+        showBirds: false,
+      },
+      performance: {
+        clouds: [],
+        fogClassName: 'lumerisFogLayerPerformance',
+        showBirds: false,
+      },
+    },
+    surfaceBackground: 'radial-gradient(ellipse at 48% 42%, rgba(244, 236, 216, 0.82), transparent 58%), linear-gradient(135deg, #eee7d8 0%, #ded0b6 48%, #f7f3ea 100%)',
+    tiles: createOverlappedRegionTiles(lyumerisTileImages, 5279, 3628, 4, 4, 16),
+    width: 5279,
+  },
 }
 
 function getInitialQuality() {
@@ -359,6 +467,7 @@ function RegionMap({ parentName = 'Eiridor', parentRoute = '/eiridor' }) {
   const [quality, setQuality] = useState(getInitialQuality)
   const [isQualityOpen, setIsQualityOpen] = useState(false)
   const [isReturningToParent, setIsReturningToParent] = useState(false)
+  const [loadedTiles, setLoadedTiles] = useState({ regionId: null, tiles: {} })
   const region = REGION_MAPS[regionId]
 
   const setStageElement = useCallback((node) => {
@@ -368,6 +477,10 @@ function RegionMap({ parentName = 'Eiridor', parentRoute = '/eiridor' }) {
   const setMapSurfaceElement = useCallback((node) => {
     mapSurfaceRef.current = node
   }, [])
+
+  useEffect(() => {
+    hasInitialCameraRef.current = false
+  }, [regionId])
 
   useEffect(() => {
     const syncCameraBounds = () => {
@@ -580,7 +693,9 @@ function RegionMap({ parentName = 'Eiridor', parentRoute = '/eiridor' }) {
     )
   }
 
-  const atmosphere = QUALITY_ATMOSPHERE[quality] ?? QUALITY_ATMOSPHERE.cinematic
+  const atmosphere = region.qualityAtmosphere?.[quality] ??
+    QUALITY_ATMOSPHERE[quality] ??
+    QUALITY_ATMOSPHERE.cinematic
   const birdFlocks = region.birdFlocks ?? CINEMATIC_BIRD_FLOCKS
   const hasRegionBirdFlocks = region.birdFlocks !== undefined
   const showMapAtmosphere = atmosphere.clouds.length > 0 || atmosphere.fogClassName !== null
@@ -639,6 +754,7 @@ function RegionMap({ parentName = 'Eiridor', parentRoute = '/eiridor' }) {
             className={styles.mapSurface}
             style={{
               '--region-aspect-ratio': region.aspectRatio ?? '2 / 1',
+              '--region-surface-background': region.surfaceBackground,
               left: `calc(50% + ${pan.x}px)`,
               top: `calc(50% + ${pan.y}px)`,
               transform: `translate(-50%, -50%) scale(${zoom})`,
@@ -656,10 +772,27 @@ function RegionMap({ parentName = 'Eiridor', parentRoute = '/eiridor' }) {
                   style={getTileStyle(tile, region)}
                 >
                   <img
-                    className={styles.regionMap}
+                    className={`${styles.regionMap} ${
+                      loadedTiles.regionId === regionId && loadedTiles.tiles[tile.id]
+                        ? styles.regionMapLoaded
+                        : ''
+                    }`}
                     src={tile.image}
                     alt=""
                     draggable="false"
+                    fetchPriority="high"
+                    decoding="async"
+                    onLoad={() => {
+                      setLoadedTiles((currentLoadedTiles) => ({
+                        regionId,
+                        tiles: {
+                          ...(currentLoadedTiles.regionId === regionId
+                            ? currentLoadedTiles.tiles
+                            : {}),
+                          [tile.id]: true,
+                        },
+                      }))
+                    }}
                   />
                 </div>
               ))}
@@ -742,14 +875,14 @@ function RegionMap({ parentName = 'Eiridor', parentRoute = '/eiridor' }) {
         <button
           className={styles.qualityToggle}
           type="button"
-          aria-label="Drakenholm quality settings"
+          aria-label={`${region.name} quality settings`}
           aria-expanded={isQualityOpen}
           onClick={() => setIsQualityOpen((current) => !current)}
         >
           <FiSliders aria-hidden="true" />
         </button>
-        <div className={styles.qualityMenu} aria-label="Drakenholm quality">
-          <span className={styles.qualityTitle}>Drakenholm Quality</span>
+        <div className={styles.qualityMenu} aria-label={`${region.name} quality`}>
+          <span className={styles.qualityTitle}>{region.name} Quality</span>
           <div className={styles.qualityOptions}>
             {QUALITY_MODES.map((mode) => (
               <button
