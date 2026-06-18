@@ -108,7 +108,8 @@ function FogSpriteLayer({ className, fogSprites }) {
 			aria-hidden="true"
 		>
 			{fogSprites.map((fog, index) => {
-				const href = spindelFogParticles[fog.image % spindelFogParticles.length];
+				const href =
+					spindelFogParticles[fog.image % spindelFogParticles.length];
 				const height = fog.width * 0.46;
 
 				return (
@@ -158,8 +159,8 @@ function Spindel() {
 
 	useEffect(() => {
 		const audioEntries = [
-			{ audio: ostAudioRef.current, volume: 0.05 },
-			{ audio: blizzardAudioRef.current, volume: 0.18 },
+			{ audio: ostAudioRef.current, volume: 0.08 },
+			{ audio: blizzardAudioRef.current, volume: 0.02 },
 		].filter(({ audio }) => audio);
 
 		if (!audioEntries.length) {
@@ -381,7 +382,10 @@ function Spindel() {
 				>
 					<FiSliders aria-hidden="true" />
 				</button>
-				<div className={styles.qualityMenu} aria-label="Spindel graphics quality">
+				<div
+					className={styles.qualityMenu}
+					aria-label="Spindel graphics quality"
+				>
 					<span className={styles.qualityTitle}>Spindel Graphics</span>
 					<div className={styles.qualityOptions}>
 						{QUALITY_MODES.map((mode) => (
