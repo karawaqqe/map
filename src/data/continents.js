@@ -7,6 +7,9 @@ export const worldMapImage = new URL('../../img/globalmap/world_map.png', import
 export const windSound = new URL('../../sounds/wind/soundwind.mp3', import.meta.url).href
 export const birdImage = new URL('../../img/bird/newbird.png', import.meta.url).href
 export const birdSound = new URL('../../sounds/birds/birdsound.mp3', import.meta.url).href
+export const worldMapMusic = new URL('../../sounds/bg_music/Jeremy Derrick - The Quest of the Coast (SPOTISAVER).mp3', import.meta.url).href
+export const eiridorMusic = new URL('../../sounds/bg_music/bg4.mp3', import.meta.url).href
+export const holyLightMusic = new URL('../../sounds/bg_music/bg6.mp3', import.meta.url).href
 
 export const cloudImages = [
   new URL('../../img/clouds/cloud1.png', import.meta.url).href,

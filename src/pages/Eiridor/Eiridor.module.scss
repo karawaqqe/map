@@ -18,6 +18,10 @@
 	animation: eiridorArrive 900ms ease-out 80ms forwards;
 }
 
+.ambientAudio {
+	display: none;
+}
+
 .mapStage::before,
 .mapStage::after {
 	position: absolute;
