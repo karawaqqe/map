@@ -11,7 +11,7 @@ function loadImage(src) {
   })
 }
 
-export async function buildHitboxPath(src) {
+export async function buildHitboxPath(src, bounds = {}) {
   const image = await loadImage(src)
   const canvas = document.createElement('canvas')
   const context = canvas.getContext('2d', { willReadFrequently: true })
@@ -22,11 +22,15 @@ export async function buildHitboxPath(src) {
 
   const { data, width, height } = context.getImageData(0, 0, canvas.width, canvas.height)
   const segments = []
+  const minX = Math.max(0, bounds.minX ?? 0)
+  const maxX = Math.min(width, bounds.maxX ?? width)
+  const minY = Math.max(0, bounds.minY ?? 0)
+  const maxY = Math.min(height, bounds.maxY ?? height)
 
-  for (let y = 0; y < height; y += ROW_STEP) {
-    let x = 0
+  for (let y = minY; y < maxY; y += ROW_STEP) {
+    let x = minX
 
-    while (x < width) {
+    while (x < maxX) {
       const alpha = data[(y * width + x) * 4 + 3]
 
       if (alpha <= ALPHA_THRESHOLD) {
@@ -36,7 +40,7 @@ export async function buildHitboxPath(src) {
 
       const start = x
 
-      while (x < width && data[(y * width + x) * 4 + 3] > ALPHA_THRESHOLD) {
+      while (x < maxX && data[(y * width + x) * 4 + 3] > ALPHA_THRESHOLD) {
         x += 1
       }
 

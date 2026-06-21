@@ -12,6 +12,7 @@ import monasteryIconUrl from '../../../svg/infopanel/monastery_shield.svg'
 
 const DEFAULT_NAVIGATION_DELAY = 1150
 const DEFAULT_OPENING_DURATION = 1100
+const LEGEND_HIDDEN_ROUTES = ['/', '/eiridor', '/holy-light', '/shrine', '/spindel', '/spindel/frostbound-ledger']
 const LEGEND_ITEMS = [
   { icon: beerIconUrl, label: 'бар' },
   { icon: churchIconUrl, label: 'церковь' },
@@ -26,7 +27,7 @@ function Layout() {
   const [isLegendOpen, setIsLegendOpen] = useState(false)
   const location = useLocation()
   const navigate = useNavigate()
-  const hidesLegend = ['/', '/eiridor', '/holy-light', '/shrine', '/spindel'].includes(location.pathname)
+  const hidesLegend = LEGEND_HIDDEN_ROUTES.includes(location.pathname)
   const legendRef = useRef(null)
   const navigationTimeoutRef = useRef(null)
   const cleanupTimeoutRef = useRef(null)
@@ -53,16 +54,17 @@ function Layout() {
     const startRouteTransition = (event) => {
       const {
         to,
+        onTransitionPoint,
         navigationDelay = DEFAULT_NAVIGATION_DELAY,
         openingDuration = DEFAULT_OPENING_DURATION,
         variant = 'clouds',
       } = event.detail ?? {}
 
-      if (!to) {
+      if (!to && typeof onTransitionPoint !== 'function') {
         return
       }
 
-      if (['/', '/eiridor', '/holy-light', '/shrine', '/spindel'].includes(to)) {
+      if (LEGEND_HIDDEN_ROUTES.includes(to)) {
         setIsLegendOpen(false)
       }
 
@@ -74,8 +76,13 @@ function Layout() {
       setTransitionMode('closing')
 
       navigationTimeoutRef.current = window.setTimeout(() => {
-        hasNavigatedRef.current = true
-        navigate(to)
+        onTransitionPoint?.()
+
+        if (to) {
+          hasNavigatedRef.current = true
+          navigate(to)
+        }
+
         setTransitionMode('opening')
 
         cleanupTimeoutRef.current = window.setTimeout(() => {

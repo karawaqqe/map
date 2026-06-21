@@ -242,3 +242,25 @@ export const spindelBlizzardAmbience = new URL(
 	"../../sounds/blizzard/blizzard2.mp3",
 	import.meta.url,
 ).href;
+
+export const spindelRoomAssets = {
+	outer: new URL("../../img/places/spindel_room/outer.png", import.meta.url).href,
+	room: new URL("../../img/places/spindel_room/room.png", import.meta.url).href,
+	windows: new URL("../../img/places/spindel_room/windows.png", import.meta.url)
+		.href,
+	windowOutside: new URL(
+		"../../img/places/spindel_room/room_window_out2.png",
+		import.meta.url,
+	).href,
+	windowInterior: new URL(
+		"../../img/places/spindel_room/room_window2.png",
+		import.meta.url,
+	).href,
+	bookshelves: new URL(
+		"../../img/places/spindel_room/bookshelfs.png",
+		import.meta.url,
+	).href,
+	banner: new URL("../../img/places/spindel_room/banner.png", import.meta.url)
+		.href,
+	book: new URL("../../img/places/spindel_room/book.png", import.meta.url).href,
+};

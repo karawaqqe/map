@@ -55,6 +55,7 @@ function getNodePages(node) {
 }
 
 function DialogueBox({
+	className = "",
 	clickSound,
 	dialogue,
 	enableSkip = false,
@@ -288,7 +289,10 @@ function DialogueBox({
 
 	return (
 		<>
-			<section className={styles.dialoguePanel} aria-live="polite">
+			<section
+				className={`${styles.dialoguePanel} ${className}`}
+				aria-live="polite"
+			>
 				{clickSound && (
 					<audio
 						ref={clickAudioRef}

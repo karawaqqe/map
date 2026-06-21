@@ -30,6 +30,10 @@
   will-change: transform;
 }
 
+.ambientAudio {
+  display: none;
+}
+
 .baseMap,
 .continentImage {
   width: 1939px;

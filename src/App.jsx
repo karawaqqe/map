@@ -9,6 +9,7 @@ const RegionMap = lazy(() => import('./pages/RegionMap/RegionMap'))
 const CityMap = lazy(() => import('./pages/CityMap/CityMap'))
 const Shrine = lazy(() => import('./pages/Shrine/Shrine'))
 const Spindel = lazy(() => import('./pages/Spindel/Spindel'))
+const SpindelBookSection = lazy(() => import('./pages/Spindel/SpindelBookSection'))
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/holy-light" element={<HolyLight />} />
           <Route path="/shrine" element={<Shrine />} />
           <Route path="/spindel" element={<Spindel />} />
+          <Route path="/spindel/frostbound-ledger" element={<SpindelBookSection />} />
           <Route path="/region/:regionId" element={<RegionMap />} />
           <Route path="/holy-light/region/:regionId" element={<RegionMap parentRoute="/holy-light" parentName="Holy Light" />} />
           <Route path="/city/:cityId" element={<CityMap />} />

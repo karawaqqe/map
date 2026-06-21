@@ -1,0 +1,1119 @@
+.room {
+	position: fixed;
+	inset: 0;
+	z-index: 30;
+	width: 100vw;
+	height: 100vh;
+	overflow: hidden;
+	background: #03070a;
+	isolation: isolate;
+}
+
+.room img {
+	user-select: none;
+	pointer-events: none;
+}
+
+.outsideAtmosphere,
+.background,
+.outsideWindowSnow,
+.windowsLayer,
+.objectGlowLayer,
+.bookshelves,
+.banner,
+.bookLayer,
+.windowSnow,
+.roomFog,
+.roomGrade,
+.frontMask {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+
+.outsideAtmosphere {
+	z-index: 1;
+	pointer-events: none;
+	background:
+		radial-gradient(
+			ellipse at 23% 38%,
+			rgba(129, 181, 214, 0.13),
+			transparent 45%
+		),
+		radial-gradient(
+			ellipse at 68% 55%,
+			rgba(78, 122, 151, 0.1),
+			transparent 56%
+		),
+		linear-gradient(115deg, rgba(18, 39, 52, 0.5), rgba(3, 7, 10, 0.95));
+}
+
+.outsideAtmosphere img,
+.background,
+.windowsLayer,
+.bookshelves,
+.banner,
+.bookLayer {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: center;
+}
+
+.outsideAtmosphere > img {
+	position: absolute;
+	inset: 0;
+	z-index: 2;
+	opacity: 0.34;
+	mix-blend-mode: screen;
+	filter: blur(0.5px) saturate(0.72);
+}
+
+.windowSnowParticle {
+	position: absolute;
+	display: block;
+	width: calc(var(--snow-size) * var(--snow-stretch, 2.6));
+	height: calc(var(--snow-size) * 0.55);
+	border-radius: 999px;
+	background: linear-gradient(
+		90deg,
+		transparent,
+		rgba(232, 246, 255, 0.42) 24%,
+		rgba(248, 253, 255, 0.88) 50%,
+		rgba(188, 225, 248, 0.34) 76%,
+		transparent
+	);
+	box-shadow: 0 0 6px rgba(172, 216, 244, 0.24);
+}
+
+.background {
+	z-index: 2;
+	filter: saturate(0.78) brightness(0.86) contrast(1.06);
+}
+
+.outsideWindowSnow {
+	z-index: 5;
+	pointer-events: none;
+}
+
+.outsideWindowSnowCanvas {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	width: max(100vw, calc(100vh * 2));
+	height: max(100vh, calc(100vw * 0.5));
+	overflow: hidden;
+	transform: translate(-50%, -50%);
+}
+
+.outsideWindowSnowPane {
+	position: absolute;
+	overflow: hidden;
+	border-radius: 48% 48% 12% 12%;
+	clip-path: polygon(50% 0, 76% 18%, 82% 100%, 16% 100%, 24% 18%);
+	mask-image: radial-gradient(
+		ellipse at 50% 54%,
+		#000 48%,
+		rgba(0, 0, 0, 0.76) 66%,
+		transparent 88%
+	);
+	mask-size: 100% 100%;
+	mask-repeat: no-repeat;
+}
+
+.outsideWindowSnowLeft {
+	left: 5.95%;
+	top: 21.15%;
+	width: 6.35%;
+	height: 38.8%;
+}
+
+.outsideWindowSnowMiddle {
+	left: 32.35%;
+	top: 29.95%;
+	width: 5.05%;
+	height: 31.1%;
+}
+
+.outsideWindowSnowParticle {
+	position: absolute;
+	z-index: 3;
+	left: var(--outside-snow-x);
+	top: -14%;
+	width: var(--outside-snow-size);
+	height: calc(var(--outside-snow-size) * 1.9);
+	border-radius: 50%;
+	background: linear-gradient(
+		180deg,
+		transparent,
+		rgba(248, 253, 255, 0.96) 24%,
+		rgba(218, 241, 255, 0.72) 70%,
+		transparent
+	);
+	box-shadow: 0 0 6px rgba(188, 229, 252, 0.32);
+	filter: blur(0.08px);
+	opacity: 0;
+	animation: spindelRoomOutsideWindowSnow var(--outside-snow-duration) linear
+		infinite;
+	animation-delay: var(--outside-snow-delay);
+}
+
+.outsideWindowFastSnowParticle {
+	position: absolute;
+	z-index: 4;
+	left: var(--outside-fast-snow-x);
+	top: -18%;
+	width: var(--outside-fast-snow-length);
+	height: 2.2px;
+	border-radius: 999px;
+	background: linear-gradient(
+		90deg,
+		transparent,
+		rgba(255, 255, 255, 0.98) 30%,
+		rgba(216, 242, 255, 0.82) 72%,
+		transparent
+	);
+	box-shadow:
+		0 0 5px rgba(235, 249, 255, 0.54),
+		0 0 10px rgba(145, 211, 248, 0.28);
+	filter: blur(0.06px);
+	opacity: 0;
+	transform-origin: center;
+	animation: spindelRoomOutsideWindowFastSnow var(--outside-fast-snow-duration)
+		linear infinite;
+	animation-delay: var(--outside-fast-snow-delay);
+}
+
+.outsideWindowHazeSprite {
+	position: absolute;
+	z-index: 1;
+	left: var(--outside-haze-x);
+	top: var(--outside-haze-y);
+	width: var(--outside-haze-width);
+	height: auto;
+	max-width: none;
+	opacity: var(--outside-haze-opacity);
+	filter: blur(0.35px) saturate(0.7);
+	mix-blend-mode: screen;
+	transform-origin: center;
+	animation: spindelRoomOutsideWindowHaze calc(9s / var(--fx-speed, 1))
+		ease-in-out infinite alternate;
+	animation-delay: var(--outside-haze-delay);
+}
+
+.windowsLayer {
+	z-index: 4;
+	filter: drop-shadow(0 0 6px rgba(236, 249, 255, 0))
+		drop-shadow(0 0 18px rgba(102, 190, 248, 0))
+		drop-shadow(0 10px 22px rgba(0, 0, 0, 0)) brightness(1.04) contrast(1.02);
+	transition:
+		filter 500ms ease,
+		opacity 500ms ease;
+}
+
+.windowsLayerActive {
+	filter: drop-shadow(0 0 6px rgba(236, 249, 255, 0.14))
+		drop-shadow(0 0 18px rgba(102, 190, 248, 0.18))
+		drop-shadow(0 10px 22px rgba(0, 0, 0, 0.2)) brightness(1.12) contrast(1.07);
+}
+
+.objectGlowLayer {
+	z-index: 4;
+	pointer-events: none;
+	mix-blend-mode: screen;
+}
+
+.glowShape {
+	opacity: 0;
+	pointer-events: none;
+	transition:
+		opacity 500ms ease,
+		filter 500ms ease;
+}
+
+.windowGlowShape {
+	fill: rgba(164, 217, 250, 0.08);
+	filter: drop-shadow(0 0 7px rgba(229, 247, 255, 0.18))
+		drop-shadow(0 0 20px rgba(94, 183, 246, 0.12))
+		drop-shadow(0 0 34px rgba(185, 230, 255, 0.08));
+}
+
+.bookshelvesGlowShape {
+	fill: rgba(155, 207, 245, 0.08);
+	filter: drop-shadow(0 0 7px rgba(219, 242, 255, 0.18))
+		drop-shadow(0 0 20px rgba(87, 169, 236, 0.1))
+		drop-shadow(0 0 36px rgba(174, 222, 255, 0.08));
+}
+
+.bookGlowShape {
+	opacity: 0;
+	fill: rgba(180, 224, 250, 0.14);
+	filter: drop-shadow(0 0 7px rgba(235, 249, 255, 0.28))
+		drop-shadow(0 0 18px rgba(106, 190, 247, 0.16))
+		drop-shadow(0 0 34px rgba(194, 230, 255, 0.11));
+}
+
+.bannerGlowShape {
+	opacity: 0;
+	fill: rgba(142, 195, 235, 0.09);
+	filter: drop-shadow(0 0 7px rgba(213, 239, 255, 0.18))
+		drop-shadow(0 0 18px rgba(83, 167, 235, 0.12))
+		drop-shadow(0 0 32px rgba(179, 225, 255, 0.08));
+}
+
+.glowShapeActive {
+	opacity: 0.34;
+}
+
+.bookGlowShape.glowShapeActive {
+	opacity: 0.48;
+}
+
+.windowGlowShape.glowShapeActive {
+	opacity: 0.36;
+}
+
+.bookshelvesGlowShape.glowShapeActive {
+	opacity: 0.34;
+}
+
+.bannerGlowShape.glowShapeActive {
+	opacity: 0.38;
+}
+
+.bookshelves {
+	z-index: 5;
+	opacity: 0.72;
+	filter: drop-shadow(0 0 6px rgba(239, 249, 255, 0))
+		drop-shadow(0 0 18px rgba(97, 188, 250, 0))
+		drop-shadow(0 16px 26px rgba(0, 0, 0, 0)) saturate(0.78) brightness(0.78)
+		contrast(1.05);
+	transition:
+		filter 500ms ease,
+		opacity 500ms ease;
+}
+
+.banner {
+	z-index: 5;
+	opacity: 0.66;
+	filter: drop-shadow(0 0 5px rgba(241, 250, 255, 0))
+		drop-shadow(0 0 16px rgba(96, 185, 248, 0))
+		drop-shadow(0 12px 24px rgba(0, 0, 0, 0.34)) saturate(0.62) brightness(0.52)
+		contrast(1.08);
+	transition:
+		filter 500ms ease,
+		opacity 500ms ease;
+}
+
+.bookLayer {
+	z-index: 5;
+	opacity: 0.78;
+	filter: drop-shadow(0 0 6px rgba(245, 252, 255, 0))
+		drop-shadow(0 0 18px rgba(101, 191, 250, 0))
+		drop-shadow(0 10px 20px rgba(0, 0, 0, 0)) saturate(0.68) brightness(0.6)
+		contrast(1.08);
+	transition:
+		filter 500ms ease,
+		opacity 500ms ease;
+}
+
+.bookshelvesActive {
+	opacity: 0.84;
+	filter: drop-shadow(0 0 6px rgba(239, 249, 255, 0.1))
+		drop-shadow(0 0 18px rgba(97, 188, 250, 0.1))
+		drop-shadow(0 16px 26px rgba(0, 0, 0, 0.1)) saturate(0.92) brightness(0.94)
+		contrast(1.1);
+}
+
+.bannerActive {
+	opacity: 0.82;
+	filter: drop-shadow(0 0 5px rgba(241, 250, 255, 0.1))
+		drop-shadow(0 0 16px rgba(96, 185, 248, 0.1))
+		drop-shadow(0 13px 24px rgba(0, 0, 0, 0.1)) saturate(0.78) brightness(0.68)
+		contrast(1.12);
+}
+
+.bookLayerActive {
+	opacity: 0.9;
+	filter: drop-shadow(0 0 6px rgba(245, 252, 255, 0.2))
+		drop-shadow(0 0 18px rgba(101, 191, 250, 0.25))
+		drop-shadow(0 10px 20px rgba(0, 0, 0, 0.35)) saturate(0.86) brightness(0.82)
+		contrast(1.12);
+}
+
+.hitboxLayer {
+	position: absolute;
+	inset: 0;
+	z-index: 8;
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
+}
+
+.objectHitbox {
+	cursor: pointer;
+	fill: rgba(210, 238, 255, 0.001);
+	outline: none;
+	pointer-events: fill;
+	stroke: transparent;
+	stroke-width: 2;
+	transition:
+		fill 180ms ease,
+		stroke 180ms ease;
+}
+
+.objectHitbox:hover,
+.objectHitbox:focus-visible {
+	fill: rgba(210, 238, 255, 0.001);
+	stroke: transparent;
+}
+
+.bookHitbox:hover,
+.bookHitbox:focus-visible {
+	fill: rgba(224, 245, 255, 0.001);
+	stroke: transparent;
+}
+
+.bookshelvesHitbox:hover,
+.bookshelvesHitbox:focus-visible {
+	fill: rgba(191, 225, 248, 0.001);
+}
+
+.bannerHitbox:hover,
+.bannerHitbox:focus-visible {
+	fill: rgba(191, 225, 248, 0.001);
+}
+
+.windowSnow {
+	z-index: 6;
+	pointer-events: none;
+	opacity: 1;
+	transition: opacity 180ms ease;
+}
+
+.windowSnowHidden {
+	opacity: 0;
+}
+
+.windowSnowParticle {
+	left: var(--snow-x);
+	top: var(--snow-y);
+	opacity: 0;
+	filter: blur(var(--snow-softness, 0.45px));
+	animation: spindelRoomWindowSnow var(--snow-duration) linear infinite;
+	animation-delay: var(--snow-delay);
+}
+
+.roomFog {
+	z-index: 11;
+	pointer-events: none;
+	overflow: hidden;
+}
+
+.roomFogSprite {
+	position: absolute;
+	left: var(--fog-x);
+	top: var(--fog-y);
+	width: var(--fog-width);
+	height: auto;
+	max-width: none;
+	opacity: var(--fog-opacity);
+	filter: blur(0.4px) saturate(0.72);
+	mix-blend-mode: screen;
+	transform-origin: center;
+	animation: spindelRoomFogDrift 13s ease-in-out infinite alternate;
+	animation-delay: var(--fog-delay);
+}
+
+.roomGrade {
+	z-index: 10;
+	pointer-events: none;
+	background:
+		radial-gradient(
+			ellipse at 18% 38%,
+			rgba(104, 163, 200, 0.06),
+			transparent 32%
+		),
+		radial-gradient(
+			ellipse at center,
+			transparent 34%,
+			rgba(0, 5, 9, 0.24) 72%,
+			rgba(0, 2, 5, 0.58) 100%
+		),
+		linear-gradient(
+			90deg,
+			rgba(0, 4, 8, 0.12),
+			transparent 22%,
+			transparent 62%,
+			rgba(0, 2, 5, 0.3)
+		);
+}
+
+.frontMask {
+	z-index: 7;
+	pointer-events: none;
+	background: transparent;
+}
+
+.snowSpawnMask {
+	position: absolute;
+	display: block;
+	border-radius: 50%;
+	background: radial-gradient(
+		ellipse at center,
+		rgba(5, 10, 14, 0.58),
+		rgba(5, 10, 14, 0.26) 42%,
+		transparent 72%
+	);
+	filter: blur(4px);
+}
+
+.snowSpawnMaskLeft {
+	left: 5.8%;
+	top: 21.8%;
+	width: 8.8%;
+	height: 12%;
+}
+
+.snowSpawnMaskMiddle {
+	left: 31.7%;
+	top: 30%;
+	width: 7.2%;
+	height: 10.5%;
+}
+
+@keyframes spindelRoomWindowSnow {
+	0% {
+		opacity: 0;
+		transform: translate3d(4px, -8px, 0) rotate(76deg) scale(0.66);
+	}
+
+	14% {
+		opacity: calc(var(--snow-opacity, 0.38) * 0.78);
+		transform: translate3d(
+				calc(var(--snow-travel-x) * 0.08),
+				calc(var(--snow-travel-y) * 0.08),
+				0
+			)
+			rotate(76deg) scale(0.78);
+	}
+
+	42% {
+		opacity: var(--snow-opacity, 0.38);
+		transform: translate3d(
+				calc(var(--snow-travel-x) * 0.42),
+				calc(var(--snow-travel-y) * 0.42),
+				0
+			)
+			rotate(78deg) scale(0.92);
+	}
+
+	72% {
+		opacity: calc(var(--snow-opacity, 0.38) * 0.72);
+		transform: translate3d(
+				calc(var(--snow-travel-x) * 0.74),
+				calc(var(--snow-travel-y) * 0.72),
+				0
+			)
+			rotate(74deg) scale(1.02);
+	}
+
+	100% {
+		opacity: 0;
+		transform: translate3d(
+				var(--snow-travel-x),
+				var(--snow-travel-y),
+				0
+			)
+			rotate(76deg) scale(1.08);
+	}
+}
+
+.backButton,
+.qualityPanel,
+.notice {
+	position: absolute;
+	z-index: 12;
+}
+
+.backButton {
+	left: 34px;
+	top: 34px;
+	width: 76px;
+	height: 76px;
+	display: grid;
+	place-items: center;
+	border: 1px solid rgba(180, 221, 255, 0.26);
+	border-radius: 50%;
+	color: rgba(229, 246, 255, 0.92);
+	background:
+		radial-gradient(
+			circle at 34% 28%,
+			rgba(151, 211, 255, 0.16),
+			transparent 40%
+		),
+		linear-gradient(145deg, rgba(11, 21, 28, 0.86), rgba(2, 5, 8, 0.8));
+	box-shadow:
+		0 0 24px rgba(82, 170, 229, 0.16),
+		0 16px 34px rgba(0, 0, 0, 0.48),
+		inset 0 0 22px rgba(160, 222, 255, 0.08);
+	cursor: pointer;
+}
+
+.backButton:hover,
+.backButton:focus-visible {
+	border-color: rgba(198, 232, 255, 0.58);
+	outline: none;
+}
+
+.backButton:disabled {
+	cursor: default;
+	opacity: 0.56;
+}
+
+.backButton svg {
+	width: 32px;
+	height: 32px;
+}
+
+.qualityPanel {
+	right: 34px;
+	top: 34px;
+	display: grid;
+	justify-items: end;
+	pointer-events: auto;
+}
+
+.qualityToggle {
+	position: relative;
+	z-index: 2;
+	width: 76px;
+	height: 76px;
+	display: grid;
+	place-items: center;
+	border: 1px solid rgba(180, 221, 255, 0.26);
+	border-radius: 50%;
+	color: rgba(229, 246, 255, 0.92);
+	background:
+		radial-gradient(
+			circle at 34% 28%,
+			rgba(151, 211, 255, 0.18),
+			transparent 40%
+		),
+		linear-gradient(145deg, rgba(11, 21, 28, 0.86), rgba(2, 5, 8, 0.8));
+	box-shadow:
+		0 0 calc(24px * var(--fx-shadow)) rgba(82, 170, 229, 0.18),
+		0 16px 34px rgba(0, 0, 0, 0.48),
+		inset 0 0 22px rgba(160, 222, 255, 0.1);
+	cursor: pointer;
+	transition:
+		border-color 220ms ease,
+		box-shadow 220ms ease,
+		transform 220ms ease;
+}
+
+.qualityToggle svg {
+	width: 32px;
+	height: 32px;
+	filter: drop-shadow(0 0 12px rgba(166, 224, 255, 0.58));
+}
+
+.qualityPanel:hover .qualityToggle,
+.qualityPanel:focus-within .qualityToggle,
+.qualityPanelOpen .qualityToggle {
+	border-color: rgba(198, 232, 255, 0.58);
+	box-shadow:
+		0 0 calc(32px * var(--fx-shadow)) rgba(82, 170, 229, 0.26),
+		0 18px 38px rgba(0, 0, 0, 0.5),
+		inset 0 0 26px rgba(160, 222, 255, 0.14);
+	outline: none;
+	transform: translateY(-1px);
+}
+
+.qualityMenu {
+	position: absolute;
+	right: 0;
+	top: 92px;
+	width: 330px;
+	padding: 20px;
+	border: 1px solid rgba(180, 221, 255, 0.2);
+	border-radius: 8px;
+	background:
+		linear-gradient(180deg, rgba(10, 20, 28, 0.9), rgba(2, 5, 8, 0.84)),
+		radial-gradient(
+			ellipse at 18% 0%,
+			rgba(140, 202, 242, 0.14),
+			transparent 58%
+		);
+	box-shadow:
+		0 22px 48px rgba(0, 0, 0, 0.52),
+		inset 0 1px 0 rgba(255, 255, 255, 0.05);
+	opacity: 0;
+	pointer-events: none;
+	font-family: "MedievalSharp", "Georgia", serif;
+	transform: translateY(-14px) scale(0.98);
+	transform-origin: right top;
+	transition:
+		opacity 220ms ease,
+		transform 260ms cubic-bezier(0.18, 0.82, 0.24, 1);
+}
+
+.qualityPanel:hover .qualityMenu,
+.qualityPanel:focus-within .qualityMenu,
+.qualityPanelOpen .qualityMenu {
+	opacity: 1;
+	pointer-events: auto;
+	transform: translateY(0) scale(1);
+}
+
+.qualityTitle {
+	display: block;
+	margin: 0 0 14px;
+	color: rgba(218, 238, 247, 0.74);
+	font-family: "MedievalSharp", "Georgia", serif;
+	font-size: 17px;
+	line-height: 1;
+	text-transform: uppercase;
+}
+
+.qualityOptions {
+	display: grid;
+	gap: 10px;
+}
+
+.qualityOption {
+	min-height: 56px;
+	padding: 0 18px;
+	border: 1px solid rgba(180, 221, 255, 0.14);
+	border-radius: 6px;
+	color: rgba(226, 239, 246, 0.72);
+	background: rgba(255, 255, 255, 0.035);
+	cursor: pointer;
+	font-family: "MedievalSharp", "Georgia", serif;
+	font-size: 21px;
+	line-height: 1;
+	text-align: left;
+	transition:
+		background 180ms ease,
+		border-color 180ms ease,
+		color 180ms ease,
+		box-shadow 180ms ease;
+}
+
+.qualityOption:hover,
+.qualityOption:focus-visible {
+	border-color: rgba(190, 230, 255, 0.34);
+	color: rgba(245, 251, 255, 0.94);
+	background: rgba(154, 214, 255, 0.08);
+	outline: none;
+}
+
+.qualityOptionActive {
+	border-color: rgba(167, 223, 255, 0.52);
+	color: rgba(243, 251, 255, 0.98);
+	background: rgba(130, 203, 255, 0.14);
+	box-shadow: inset 0 0 12px rgba(134, 211, 255, 0.08);
+}
+
+.notice {
+	left: 50%;
+	bottom: 36px;
+	max-width: min(520px, calc(100vw - 40px));
+	padding: 15px 20px;
+	border: 1px solid rgba(176, 220, 250, 0.18);
+	border-radius: 8px;
+	color: rgba(226, 241, 248, 0.88);
+	background: rgba(4, 9, 13, 0.82);
+	box-shadow: 0 18px 42px rgba(0, 0, 0, 0.42);
+	font-family: "MedievalSharp", Georgia, serif;
+	font-size: 18px;
+	line-height: 1.35;
+	text-align: center;
+	transform: translateX(-50%);
+}
+
+.roomDialogue {
+	z-index: 13;
+}
+
+.windowCloseup {
+	position: absolute;
+	inset: 0;
+	z-index: 12;
+	overflow: hidden;
+	background: #020509;
+	opacity: 1;
+	pointer-events: auto;
+}
+
+.windowCloseupEntering {
+	animation: spindelWindowCloseupFadeIn 140ms ease-out both;
+}
+
+.windowCloseupView {
+	animation: spindelWindowCloseupSettle 260ms ease-out both;
+}
+
+.windowCloseupExiting {
+	pointer-events: none;
+	animation: spindelWindowCloseupFadeOut 360ms ease-in both;
+}
+
+.windowCloseupScene,
+.windowCloseupOutside,
+.windowCloseupWeather,
+.windowCloseupInterior,
+.windowCloseupFog {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+
+.windowCloseupOutside,
+.windowCloseupInterior {
+	object-fit: cover;
+	object-position: center;
+}
+
+.windowCloseupScene {
+	z-index: 2;
+	opacity: 1;
+	transform-origin: 58% 32%;
+}
+
+.windowCloseupSceneEntering {
+	animation: spindelWindowSceneFadeIn 760ms ease-out both;
+}
+
+.windowCloseupOutside {
+	z-index: 1;
+	filter: saturate(0.92) brightness(0.84) contrast(1.16);
+}
+
+.windowCloseupWeather {
+	z-index: 2;
+	pointer-events: none;
+	background:
+		radial-gradient(
+			ellipse at 42% 36%,
+			rgba(157, 218, 255, 0.24),
+			transparent 42%
+		),
+		radial-gradient(
+			ellipse at 62% 54%,
+			rgba(102, 181, 241, 0.16),
+			transparent 46%
+		),
+		linear-gradient(180deg, rgba(14, 37, 54, 0.2), rgba(1, 4, 8, 0.48));
+}
+
+.windowCloseupInterior {
+	z-index: 3;
+	filter: saturate(0.76) brightness(0.82) contrast(1.08);
+}
+
+.windowCloseupFog {
+	z-index: 5;
+	pointer-events: none;
+}
+
+.windowCloseupFogSprite {
+	position: absolute;
+	left: var(--fog-x);
+	top: var(--fog-y);
+	width: var(--fog-width);
+	height: auto;
+	max-width: none;
+	opacity: var(--fog-opacity, 0.13);
+	filter: blur(0.45px) saturate(0.72);
+	mix-blend-mode: screen;
+	transform-origin: center;
+	animation: spindelRoomFogDrift 13s ease-in-out infinite alternate;
+	animation-delay: var(--fog-delay);
+}
+
+.windowCloseupRoomSnow {
+	position: absolute;
+	inset: 0;
+	z-index: 7;
+	overflow: hidden;
+	pointer-events: none;
+}
+
+.windowCloseupRoomSnow::before {
+	position: absolute;
+	content: "";
+	pointer-events: none;
+}
+
+.windowCloseupRoomSnow::before {
+	left: 51%;
+	top: 5%;
+	width: 30%;
+	height: 50%;
+	background:
+		radial-gradient(
+			ellipse at 42% 24%,
+			rgba(210, 238, 255, 0.08),
+			transparent 48%
+		),
+		radial-gradient(
+			ellipse at 68% 32%,
+			rgba(166, 219, 255, 0.06),
+			transparent 52%
+		);
+	filter: blur(18px);
+	mix-blend-mode: screen;
+	opacity: 0.34;
+}
+
+.windowCloseupRoomSnowParticle {
+	position: absolute;
+	left: var(--room-snow-x);
+	top: var(--room-snow-y);
+	width: calc(var(--room-snow-size) * var(--room-snow-stretch, 2.7));
+	height: calc(var(--room-snow-size) * 0.56);
+	border-radius: 999px;
+	background: linear-gradient(
+		90deg,
+		transparent,
+		rgba(230, 246, 255, 0.24) 22%,
+		rgba(250, 254, 255, 0.58) 50%,
+		rgba(188, 226, 250, 0.2) 78%,
+		transparent
+	);
+	box-shadow:
+		0 0 8px rgba(225, 245, 255, 0.2),
+		0 0 16px rgba(124, 201, 248, 0.1);
+	filter: blur(var(--room-snow-softness, 0.2px));
+	opacity: 0;
+	transform-origin: center;
+	animation: spindelWindowRoomSnow var(--room-snow-duration) linear infinite;
+	animation-delay: var(--room-snow-delay);
+}
+
+@keyframes spindelWindowSceneFadeIn {
+	0% {
+		opacity: 0;
+		filter: brightness(0.82);
+	}
+
+	100% {
+		opacity: 1;
+		filter: brightness(1);
+	}
+}
+
+@keyframes spindelWindowCloseupFadeIn {
+	from {
+		opacity: 0;
+	}
+
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes spindelWindowCloseupSettle {
+	from {
+		opacity: 1;
+		transform: scale(1.012);
+	}
+
+	to {
+		opacity: 1;
+		transform: scale(1);
+	}
+}
+
+@keyframes spindelWindowCloseupFadeOut {
+	from {
+		opacity: 1;
+	}
+
+	to {
+		opacity: 0;
+	}
+}
+
+@keyframes spindelWindowRoomSnow {
+	0% {
+		opacity: 0;
+		transform: translate3d(8px, -10px, 0)
+			rotate(var(--room-snow-rotation, -80deg)) scale(0.62);
+	}
+
+	14% {
+		opacity: calc(var(--room-snow-opacity, 0.5) * 0.88);
+		transform: translate3d(
+				calc(
+					var(--room-snow-drift-x) * 0.14 + var(--room-snow-wobble-x) * 0.24
+				),
+				calc(var(--room-snow-fall-y) * 0.12),
+				0
+			)
+			rotate(calc(var(--room-snow-rotation, -80deg) - 1deg)) scale(0.72);
+	}
+
+	34% {
+		transform: translate3d(
+				calc(var(--room-snow-drift-x) * 0.34 + var(--room-snow-wobble-x)),
+				calc(var(--room-snow-fall-y) * 0.28),
+				0
+			)
+			rotate(calc(var(--room-snow-rotation, -80deg) - 4deg)) scale(0.86);
+	}
+
+	52% {
+		opacity: var(--room-snow-opacity, 0.5);
+		transform: translate3d(
+				calc(
+					var(--room-snow-drift-x) * 0.52 + var(--room-snow-wobble-x) * 0.18
+				),
+				calc(var(--room-snow-fall-y) * 0.48),
+				0
+			)
+			rotate(calc(var(--room-snow-rotation, -80deg) + 1deg)) scale(0.94);
+	}
+
+	68% {
+		transform: translate3d(
+				calc(var(--room-snow-drift-x) * 0.68 - var(--room-snow-wobble-x) * 0.5),
+				calc(var(--room-snow-fall-y) * 0.64),
+				0
+			)
+			rotate(calc(var(--room-snow-rotation, -80deg) + 3deg)) scale(1);
+	}
+
+	82% {
+		opacity: calc(var(--room-snow-opacity, 0.5) * 0.58);
+		transform: translate3d(
+				calc(
+					var(--room-snow-drift-x) * 0.82 - var(--room-snow-wobble-x) * 0.18
+				),
+				calc(var(--room-snow-fall-y) * 0.8),
+				0
+			)
+			rotate(calc(var(--room-snow-rotation, -80deg) + 2deg)) scale(1.04);
+	}
+
+	100% {
+		opacity: 0;
+		transform: translate3d(var(--room-snow-drift-x), var(--room-snow-fall-y), 0)
+			rotate(var(--room-snow-rotation, -80deg)) scale(1.08);
+	}
+}
+
+@keyframes spindelRoomOutsideWindowSnow {
+	0% {
+		opacity: 0;
+		transform: translate3d(0, -12%, 0) scale(0.72);
+	}
+
+	18% {
+		opacity: calc(var(--outside-snow-opacity, 0.44) * 0.92);
+	}
+
+	76% {
+		opacity: var(--outside-snow-opacity, 0.44);
+	}
+
+	100% {
+		opacity: 0;
+		transform: translate3d(var(--outside-snow-drift-x), 126%, 0) scale(1);
+	}
+}
+
+@keyframes spindelRoomOutsideWindowFastSnow {
+	0% {
+		opacity: 0;
+		transform: translate3d(0, -14%, 0) rotate(76deg) scaleX(0.82);
+	}
+
+	14% {
+		opacity: calc(var(--outside-fast-snow-opacity, 0.72) * 0.98);
+	}
+
+	62% {
+		opacity: var(--outside-fast-snow-opacity, 0.72);
+	}
+
+	100% {
+		opacity: 0;
+		transform: translate3d(var(--outside-fast-snow-drift-x), 136%, 0)
+			rotate(76deg) scaleX(1.05);
+	}
+}
+
+@keyframes spindelRoomOutsideWindowHaze {
+	0% {
+		transform: translate3d(-8%, 2%, 0) scale(1);
+	}
+
+	100% {
+		transform: translate3d(8%, -2%, 0) scale(1.06);
+	}
+}
+
+@keyframes spindelRoomFogDrift {
+	0% {
+		transform: translate3d(-4%, 1%, 0) scale(1);
+	}
+
+	100% {
+		transform: translate3d(5%, -1.4%, 0) scale(1.04);
+	}
+}
+
+@media (max-width: 760px) {
+	.backButton {
+		left: 18px;
+		top: 18px;
+		width: 62px;
+		height: 62px;
+	}
+
+	.qualityPanel {
+		right: 18px;
+		top: 18px;
+	}
+
+	.qualityToggle {
+		width: 62px;
+		height: 62px;
+	}
+
+	.backButton svg,
+	.qualityToggle svg {
+		width: 28px;
+		height: 28px;
+	}
+
+	.qualityMenu {
+		top: 78px;
+		width: min(300px, calc(100vw - 36px));
+		padding: 16px;
+	}
+
+	.notice {
+		bottom: 18px;
+		font-size: 16px;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.outsideWindowHazeSprite,
+	.outsideWindowFastSnowParticle,
+	.outsideWindowSnowParticle,
+	.windowSnowParticle,
+	.windowCloseupRoomSnowParticle,
+	.roomFogSprite,
+	.windowCloseup,
+	.windowCloseupFogSprite {
+		animation: none;
+	}
+}

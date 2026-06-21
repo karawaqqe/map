@@ -14,9 +14,23 @@ import {
 } from "../../data/spindel";
 import { buildHitboxPath } from "../../utils/mapHitbox";
 import styles from "./Spindel.module.scss";
+import SpindelRoom from "./SpindelRoom";
 
 const WORLD_NAVIGATION_DELAY = 1150;
 const WORLD_TRANSITION_OPENING_DURATION = 1100;
+const ROOM_TRANSITION_DELAY = 850;
+const ROOM_TRANSITION_OPENING_DURATION = 900;
+const AUDIO_FADE_DURATION = 850;
+const MAP_AUDIO_FILTER_FREQUENCY = 18000;
+const ROOM_AUDIO_FILTER_FREQUENCY = 1850;
+const MAP_AUDIO_VOLUMES = {
+	ost: 0.08,
+	blizzard: 0.02,
+};
+const ROOM_AUDIO_VOLUMES = {
+	ost: 0.035,
+	blizzard: 0.007,
+};
 const QUALITY_STORAGE_KEY = "spindel-map-quality";
 const QUALITY_MODES = [
 	{ id: "cinematic", label: "Cinematic" },
@@ -24,6 +38,74 @@ const QUALITY_MODES = [
 	{ id: "performance", label: "Performance" },
 ];
 const QUALITY_BODY_CLASSES = QUALITY_MODES.map((mode) => `quality-${mode.id}`);
+
+function fadeAudioVolume(audio, targetVolume, duration = AUDIO_FADE_DURATION) {
+	if (!audio) {
+		return () => {};
+	}
+
+	const startVolume = audio.volume;
+	const startTime = performance.now();
+	let frameId = null;
+
+	const tick = (timestamp) => {
+		const progress = Math.min((timestamp - startTime) / duration, 1);
+		audio.volume = startVolume + (targetVolume - startVolume) * progress;
+
+		if (progress < 1) {
+			frameId = window.requestAnimationFrame(tick);
+		}
+	};
+
+	frameId = window.requestAnimationFrame(tick);
+
+	return () => {
+		if (frameId) {
+			window.cancelAnimationFrame(frameId);
+		}
+	};
+}
+
+function createMuffledAudioNode(audio, existingContext) {
+	if (!audio) {
+		return null;
+	}
+
+	const AudioContext = window.AudioContext || window.webkitAudioContext;
+
+	if (!AudioContext) {
+		return null;
+	}
+
+	const context = existingContext ?? new AudioContext();
+	const source = context.createMediaElementSource(audio);
+	const filter = context.createBiquadFilter();
+
+	filter.type = "lowpass";
+	filter.frequency.value = MAP_AUDIO_FILTER_FREQUENCY;
+	filter.Q.value = 0.8;
+	source.connect(filter);
+	filter.connect(context.destination);
+
+	return { context, filter };
+}
+
+function fadeAudioFilter(
+	filter,
+	targetFrequency,
+	duration = AUDIO_FADE_DURATION,
+) {
+	if (!filter) {
+		return;
+	}
+
+	const now = filter.context.currentTime;
+	const endTime = now + duration / 1000;
+
+	filter.frequency.cancelScheduledValues(now);
+	filter.frequency.setValueAtTime(filter.frequency.value, now);
+	filter.frequency.linearRampToValueAtTime(targetFrequency, endTime);
+}
 
 function getInitialQuality() {
 	if (typeof window === "undefined") {
@@ -131,13 +213,17 @@ function FogSpriteLayer({ className, fogSprites }) {
 }
 
 function Spindel() {
+	const [activeScene, setActiveScene] = useState("map");
 	const [castleHitbox, setCastleHitbox] = useState("");
 	const [isCastleAwake, setIsCastleAwake] = useState(false);
 	const [quality, setQuality] = useState(getInitialQuality);
 	const [isQualityOpen, setIsQualityOpen] = useState(false);
 	const [isReturningToWorld, setIsReturningToWorld] = useState(false);
+	const [isSceneTransitioning, setIsSceneTransitioning] = useState(false);
 	const ostAudioRef = useRef(null);
 	const blizzardAudioRef = useRef(null);
+	const audioFilterRef = useRef(null);
+	const sceneTransitionTimeoutRef = useRef(null);
 
 	useEffect(() => {
 		let isMounted = true;
@@ -159,8 +245,8 @@ function Spindel() {
 
 	useEffect(() => {
 		const audioEntries = [
-			{ audio: ostAudioRef.current, volume: 0.08 },
-			{ audio: blizzardAudioRef.current, volume: 0.02 },
+			{ audio: ostAudioRef.current, volume: MAP_AUDIO_VOLUMES.ost },
+			{ audio: blizzardAudioRef.current, volume: MAP_AUDIO_VOLUMES.blizzard },
 		].filter(({ audio }) => audio);
 
 		if (!audioEntries.length) {
@@ -191,6 +277,74 @@ function Spindel() {
 	}, []);
 
 	useEffect(() => {
+		if (audioFilterRef.current) {
+			return undefined;
+		}
+
+		const ostAudio = ostAudioRef.current;
+		const blizzardAudio = blizzardAudioRef.current;
+
+		if (!ostAudio || !blizzardAudio) {
+			return undefined;
+		}
+
+		const AudioContext = window.AudioContext || window.webkitAudioContext;
+
+		if (!AudioContext) {
+			return undefined;
+		}
+
+		const context = new AudioContext();
+		const ostNode = createMuffledAudioNode(ostAudio, context);
+		const blizzardNode = createMuffledAudioNode(blizzardAudio, context);
+
+		audioFilterRef.current = {
+			context,
+			filters: [ostNode?.filter, blizzardNode?.filter].filter(Boolean),
+		};
+
+		const resumeContext = () => {
+			context.resume().catch(() => {});
+		};
+
+		window.addEventListener("pointerdown", resumeContext);
+		window.addEventListener("keydown", resumeContext);
+
+		return () => {
+			window.removeEventListener("pointerdown", resumeContext);
+			window.removeEventListener("keydown", resumeContext);
+			audioFilterRef.current = null;
+			context.close().catch(() => {});
+		};
+	}, []);
+
+	useEffect(() => {
+		const targetVolumes =
+			activeScene === "spindel-room" ? ROOM_AUDIO_VOLUMES : MAP_AUDIO_VOLUMES;
+		const targetFilterFrequency =
+			activeScene === "spindel-room"
+				? ROOM_AUDIO_FILTER_FREQUENCY
+				: MAP_AUDIO_FILTER_FREQUENCY;
+		const cancelOstFade = fadeAudioVolume(
+			ostAudioRef.current,
+			targetVolumes.ost,
+		);
+		const cancelBlizzardFade = fadeAudioVolume(
+			blizzardAudioRef.current,
+			targetVolumes.blizzard,
+		);
+
+		audioFilterRef.current?.filters.forEach((filter) => {
+			fadeAudioFilter(filter, targetFilterFrequency);
+		});
+
+		return () => {
+			cancelOstFade();
+			cancelBlizzardFade();
+		};
+	}, [activeScene]);
+
+	useEffect(() => {
 		document.body.classList.remove(...QUALITY_BODY_CLASSES);
 		document.body.classList.add(`quality-${quality}`);
 
@@ -205,6 +359,13 @@ function Spindel() {
 		};
 	}, [quality]);
 
+	useEffect(
+		() => () => {
+			window.clearTimeout(sceneTransitionTimeoutRef.current);
+		},
+		[],
+	);
+
 	const closeQualityPanelOnBlur = (event) => {
 		if (!event.currentTarget.contains(event.relatedTarget)) {
 			setIsQualityOpen(false);
@@ -216,6 +377,7 @@ function Spindel() {
 			return;
 		}
 
+		window.clearTimeout(sceneTransitionTimeoutRef.current);
 		setIsReturningToWorld(true);
 		window.dispatchEvent(
 			new CustomEvent(ROUTE_TRANSITION_EVENT, {
@@ -229,8 +391,40 @@ function Spindel() {
 		);
 	};
 
+	const transitionToScene = (nextScene) => {
+		if (isSceneTransitioning || activeScene === nextScene) {
+			return;
+		}
+
+		setIsSceneTransitioning(true);
+		window.clearTimeout(sceneTransitionTimeoutRef.current);
+		sceneTransitionTimeoutRef.current = window.setTimeout(
+			() => {
+				setIsSceneTransitioning(false);
+			},
+			ROOM_TRANSITION_DELAY + ROOM_TRANSITION_OPENING_DURATION + 180,
+		);
+
+		window.dispatchEvent(
+			new CustomEvent(ROUTE_TRANSITION_EVENT, {
+				detail: {
+					onTransitionPoint: () => {
+						setActiveScene(nextScene);
+						if (nextScene === "map") {
+							setIsCastleAwake(false);
+						}
+					},
+					navigationDelay: ROOM_TRANSITION_DELAY,
+					openingDuration: ROOM_TRANSITION_OPENING_DURATION,
+					variant: "black",
+				},
+			}),
+		);
+	};
+
 	const awakenCastle = () => {
 		setIsCastleAwake(true);
+		transitionToScene("spindel-room");
 	};
 
 	const handleCastleKeyDown = (event) => {
@@ -334,7 +528,7 @@ function Spindel() {
 							role="button"
 							tabIndex="0"
 							focusable="true"
-							aria-label="Awaken the frostbound castle"
+							aria-label="Enter the frostbound castle"
 							onClick={awakenCastle}
 							onKeyDown={handleCastleKeyDown}
 						/>
@@ -407,6 +601,15 @@ function Spindel() {
 					</div>
 				</div>
 			</div>
+			{activeScene === "spindel-room" && (
+				<SpindelRoom
+					isTransitioning={isSceneTransitioning}
+					onBack={() => transitionToScene("map")}
+					onQualityChange={setQuality}
+					quality={quality}
+					qualityModes={QUALITY_MODES}
+				/>
+			)}
 		</section>
 	);
 }
