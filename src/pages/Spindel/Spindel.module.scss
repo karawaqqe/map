@@ -116,8 +116,6 @@
 }
 
 .castleInteractionImage {
-	width: 1774px;
-	height: 887px;
 	pointer-events: none;
 	opacity: 0.86;
 	filter:
@@ -224,11 +222,9 @@
 	animation: none;
 }
 
-.baseMap,
-.regionImage {
+.baseMap {
 	width: 1774px;
 	height: 887px;
-	user-select: none;
 }
 
 .baseMap {
@@ -258,6 +254,7 @@
 	pointer-events: none;
 	transform-box: fill-box;
 	transform-origin: center;
+	user-select: none;
 }
 
 .backButton {

@@ -209,8 +209,8 @@
 		drop-shadow(0 0 18px rgba(102, 190, 248, 0))
 		drop-shadow(0 10px 22px rgba(0, 0, 0, 0)) brightness(1.04) contrast(1.02);
 	transition:
-		filter 500ms ease,
-		opacity 500ms ease;
+		filter 300ms ease,
+		opacity 300ms ease;
 }
 
 .windowsLayerActive {
@@ -229,8 +229,8 @@
 	opacity: 0;
 	pointer-events: none;
 	transition:
-		opacity 500ms ease,
-		filter 500ms ease;
+		opacity 300ms ease,
+		filter 300ms ease;
 }
 
 .windowGlowShape {
@@ -291,8 +291,8 @@
 		drop-shadow(0 16px 26px rgba(0, 0, 0, 0)) saturate(0.78) brightness(0.78)
 		contrast(1.05);
 	transition:
-		filter 500ms ease,
-		opacity 500ms ease;
+		filter 300ms ease,
+		opacity 300ms ease;
 }
 
 .banner {
@@ -303,8 +303,8 @@
 		drop-shadow(0 12px 24px rgba(0, 0, 0, 0.34)) saturate(0.62) brightness(0.52)
 		contrast(1.08);
 	transition:
-		filter 500ms ease,
-		opacity 500ms ease;
+		filter 300ms ease,
+		opacity 300ms ease;
 }
 
 .bookLayer {
@@ -315,8 +315,8 @@
 		drop-shadow(0 10px 20px rgba(0, 0, 0, 0)) saturate(0.68) brightness(0.6)
 		contrast(1.08);
 	transition:
-		filter 500ms ease,
-		opacity 500ms ease;
+		filter 300ms ease,
+		opacity 300ms ease;
 }
 
 .bookshelvesActive {
@@ -522,11 +522,7 @@
 
 	100% {
 		opacity: 0;
-		transform: translate3d(
-				var(--snow-travel-x),
-				var(--snow-travel-y),
-				0
-			)
+		transform: translate3d(var(--snow-travel-x), var(--snow-travel-y), 0)
 			rotate(76deg) scale(1.08);
 	}
 }
@@ -915,18 +911,6 @@
 
 	to {
 		opacity: 1;
-	}
-}
-
-@keyframes spindelWindowCloseupSettle {
-	from {
-		opacity: 1;
-		transform: scale(1.012);
-	}
-
-	to {
-		opacity: 1;
-		transform: scale(1);
 	}
 }
 

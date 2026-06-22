@@ -1,0 +1,99 @@
+.bookSection {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: grid;
+  place-items: center;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 50% 42%, rgba(92, 148, 185, 0.16), transparent 48%), linear-gradient(180deg, #071018, #020407 74%);
+  isolation: isolate;
+}
+
+.bookSection::before,
+.bookSection::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+}
+
+.bookSection::before {
+  background: radial-gradient(ellipse at center, transparent 32%, rgba(0, 3, 6, 0.46) 78%, rgba(0, 1, 3, 0.84) 100%), linear-gradient(90deg, rgba(0, 4, 8, 0.34), transparent 28%, transparent 72%, rgba(0, 3, 7, 0.34));
+}
+
+.bookSection::after {
+  opacity: 0.22;
+  background-image: linear-gradient(rgba(222, 242, 255, 0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(222, 242, 255, 0.035) 1px, transparent 1px);
+  background-size: 54px 54px;
+  -webkit-mask-image: radial-gradient(ellipse at center, #000, transparent 72%);
+          mask-image: radial-gradient(ellipse at center, #000, transparent 72%);
+}
+
+.backButton {
+  position: absolute;
+  left: 34px;
+  top: 34px;
+  z-index: 2;
+  width: 76px;
+  height: 76px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(180, 221, 255, 0.26);
+  border-radius: 50%;
+  color: rgba(229, 246, 255, 0.92);
+  background: radial-gradient(circle at 34% 28%, rgba(151, 211, 255, 0.16), transparent 40%), linear-gradient(145deg, rgba(11, 21, 28, 0.86), rgba(2, 5, 8, 0.8));
+  box-shadow: 0 0 24px rgba(82, 170, 229, 0.16), 0 16px 34px rgba(0, 0, 0, 0.48), inset 0 0 22px rgba(160, 222, 255, 0.08);
+  cursor: pointer;
+}
+
+.backButton:hover,
+.backButton:focus-visible {
+  border-color: rgba(198, 232, 255, 0.58);
+  outline: none;
+}
+
+.backButton svg {
+  width: 32px;
+  height: 32px;
+}
+
+.bookMount {
+  position: relative;
+  z-index: 1;
+  width: min(1160px, 100vw - 72px);
+  height: min(720px, 100vh - 120px);
+  border: 1px solid rgba(181, 221, 249, 0.14);
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(12, 23, 31, 0.32), rgba(3, 7, 11, 0.36)), radial-gradient(ellipse at center, rgba(145, 206, 244, 0.08), transparent 58%);
+  box-shadow: 0 24px 72px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.placeholderLabel {
+  position: absolute;
+  left: 24px;
+  top: 20px;
+  color: rgba(226, 241, 248, 0.62);
+  font-family: "MedievalSharp", Georgia, serif;
+  font-size: 18px;
+  letter-spacing: 0;
+}
+
+@media (max-width: 760px) {
+  .backButton {
+    left: 18px;
+    top: 18px;
+    width: 62px;
+    height: 62px;
+  }
+  .backButton svg {
+    width: 28px;
+    height: 28px;
+  }
+  .bookMount {
+    width: calc(100vw - 36px);
+    height: calc(100vh - 104px);
+    margin-top: 54px;
+  }
+}/*# sourceMappingURL=SpindelBookSection.module.css.map */

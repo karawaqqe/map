@@ -7,12 +7,13 @@ import {
 	spindelBuildingLayers,
 	spindelFogParticles,
 	spindelInteractiveCastle,
+	spindelInteractiveCastleFrame,
 	spindelMapImage,
 	spindelMapSize,
 	spindelOst,
 	spindelRegions,
 } from "../../data/spindel";
-import { buildHitboxPath } from "../../utils/mapHitbox";
+import { spindelCastleHitbox } from "../../data/generatedHitboxes";
 import styles from "./Spindel.module.scss";
 import SpindelRoom from "./SpindelRoom";
 
@@ -38,6 +39,10 @@ const QUALITY_MODES = [
 	{ id: "performance", label: "Performance" },
 ];
 const QUALITY_BODY_CLASSES = QUALITY_MODES.map((mode) => `quality-${mode.id}`);
+
+function getLayerFrame(layer) {
+	return layer.frame ?? { x: 0, y: 0, width: spindelMapSize.width, height: spindelMapSize.height };
+}
 
 function fadeAudioVolume(audio, targetVolume, duration = AUDIO_FADE_DURATION) {
 	if (!audio) {
@@ -126,9 +131,12 @@ function getInitialQuality() {
 }
 
 const SpindelLayer = memo(function SpindelLayer({ region }) {
+	const frame = getLayerFrame(region);
+
 	return (
 		<g
 			className={styles.region}
+			transform={`translate(${frame.x} ${frame.y})`}
 			style={{
 				"--region-glow": region.glowColor,
 				"--region-glow-fill": region.glowFill,
@@ -143,8 +151,8 @@ const SpindelLayer = memo(function SpindelLayer({ region }) {
 					<image
 						className={styles.regionImage}
 						href={region.image}
-						width={spindelMapSize.width}
-						height={spindelMapSize.height}
+						width={frame.width}
+						height={frame.height}
 						loading="lazy"
 						decoding="async"
 					/>
@@ -214,7 +222,6 @@ function FogSpriteLayer({ className, fogSprites }) {
 
 function Spindel() {
 	const [activeScene, setActiveScene] = useState("map");
-	const [castleHitbox, setCastleHitbox] = useState("");
 	const [isCastleAwake, setIsCastleAwake] = useState(false);
 	const [quality, setQuality] = useState(getInitialQuality);
 	const [isQualityOpen, setIsQualityOpen] = useState(false);
@@ -224,24 +231,6 @@ function Spindel() {
 	const blizzardAudioRef = useRef(null);
 	const audioFilterRef = useRef(null);
 	const sceneTransitionTimeoutRef = useRef(null);
-
-	useEffect(() => {
-		let isMounted = true;
-
-		async function createCastleHitbox() {
-			const hitbox = await buildHitboxPath(spindelInteractiveCastle);
-
-			if (isMounted) {
-				setCastleHitbox(hitbox);
-			}
-		}
-
-		createCastleHitbox();
-
-		return () => {
-			isMounted = false;
-		};
-	}, []);
 
 	useEffect(() => {
 		const audioEntries = [
@@ -513,26 +502,30 @@ function Spindel() {
 					preserveAspectRatio="xMidYMid slice"
 					aria-hidden="false"
 				>
-					<image
-						className={styles.castleInteractionImage}
-						href={spindelInteractiveCastle}
-						width={spindelMapSize.width}
-						height={spindelMapSize.height}
-						loading="lazy"
-						decoding="async"
-					/>
-					{castleHitbox && (
-						<path
-							className={styles.castleHitbox}
-							d={castleHitbox}
-							role="button"
-							tabIndex="0"
-							focusable="true"
-							aria-label="Enter the frostbound castle"
-							onClick={awakenCastle}
-							onKeyDown={handleCastleKeyDown}
+					<g
+						transform={`translate(${spindelInteractiveCastleFrame.x} ${spindelInteractiveCastleFrame.y})`}
+					>
+						<image
+							className={styles.castleInteractionImage}
+							href={spindelInteractiveCastle}
+							width={spindelInteractiveCastleFrame.width}
+							height={spindelInteractiveCastleFrame.height}
+							loading="lazy"
+							decoding="async"
 						/>
-					)}
+						{spindelCastleHitbox && (
+							<path
+								className={styles.castleHitbox}
+								d={spindelCastleHitbox}
+								role="button"
+								tabIndex="0"
+								focusable="true"
+								aria-label="Enter the frostbound castle"
+								onClick={awakenCastle}
+								onKeyDown={handleCastleKeyDown}
+							/>
+						)}
+					</g>
 				</svg>
 
 				<FogSpriteLayer

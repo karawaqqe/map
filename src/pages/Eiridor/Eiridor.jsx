@@ -13,7 +13,7 @@ import {
 	eiridorMapSize,
 	eiridorRegions,
 } from "../../data/eiridor";
-import { buildHitboxPath } from "../../utils/mapHitbox";
+import { eiridorHitboxes } from "../../data/generatedHitboxes";
 import styles from "./Eiridor.module.scss";
 
 const WORLD_NAVIGATION_DELAY = 1150;
@@ -140,6 +140,10 @@ const QUALITY_MODES = [
 ];
 const QUALITY_BODY_CLASSES = QUALITY_MODES.map((mode) => `quality-${mode.id}`);
 
+function getLayerFrame(layer) {
+	return layer.frame ?? { x: 0, y: 0, width: eiridorMapSize.width, height: eiridorMapSize.height };
+}
+
 function getInitialQuality() {
 	if (typeof window === "undefined") {
 		return "cinematic";
@@ -163,6 +167,7 @@ const RegionLayer = memo(function RegionLayer({
 	onEnterRegion,
 	region,
 }) {
+	const frame = getLayerFrame(region);
 	const handleKeyDown = (event) => {
 		if (event.key === "Enter" || event.key === " ") {
 			event.preventDefault();
@@ -173,6 +178,7 @@ const RegionLayer = memo(function RegionLayer({
 	return (
 		<g
 			className={styles.region}
+			transform={`translate(${frame.x} ${frame.y})`}
 			style={{
 				"--region-glow": region.glowColor,
 				"--region-glow-fill": region.glowFill,
@@ -188,8 +194,8 @@ const RegionLayer = memo(function RegionLayer({
 					<image
 						className={styles.regionImage}
 						href={region.image}
-						width={eiridorMapSize.width}
-						height={eiridorMapSize.height}
+						width={frame.width}
+						height={frame.height}
 						loading="lazy"
 						decoding="async"
 					/>
@@ -213,7 +219,6 @@ const RegionLayer = memo(function RegionLayer({
 });
 
 function Eiridor() {
-	const [hitboxes, setHitboxes] = useState({});
 	const [quality, setQuality] = useState(getInitialQuality);
 	const [isQualityOpen, setIsQualityOpen] = useState(false);
 	const [isReturningToWorld, setIsReturningToWorld] = useState(false);
@@ -241,29 +246,6 @@ function Eiridor() {
 		},
 		[isEnteringRegion],
 	);
-
-	useEffect(() => {
-		let isMounted = true;
-
-		async function createHitboxes() {
-			const entries = await Promise.all(
-				eiridorRegions.map(async (region) => [
-					region.id,
-					await buildHitboxPath(region.image),
-				]),
-			);
-
-			if (isMounted) {
-				setHitboxes(Object.fromEntries(entries));
-			}
-		}
-
-		createHitboxes();
-
-		return () => {
-			isMounted = false;
-		};
-	}, []);
 
 	useEffect(() => {
 		const audioEntries = [
@@ -423,7 +405,7 @@ function Eiridor() {
 					{eiridorRegions.map((region) => (
 						<RegionLayer
 							key={region.id}
-							hitbox={hitboxes[region.id]}
+							hitbox={eiridorHitboxes[region.id]}
 							onEnterRegion={enterRegion}
 							region={region}
 						/>

@@ -10,7 +10,9 @@
 }
 
 .room img {
-  user-select: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
   pointer-events: none;
 }
 
@@ -47,8 +49,10 @@
 .bookLayer {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: center;
+  -o-object-fit: cover;
+     object-fit: cover;
+  -o-object-position: center;
+     object-position: center;
 }
 
 .outsideAtmosphere > img {
@@ -95,9 +99,12 @@
   overflow: hidden;
   border-radius: 48% 48% 12% 12%;
   clip-path: polygon(50% 0, 76% 18%, 82% 100%, 16% 100%, 24% 18%);
-  mask-image: radial-gradient(ellipse at 50% 54%, #000 48%, rgba(0, 0, 0, 0.76) 66%, transparent 88%);
-  mask-size: 100% 100%;
-  mask-repeat: no-repeat;
+  -webkit-mask-image: radial-gradient(ellipse at 50% 54%, #000 48%, rgba(0, 0, 0, 0.76) 66%, transparent 88%);
+          mask-image: radial-gradient(ellipse at 50% 54%, #000 48%, rgba(0, 0, 0, 0.76) 66%, transparent 88%);
+  -webkit-mask-size: 100% 100%;
+          mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+          mask-repeat: no-repeat;
 }
 
 .outsideWindowSnowLeft {
@@ -166,7 +173,7 @@
 .windowsLayer {
   z-index: 4;
   filter: drop-shadow(0 0 6px rgba(236, 249, 255, 0)) drop-shadow(0 0 18px rgba(102, 190, 248, 0)) drop-shadow(0 10px 22px rgba(0, 0, 0, 0)) brightness(1.04) contrast(1.02);
-  transition: filter 500ms ease, opacity 500ms ease;
+  transition: filter 300ms ease, opacity 300ms ease;
 }
 
 .windowsLayerActive {
@@ -182,7 +189,7 @@
 .glowShape {
   opacity: 0;
   pointer-events: none;
-  transition: opacity 500ms ease, filter 500ms ease;
+  transition: opacity 300ms ease, filter 300ms ease;
 }
 
 .windowGlowShape {
@@ -231,21 +238,21 @@
   z-index: 5;
   opacity: 0.72;
   filter: drop-shadow(0 0 6px rgba(239, 249, 255, 0)) drop-shadow(0 0 18px rgba(97, 188, 250, 0)) drop-shadow(0 16px 26px rgba(0, 0, 0, 0)) saturate(0.78) brightness(0.78) contrast(1.05);
-  transition: filter 500ms ease, opacity 500ms ease;
+  transition: filter 300ms ease, opacity 300ms ease;
 }
 
 .banner {
   z-index: 5;
   opacity: 0.66;
   filter: drop-shadow(0 0 5px rgba(241, 250, 255, 0)) drop-shadow(0 0 16px rgba(96, 185, 248, 0)) drop-shadow(0 12px 24px rgba(0, 0, 0, 0.34)) saturate(0.62) brightness(0.52) contrast(1.08);
-  transition: filter 500ms ease, opacity 500ms ease;
+  transition: filter 300ms ease, opacity 300ms ease;
 }
 
 .bookLayer {
   z-index: 5;
   opacity: 0.78;
   filter: drop-shadow(0 0 6px rgba(245, 252, 255, 0)) drop-shadow(0 0 18px rgba(101, 191, 250, 0)) drop-shadow(0 10px 20px rgba(0, 0, 0, 0)) saturate(0.68) brightness(0.6) contrast(1.08);
-  transition: filter 500ms ease, opacity 500ms ease;
+  transition: filter 300ms ease, opacity 300ms ease;
 }
 
 .bookshelvesActive {
@@ -607,8 +614,10 @@
 
 .windowCloseupOutside,
 .windowCloseupInterior {
-  object-fit: cover;
-  object-position: center;
+  -o-object-fit: cover;
+     object-fit: cover;
+  -o-object-position: center;
+     object-position: center;
 }
 
 .windowCloseupScene {
@@ -714,16 +723,6 @@
   }
   to {
     opacity: 1;
-  }
-}
-@keyframes spindelWindowCloseupSettle {
-  from {
-    opacity: 1;
-    transform: scale(1.012);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
   }
 }
 @keyframes spindelWindowCloseupFadeOut {
@@ -851,6 +850,4 @@
   .windowCloseupFogSprite {
     animation: none;
   }
-}
-
-/*# sourceMappingURL=SpindelRoom.module.css.map */
+}/*# sourceMappingURL=SpindelRoom.module.css.map */

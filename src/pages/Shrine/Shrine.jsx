@@ -7,8 +7,8 @@ import {
 	statueRepeatDialogue,
 	statueDialogue,
 } from "../../data/dialogues/statueDialogue";
+import { shrineStatueHitbox } from "../../data/generatedHitboxes";
 import useSessionDialogMemory from "../../hooks/useSessionDialogMemory";
-import { buildHitboxPath } from "../../utils/mapHitbox";
 import styles from "./Shrine.module.scss";
 
 const shrineSize = {
@@ -87,7 +87,6 @@ function dispatchRouteTransition(to) {
 }
 
 function Shrine() {
-	const [statueHitbox, setStatueHitbox] = useState("");
 	const [isDialogueOpen, setIsDialogueOpen] = useState(false);
 	const [activeDialogue, setActiveDialogue] = useState(statueDialogue);
 	const [isEyesVisible, setIsEyesVisible] = useState(false);
@@ -97,24 +96,6 @@ function Shrine() {
 		useSessionDialogMemory(STATUE_DIALOG_ID);
 	const ambienceRef = useRef(null);
 	const visionTimeoutRef = useRef(null);
-
-	useEffect(() => {
-		let isMounted = true;
-
-		async function createStatueHitbox() {
-			const hitbox = await buildHitboxPath(shrineStatue);
-
-			if (isMounted) {
-				setStatueHitbox(hitbox);
-			}
-		}
-
-		createStatueHitbox();
-
-		return () => {
-			isMounted = false;
-		};
-	}, []);
 
 	useEffect(() => {
 		const audio = ambienceRef.current;
@@ -264,10 +245,10 @@ function Shrine() {
 					width={shrineSize.width}
 					height={shrineSize.height}
 				/>
-				{statueHitbox && (
+				{shrineStatueHitbox && (
 					<path
 						className={styles.statueHitbox}
-						d={statueHitbox}
+						d={shrineStatueHitbox}
 						role="button"
 						tabIndex="0"
 						focusable="true"
