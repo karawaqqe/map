@@ -3,18 +3,18 @@ import { FiArrowLeft, FiSliders } from "react-icons/fi";
 import DialogueBox from "../../components/DialogueBox/DialogueBox";
 import SpindelWeatherVolume from "../../components/SpindelWeatherVolume/SpindelWeatherVolume";
 import { ROUTE_TRANSITION_EVENT } from "../../constants/routeTransition";
+import { spindelRoomHitboxes } from "../../data/generatedHitboxes";
 import { spindelFogParticles, spindelRoomAssets } from "../../data/spindel";
-import { buildHitboxPath } from "../../utils/mapHitbox";
 import styles from "./SpindelRoom.module.scss";
 
 const WINDOW_SNOW_PARTICLES = Array.from({ length: 68 }, (_, index) => {
 	const isLeftWindow = index % 3 !== 0;
 	const windowOffset = isLeftWindow ? 0 : 1;
 	const x = isLeftWindow
-		? 2.55 + (index % 7) * 0.82
+		? 5.65 + (index % 7) * 0.82
 		: 31.55 + (index % 5) * 0.75;
 	const y = isLeftWindow
-		? 23.4 + ((index + windowOffset) % 5) * 1.05
+		? 25.4 + ((index + windowOffset) % 5) * 1.05
 		: 31.9 + ((index + windowOffset) % 4) * 1.25;
 
 	return {
@@ -187,11 +187,6 @@ const roomSize = {
 	height: 887,
 };
 
-const WINDOW_HITBOX_BOUNDS = {
-	left: { minX: 0, maxX: 360, minY: 70, maxY: 660 },
-	right: { minX: 460, maxX: 780, minY: 120, maxY: 660 },
-};
-
 const dialogueWindow = new URL(
 	"../../../img/cubes/Spindel/shrine/dialogue_window.png",
 	import.meta.url,
@@ -236,13 +231,6 @@ function SpindelRoom({
 	const [hoveredObject, setHoveredObject] = useState("");
 	const [isQualityOpen, setIsQualityOpen] = useState(false);
 	const [windowViewMode, setWindowViewMode] = useState("room");
-	const [hitboxes, setHitboxes] = useState({
-		leftWindow: "",
-		rightWindow: "",
-		bookshelves: "",
-		banner: "",
-		book: "",
-	});
 	const windowTransitionTimeoutRef = useRef(null);
 	const effectLimits =
 		ROOM_EFFECT_LIMITS[quality] ?? ROOM_EFFECT_LIMITS.cinematic;
@@ -279,34 +267,6 @@ function SpindelRoom({
 		() => WINDOW_CLOSEUP_ROOM_SNOW.slice(0, effectLimits.closeupRoomSnow),
 		[effectLimits.closeupRoomSnow],
 	);
-	useEffect(() => {
-		let isMounted = true;
-
-		async function createHitboxes() {
-			const [leftWindow, rightWindow, bookshelves, banner, book] =
-				await Promise.all([
-					buildHitboxPath(spindelRoomAssets.windows, WINDOW_HITBOX_BOUNDS.left),
-					buildHitboxPath(
-						spindelRoomAssets.windows,
-						WINDOW_HITBOX_BOUNDS.right,
-					),
-					buildHitboxPath(spindelRoomAssets.bookshelves),
-					buildHitboxPath(spindelRoomAssets.banner),
-					buildHitboxPath(spindelRoomAssets.book),
-				]);
-
-			if (isMounted) {
-				setHitboxes({ leftWindow, rightWindow, bookshelves, banner, book });
-			}
-		}
-
-		createHitboxes();
-
-		return () => {
-			isMounted = false;
-		};
-	}, []);
-
 	useEffect(
 		() => () => {
 			window.clearTimeout(windowTransitionTimeoutRef.current);
@@ -538,44 +498,44 @@ function SpindelRoom({
 				preserveAspectRatio="xMidYMid slice"
 				aria-hidden="true"
 			>
-				{hitboxes.leftWindow && (
+				{spindelRoomHitboxes.leftWindow && (
 					<path
 						className={`${styles.glowShape} ${styles.windowGlowShape} ${
 							hoveredObject === "windows" ? styles.glowShapeActive : ""
 						}`}
-						d={hitboxes.leftWindow}
+						d={spindelRoomHitboxes.leftWindow}
 					/>
 				)}
-				{hitboxes.rightWindow && (
+				{spindelRoomHitboxes.rightWindow && (
 					<path
 						className={`${styles.glowShape} ${styles.windowGlowShape} ${
 							hoveredObject === "windows" ? styles.glowShapeActive : ""
 						}`}
-						d={hitboxes.rightWindow}
+						d={spindelRoomHitboxes.rightWindow}
 					/>
 				)}
-				{hitboxes.bookshelves && (
+				{spindelRoomHitboxes.bookshelves && (
 					<path
 						className={`${styles.glowShape} ${styles.bookshelvesGlowShape} ${
 							hoveredObject === "bookshelves" ? styles.glowShapeActive : ""
 						}`}
-						d={hitboxes.bookshelves}
+						d={spindelRoomHitboxes.bookshelves}
 					/>
 				)}
-				{hitboxes.book && (
+				{spindelRoomHitboxes.book && (
 					<path
 						className={`${styles.glowShape} ${styles.bookGlowShape} ${
 							hoveredObject === "book" ? styles.glowShapeActive : ""
 						}`}
-						d={hitboxes.book}
+						d={spindelRoomHitboxes.book}
 					/>
 				)}
-				{hitboxes.banner && (
+				{spindelRoomHitboxes.banner && (
 					<path
 						className={`${styles.glowShape} ${styles.bannerGlowShape} ${
 							hoveredObject === "banner" ? styles.glowShapeActive : ""
 						}`}
-						d={hitboxes.banner}
+						d={spindelRoomHitboxes.banner}
 					/>
 				)}
 			</svg>
@@ -611,10 +571,10 @@ function SpindelRoom({
 				preserveAspectRatio="xMidYMid slice"
 				aria-hidden="false"
 			>
-				{hitboxes.leftWindow && (
+				{spindelRoomHitboxes.leftWindow && (
 					<path
 						className={`${styles.objectHitbox} ${styles.windowHitbox}`}
-						d={hitboxes.leftWindow}
+						d={spindelRoomHitboxes.leftWindow}
 						role="button"
 						tabIndex="0"
 						focusable="true"
@@ -632,10 +592,10 @@ function SpindelRoom({
 						}}
 					/>
 				)}
-				{hitboxes.rightWindow && (
+				{spindelRoomHitboxes.rightWindow && (
 					<path
 						className={`${styles.objectHitbox} ${styles.windowHitbox}`}
-						d={hitboxes.rightWindow}
+						d={spindelRoomHitboxes.rightWindow}
 						role="button"
 						tabIndex="0"
 						focusable="true"
@@ -653,10 +613,10 @@ function SpindelRoom({
 						}}
 					/>
 				)}
-				{hitboxes.bookshelves && (
+				{spindelRoomHitboxes.bookshelves && (
 					<path
 						className={`${styles.objectHitbox} ${styles.bookshelvesHitbox}`}
-						d={hitboxes.bookshelves}
+						d={spindelRoomHitboxes.bookshelves}
 						role="button"
 						tabIndex="0"
 						focusable="true"
@@ -674,10 +634,10 @@ function SpindelRoom({
 						}}
 					/>
 				)}
-				{hitboxes.book && (
+				{spindelRoomHitboxes.book && (
 					<path
 						className={`${styles.objectHitbox} ${styles.bookHitbox}`}
-						d={hitboxes.book}
+						d={spindelRoomHitboxes.book}
 						role="button"
 						tabIndex="0"
 						focusable="true"
@@ -695,10 +655,10 @@ function SpindelRoom({
 						}}
 					/>
 				)}
-				{hitboxes.banner && (
+				{spindelRoomHitboxes.banner && (
 					<path
 						className={`${styles.objectHitbox} ${styles.bannerHitbox}`}
-						d={hitboxes.banner}
+						d={spindelRoomHitboxes.banner}
 						role="button"
 						tabIndex="0"
 						focusable="true"
@@ -822,7 +782,10 @@ function SpindelRoom({
 					>
 						<FiSliders aria-hidden="true" />
 					</button>
-					<div className={styles.qualityMenu} aria-label="Room graphics quality">
+					<div
+						className={styles.qualityMenu}
+						aria-label="Room graphics quality"
+					>
 						<span className={styles.qualityTitle}>Room Graphics</span>
 						<div className={styles.qualityOptions}>
 							{qualityModes.map((mode) => (

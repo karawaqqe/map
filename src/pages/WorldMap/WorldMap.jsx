@@ -11,7 +11,7 @@ import {
 	worldMapImage,
 	worldMapMusic,
 } from "../../data/continents";
-import { buildHitboxPath } from "../../utils/mapHitbox";
+import { worldHitboxes } from "../../data/generatedHitboxes";
 import styles from "./WorldMap.module.scss";
 
 const EIRIDOR_CONTINENT_ID = "eiridors";
@@ -269,6 +269,10 @@ const QUALITY_MODES = [
 ];
 const QUALITY_BODY_CLASSES = QUALITY_MODES.map((mode) => `quality-${mode.id}`);
 
+function getLayerFrame(layer) {
+	return layer.frame ?? { x: 0, y: 0, width: mapSize.width, height: mapSize.height };
+}
+
 function getInitialQuality() {
 	if (typeof window === "undefined") {
 		return "cinematic";
@@ -288,36 +292,12 @@ function getInitialQuality() {
 }
 
 function WorldMap() {
-	const [hitboxes, setHitboxes] = useState({});
 	const [quality, setQuality] = useState(getInitialQuality);
 	const [isQualityOpen, setIsQualityOpen] = useState(false);
 	const [enteringContinentId, setEnteringContinentId] = useState(null);
 	const musicAudioRef = useRef(null);
 	const windAudioRef = useRef(null);
 	const birdAudioRef = useRef(null);
-
-	useEffect(() => {
-		let isMounted = true;
-
-		async function createHitboxes() {
-			const entries = await Promise.all(
-				continents.map(async (continent) => [
-					continent.id,
-					await buildHitboxPath(continent.image),
-				]),
-			);
-
-			if (isMounted) {
-				setHitboxes(Object.fromEntries(entries));
-			}
-		}
-
-		createHitboxes();
-
-		return () => {
-			isMounted = false;
-		};
-	}, []);
 
 	useEffect(() => {
 		const audioEntries = [
@@ -522,6 +502,7 @@ function WorldMap() {
 						<g
 							key={continent.id}
 							className={styles.continent}
+							transform={`translate(${getLayerFrame(continent).x} ${getLayerFrame(continent).y})`}
 							style={{
 								"--continent-glow": continent.glowColor,
 								"--continent-glow-fill": continent.glowFill,
@@ -531,20 +512,20 @@ function WorldMap() {
 						>
 							<title>{continent.name}</title>
 							<g className={styles.fabricLayer}>
-								{hitboxes[continent.id] && (
-									<path className={styles.glow} d={hitboxes[continent.id]} />
+								{worldHitboxes[continent.id] && (
+									<path className={styles.glow} d={worldHitboxes[continent.id]} />
 								)}
 								<image
 									className={styles.continentImage}
 									href={continent.image}
-									width={mapSize.width}
-									height={mapSize.height}
+									width={getLayerFrame(continent).width}
+									height={getLayerFrame(continent).height}
 								/>
 							</g>
-							{hitboxes[continent.id] && (
+							{worldHitboxes[continent.id] && (
 								<path
 									className={styles.hitbox}
-									d={hitboxes[continent.id]}
+									d={worldHitboxes[continent.id]}
 									data-continent-id={continent.id}
 									role="button"
 									aria-label={continent.name}

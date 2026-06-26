@@ -13,7 +13,7 @@ import {
 	holyLightMapSize,
 	holyLightRegions,
 } from "../../data/holylight";
-import { buildHitboxPath } from "../../utils/mapHitbox";
+import { holyLightHitboxes } from "../../data/generatedHitboxes";
 import styles from "../Eiridor/Eiridor.module.scss";
 import capitalIconUrl from "../../../svg/Capital/holy_capital_sword_shield.svg";
 
@@ -141,6 +141,10 @@ const QUALITY_MODES = [
 ];
 const QUALITY_BODY_CLASSES = QUALITY_MODES.map((mode) => `quality-${mode.id}`);
 
+function getLayerFrame(layer) {
+	return layer.frame ?? { x: 0, y: 0, width: holyLightMapSize.width, height: holyLightMapSize.height };
+}
+
 function getInitialQuality() {
 	if (typeof window === "undefined") {
 		return "cinematic";
@@ -166,6 +170,7 @@ const RegionLayer = memo(function RegionLayer({
 	onEnterRegion,
 	region,
 }) {
+	const frame = getLayerFrame(region);
 	const handleKeyDown = (event) => {
 		if (event.key === "Enter" || event.key === " ") {
 			event.preventDefault();
@@ -176,6 +181,7 @@ const RegionLayer = memo(function RegionLayer({
 	return (
 		<g
 			className={styles.region}
+			transform={`translate(${frame.x} ${frame.y})`}
 			style={{
 				"--region-glow": region.glowColor,
 				"--region-glow-fill": region.glowFill,
@@ -191,8 +197,8 @@ const RegionLayer = memo(function RegionLayer({
 					<image
 						className={styles.regionImage}
 						href={region.image}
-						width={holyLightMapSize.width}
-						height={holyLightMapSize.height}
+						width={frame.width}
+						height={frame.height}
 						loading="lazy"
 						decoding="async"
 					/>
@@ -222,7 +228,6 @@ const RegionLayer = memo(function RegionLayer({
 });
 
 function HolyLight() {
-	const [hitboxes, setHitboxes] = useState({});
 	const [activeRegionId, setActiveRegionId] = useState(null);
 	const [quality, setQuality] = useState(getInitialQuality);
 	const [isQualityOpen, setIsQualityOpen] = useState(false);
@@ -258,29 +263,6 @@ function HolyLight() {
 
 	const clearRegion = useCallback((regionId) => {
 		setActiveRegionId((current) => (current === regionId ? null : current));
-	}, []);
-
-	useEffect(() => {
-		let isMounted = true;
-
-		async function createHitboxes() {
-			const entries = await Promise.all(
-				holyLightRegions.map(async (region) => [
-					region.id,
-					await buildHitboxPath(region.image),
-				]),
-			);
-
-			if (isMounted) {
-				setHitboxes(Object.fromEntries(entries));
-			}
-		}
-
-		createHitboxes();
-
-		return () => {
-			isMounted = false;
-		};
 	}, []);
 
 	useEffect(() => {
@@ -441,7 +423,7 @@ function HolyLight() {
 					{holyLightRegions.map((region) => (
 						<RegionLayer
 							key={region.id}
-							hitbox={hitboxes[region.id]}
+							hitbox={holyLightHitboxes[region.id]}
 							onActivateRegion={activateRegion}
 							onClearRegion={clearRegion}
 							onEnterRegion={enterRegion}

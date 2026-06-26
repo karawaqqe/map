@@ -25,7 +25,8 @@ export const continents = [
   {
     id: 'eiridors',
     name: 'Eiridors',
-    image: new URL('../../img/continents/Eiridors/Eiritor_continent.png', import.meta.url).href,
+    image: new URL('../../img/continents/Eiridors/cropped/Eiritor_continent.png', import.meta.url).href,
+    frame: { x: 88, y: 150, width: 685, height: 458 },
     crest: new URL('../../img/herbs/herb_eridor.png', import.meta.url).href,
     glowColor: '#00ff3c',
     glowFill: 'rgba(0, 255, 60, 0.082)',
@@ -36,7 +37,8 @@ export const continents = [
   {
     id: 'death',
     name: 'Death',
-    image: new URL('../../img/continents/Death/death_continent.png', import.meta.url).href,
+    image: new URL('../../img/continents/Death/cropped/death_continent.png', import.meta.url).href,
+    frame: { x: 786, y: 315, width: 360, height: 302 },
     crest: new URL('../../img/herbs/herb_death.png', import.meta.url).href,
     glowColor: '#ff0000',
     glowFill: 'rgba(255, 0, 0, 0.16)',
@@ -47,7 +49,8 @@ export const continents = [
   {
     id: 'holyLights',
     name: 'Holy Lights',
-    image: new URL('../../img/continents/HolyLights/holylight_continent.png', import.meta.url).href,
+    image: new URL('../../img/continents/HolyLights/cropped/holylight_continent.png', import.meta.url).href,
+    frame: { x: 1176, y: 116, width: 720, height: 539 },
     crest: new URL('../../img/herbs/herb_holylight.png', import.meta.url).href,
     glowColor: '#ffbf00',
     glowFill: 'rgba(255, 191, 0, 0.115)',
@@ -58,7 +61,8 @@ export const continents = [
   {
     id: 'island',
     name: 'Magic Island',
-    image: new URL('../../img/continents/Island/mage_continent.png', import.meta.url).href,
+    image: new URL('../../img/continents/Island/cropped/mage_continent.png', import.meta.url).href,
+    frame: { x: 309, y: 591, width: 290, height: 198 },
     crest: new URL('../../img/herbs/herb_mage.png', import.meta.url).href,
     glowColor: '#003cff',
     glowFill: 'rgba(0, 60, 255, 0.088)',
@@ -69,7 +73,8 @@ export const continents = [
   {
     id: 'spindel',
     name: 'Spindel',
-    image: new URL('../../img/continents/Spindel/secret_continent.png', import.meta.url).href,
+    image: new URL('../../img/continents/Spindel/cropped/secret_continent.png', import.meta.url).href,
+    frame: { x: 1250, y: 22, width: 73, height: 49 },
     glowColor: '#d7f2ff',
     glowFill: 'rgba(215, 242, 255, 0.08)',
     glowOpacity: 0.94,
