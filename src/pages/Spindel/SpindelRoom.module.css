@@ -17,6 +17,7 @@
 }
 
 .outsideAtmosphere,
+.outerLayer,
 .background,
 .outsideWindowSnow,
 .windowsLayer,
@@ -41,7 +42,7 @@
   background: radial-gradient(ellipse at 23% 38%, rgba(129, 181, 214, 0.13), transparent 45%), radial-gradient(ellipse at 68% 55%, rgba(78, 122, 151, 0.1), transparent 56%), linear-gradient(115deg, rgba(18, 39, 52, 0.5), rgba(3, 7, 10, 0.95));
 }
 
-.outsideAtmosphere img,
+.outerLayer,
 .background,
 .windowsLayer,
 .bookshelves,
@@ -55,7 +56,7 @@
      object-position: center;
 }
 
-.outsideAtmosphere > img {
+.outsideAtmosphere > .outerLayer {
   position: absolute;
   inset: 0;
   z-index: 2;
@@ -173,7 +174,7 @@
 .windowsLayer {
   z-index: 4;
   filter: drop-shadow(0 0 6px rgba(236, 249, 255, 0)) drop-shadow(0 0 18px rgba(102, 190, 248, 0)) drop-shadow(0 10px 22px rgba(0, 0, 0, 0)) brightness(1.04) contrast(1.02);
-  transition: filter 300ms ease, opacity 300ms ease;
+  transition: filter 200ms ease, opacity 200ms ease;
 }
 
 .windowsLayerActive {
@@ -189,7 +190,7 @@
 .glowShape {
   opacity: 0;
   pointer-events: none;
-  transition: opacity 300ms ease, filter 300ms ease;
+  transition: opacity 140ms ease, filter 140ms ease;
 }
 
 .windowGlowShape {
@@ -238,21 +239,21 @@
   z-index: 5;
   opacity: 0.72;
   filter: drop-shadow(0 0 6px rgba(239, 249, 255, 0)) drop-shadow(0 0 18px rgba(97, 188, 250, 0)) drop-shadow(0 16px 26px rgba(0, 0, 0, 0)) saturate(0.78) brightness(0.78) contrast(1.05);
-  transition: filter 300ms ease, opacity 300ms ease;
+  transition: filter 140ms ease, opacity 140ms ease;
 }
 
 .banner {
   z-index: 5;
   opacity: 0.66;
   filter: drop-shadow(0 0 5px rgba(241, 250, 255, 0)) drop-shadow(0 0 16px rgba(96, 185, 248, 0)) drop-shadow(0 12px 24px rgba(0, 0, 0, 0.34)) saturate(0.62) brightness(0.52) contrast(1.08);
-  transition: filter 300ms ease, opacity 300ms ease;
+  transition: filter 140ms ease, opacity 140ms ease;
 }
 
 .bookLayer {
   z-index: 5;
   opacity: 0.78;
   filter: drop-shadow(0 0 6px rgba(245, 252, 255, 0)) drop-shadow(0 0 18px rgba(101, 191, 250, 0)) drop-shadow(0 10px 20px rgba(0, 0, 0, 0)) saturate(0.68) brightness(0.6) contrast(1.08);
-  transition: filter 300ms ease, opacity 300ms ease;
+  transition: filter 140ms ease, opacity 140ms ease;
 }
 
 .bookshelvesActive {
@@ -277,6 +278,10 @@
   width: 100%;
   height: 100%;
   pointer-events: none;
+}
+
+.outerWindowHitbox {
+  pointer-events: fill;
 }
 
 .objectHitbox {

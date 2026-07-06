@@ -56,6 +56,16 @@
 	animation: eyeFlare 5000ms ease-in-out infinite;
 }
 
+.eyesScene {
+	position: absolute;
+	inset: 0;
+	z-index: 4;
+	display: block;
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
+}
+
 .statueHitbox {
 	fill: rgba(255, 255, 255, 0.01);
 	outline: none;
@@ -99,7 +109,8 @@
 	filter: blur(calc(18px * var(--fx-blur)));
 	opacity: 0;
 	transform: translate3d(-50%, -50%, 0) scale(var(--smoke-scale));
-	animation: smokeBreathe calc(var(--smoke-duration) * var(--fx-speed)) ease-in-out infinite;
+	animation: smokeBreathe calc(var(--smoke-duration) * var(--fx-speed))
+		ease-in-out infinite;
 	animation-delay: var(--smoke-delay);
 	will-change: transform, opacity;
 }
@@ -120,7 +131,8 @@
 		0 0 8px rgba(205, 232, 238, 0.28),
 		0 0 18px rgba(118, 164, 180, 0.12);
 	opacity: 0;
-	animation: dustFloat calc(var(--dust-duration) * var(--fx-speed)) linear infinite;
+	animation: dustFloat calc(var(--dust-duration) * var(--fx-speed)) linear
+		infinite;
 	animation-delay: var(--dust-delay);
 	will-change: transform, opacity;
 }
@@ -144,7 +156,8 @@
 	);
 	filter: drop-shadow(0 0 5px rgba(130, 208, 244, 0.28));
 	opacity: 0;
-	animation: waterDrip calc(var(--drip-duration) * var(--fx-speed)) linear infinite;
+	animation: waterDrip calc(var(--drip-duration) * var(--fx-speed)) linear
+		infinite;
 	animation-delay: var(--drip-delay);
 	will-change: transform, opacity;
 }
@@ -173,6 +186,15 @@
 
 .pageAwakened .caveVeil {
 	opacity: 0.56;
+}
+
+.blackOverlayLayer {
+	position: absolute;
+	inset: 0;
+	z-index: 3;
+	pointer-events: none;
+	background: #000;
+	opacity: 0.45;
 }
 
 .backButton {
@@ -228,6 +250,157 @@
 	transform: none;
 }
 
+.openDialogueButton {
+	position: absolute;
+	left: 50%;
+	bottom: 28px;
+	z-index: 6;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	min-height: 46px;
+	padding: 9px 18px;
+	border: 1px solid rgba(188, 226, 255, 0.28);
+	border-radius: 4px;
+	color: rgba(239, 249, 255, 0.94);
+	background: linear-gradient(
+		180deg,
+		rgba(20, 34, 44, 0.76),
+		rgba(5, 9, 14, 0.82)
+	);
+	box-shadow: 0 14px 32px rgba(0, 0, 0, 0.48);
+	cursor: pointer;
+	font-family: "MedievalSharp", "Georgia", serif;
+	font-size: 18px;
+	transform: translateX(-50%);
+	transition:
+		border-color 180ms ease,
+		background 180ms ease,
+		transform 180ms ease;
+}
+
+.openDialogueButton:hover,
+.openDialogueButton:focus-visible {
+	border-color: rgba(210, 238, 255, 0.58);
+	background: linear-gradient(
+		180deg,
+		rgba(42, 65, 80, 0.82),
+		rgba(8, 14, 20, 0.88)
+	);
+	outline: none;
+	transform: translateX(-50%) translateY(-2px);
+}
+
+.openDialogueButton svg {
+	width: 20px;
+	height: 20px;
+}
+
+.debugControls {
+	position: absolute;
+	left: 126px;
+	top: 34px;
+	z-index: 7;
+	display: flex;
+	align-items: flex-start;
+	gap: 10px;
+	color: rgba(229, 246, 255, 0.92);
+	font-family: "Cinzel", "Georgia", serif;
+}
+
+.debugButton {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	min-height: 42px;
+	padding: 0 14px;
+	border: 1px solid rgba(180, 221, 255, 0.24);
+	border-radius: 8px;
+	color: inherit;
+	background: linear-gradient(
+		145deg,
+		rgba(11, 21, 28, 0.82),
+		rgba(2, 5, 8, 0.76)
+	);
+	box-shadow:
+		0 12px 28px rgba(0, 0, 0, 0.38),
+		inset 0 0 18px rgba(160, 222, 255, 0.07);
+	cursor: pointer;
+	letter-spacing: 0;
+	transition:
+		border-color 180ms ease,
+		box-shadow 180ms ease,
+		transform 180ms ease;
+}
+
+.debugButton:hover,
+.debugButton:focus-visible {
+	border-color: rgba(198, 232, 255, 0.58);
+	box-shadow:
+		0 0 22px rgba(106, 190, 245, 0.22),
+		0 14px 30px rgba(0, 0, 0, 0.46),
+		inset 0 0 22px rgba(170, 225, 255, 0.1);
+	outline: none;
+	transform: translateY(-1px);
+}
+
+.debugButton svg {
+	width: 18px;
+	height: 18px;
+	filter: drop-shadow(0 0 8px rgba(187, 228, 255, 0.38));
+}
+
+.debugPanel {
+	position: absolute;
+	left: 110px;
+	top: 52px;
+	width: 220px;
+	padding: 14px;
+	border: 1px solid rgba(180, 221, 255, 0.24);
+	border-radius: 8px;
+	background: rgba(2, 7, 11, 0.88);
+	box-shadow:
+		0 18px 42px rgba(0, 0, 0, 0.5),
+		inset 0 0 24px rgba(160, 222, 255, 0.06);
+	backdrop-filter: blur(10px);
+}
+
+.debugPanel div {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	padding: 7px 0;
+	border-bottom: 1px solid rgba(180, 221, 255, 0.1);
+	font-size: 13px;
+}
+
+.debugPanel span {
+	color: rgba(196, 220, 232, 0.76);
+}
+
+.debugPanel strong {
+	color: rgba(245, 252, 255, 0.96);
+	font-weight: 700;
+}
+
+.debugPanel button {
+	width: 100%;
+	margin-top: 12px;
+	min-height: 34px;
+	border: 1px solid rgba(180, 221, 255, 0.2);
+	border-radius: 8px;
+	color: rgba(229, 246, 255, 0.92);
+	background: rgba(16, 31, 41, 0.78);
+	cursor: pointer;
+}
+
+.debugPanel button:hover,
+.debugPanel button:focus-visible {
+	border-color: rgba(198, 232, 255, 0.54);
+	outline: none;
+}
+
 .ambientAudio {
 	display: none;
 }
@@ -236,40 +409,22 @@
 	position: absolute;
 	inset: 0;
 	z-index: 6;
-	display: grid;
-	place-items: center;
 	pointer-events: none;
-	background:
-		radial-gradient(
-			circle at 50% 42%,
-			rgba(226, 245, 255, 0.18),
-			transparent 16%
-		),
-		radial-gradient(
-			ellipse at center,
-			rgba(1, 8, 14, 0.22),
-			rgba(0, 0, 0, 0.92) 72%
-		),
-		linear-gradient(
-			90deg,
-			rgba(0, 0, 0, 0.92),
-			transparent 48%,
-			rgba(0, 0, 0, 0.92)
-		);
-	animation: visionPulse 3200ms ease-in-out forwards;
+	background: #000;
+	opacity: 0;
+	visibility: hidden;
 }
 
-.visionGlyph {
-	color: rgba(245, 252, 255, 0.9);
-	font-family: "UnifrakturMaguntia", "Georgia", serif;
-	font-size: clamp(54px, 10vw, 160px);
-	letter-spacing: 0;
-	text-shadow:
-		0 0 12px rgba(255, 255, 255, 0.84),
-		0 0 40px rgba(147, 218, 255, 0.58),
-		0 0 90px rgba(36, 129, 190, 0.42);
-	transform: skewX(-3deg);
-	animation: visionText 3200ms ease-in-out forwards;
+.visionOverlayVisible {
+	opacity: 1;
+	visibility: visible;
+}
+
+.visionVideo {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
 }
 
 @keyframes shrineArrive {
@@ -419,6 +574,24 @@
 	.backButton svg {
 		width: 26px;
 		height: 26px;
+	}
+
+	.debugControls {
+		left: 86px;
+		top: 18px;
+		gap: 6px;
+	}
+
+	.debugButton {
+		min-height: 36px;
+		padding: 0 10px;
+		font-size: 12px;
+	}
+
+	.debugPanel {
+		left: 0;
+		top: 44px;
+		width: min(220px, calc(100vw - 104px));
 	}
 }
 

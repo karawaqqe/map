@@ -12,7 +12,7 @@ import monasteryIconUrl from '../../../svg/infopanel/monastery_shield.svg'
 
 const DEFAULT_NAVIGATION_DELAY = 1150
 const DEFAULT_OPENING_DURATION = 1100
-const LEGEND_HIDDEN_ROUTES = ['/', '/eiridor', '/holy-light', '/shrine', '/spindel', '/spindel/frostbound-ledger']
+const LEGEND_HIDDEN_ROUTES = ['/', '/eiridor', '/holy-light', '/shrine', '/spindel', '/spindel/room', '/spindel/edar-voss-journal']
 const LEGEND_ITEMS = [
   { icon: beerIconUrl, label: 'бар' },
   { icon: churchIconUrl, label: 'церковь' },

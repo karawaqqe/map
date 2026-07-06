@@ -1,8 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { FiX } from "react-icons/fi";
 import styles from "./DialogueBox.module.scss";
 
 const DEFAULT_TYPEWRITER_INTERVAL = 50;
 const DEFAULT_LINE_PAUSE = 420;
+const MAX_LINES_PER_PAGE = 2;
+const CLOSE_ANIMATION_DURATION = 460;
 
 function getLinePause(line, fallbackPause) {
 	if (typeof line.pause === "number") {
@@ -33,13 +36,25 @@ function normalizeLines(page) {
 		.filter((line) => line.text);
 }
 
+function splitIntoPages(lines) {
+	const pages = [];
+
+	for (let index = 0; index < lines.length; index += MAX_LINES_PER_PAGE) {
+		pages.push(lines.slice(index, index + MAX_LINES_PER_PAGE));
+	}
+
+	return pages;
+}
+
 function getNodePages(node) {
 	if (!node) {
 		return [];
 	}
 
 	if (Array.isArray(node.pages)) {
-		return node.pages.map(normalizeLines).filter((page) => page.length);
+		return node.pages
+			.flatMap((page) => splitIntoPages(normalizeLines(page)))
+			.filter((page) => page.length);
 	}
 
 	const text = node.text ?? "";
@@ -50,7 +65,7 @@ function getNodePages(node) {
 
 	return text
 		.split(/\n\s*\n/g)
-		.map(normalizeLines)
+		.flatMap((page) => splitIntoPages(normalizeLines(page)))
 		.filter((page) => page.length);
 }
 
@@ -74,10 +89,12 @@ function DialogueBox({
 	const [isTyping, setIsTyping] = useState(false);
 	const [history, setHistory] = useState([]);
 	const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+	const [isClosing, setIsClosing] = useState(false);
 	const [segmentKey, setSegmentKey] = useState(0);
 	const clickAudioRef = useRef(null);
 	const historyLinesRef = useRef(null);
 	const timeoutIdsRef = useRef([]);
+	const closeTimeoutRef = useRef(null);
 
 	const node = dialogue[nodeId];
 	const pages = useMemo(() => getNodePages(node), [node]);
@@ -95,6 +112,7 @@ function DialogueBox({
 
 	useEffect(
 		() => () => {
+			window.clearTimeout(closeTimeoutRef.current);
 			timeoutIdsRef.current.forEach((timeoutId) =>
 				window.clearTimeout(timeoutId),
 			);
@@ -245,6 +263,10 @@ function DialogueBox({
 			return;
 		}
 
+		if (option.action) {
+			onAction(option.action);
+		}
+
 		setNodeId(option.next);
 		setPageIndex(0);
 		setShownLines([]);
@@ -287,11 +309,28 @@ function DialogueBox({
 		}
 	};
 
+	const hideDialogue = () => {
+		if (isClosing) {
+			return;
+		}
+
+		clearTypingTimers();
+		setIsHistoryOpen(false);
+		setIsClosing(true);
+		closeTimeoutRef.current = window.setTimeout(() => {
+			setIsClosing(false);
+			onClose();
+		}, CLOSE_ANIMATION_DURATION);
+	};
+
 	return (
 		<>
 			<section
-				className={`${styles.dialoguePanel} ${className}`}
+				className={`${styles.dialoguePanel} ${
+					isClosing ? styles.dialoguePanelClosing : ""
+				} ${className}`}
 				aria-live="polite"
+				aria-hidden={isClosing}
 			>
 				{clickSound && (
 					<audio
@@ -326,7 +365,7 @@ function DialogueBox({
 							<button
 								className={styles.toolButton}
 								type="button"
-								onClick={onClose}
+								onClick={hideDialogue}
 							>
 								Close
 							</button>
@@ -356,7 +395,10 @@ function DialogueBox({
 					</div>
 					<div className={styles.optionsArea}>
 						{canContinue && (
-							<div className={styles.options} aria-label="Continue dialogue">
+							<div
+								className={`${styles.options} ${styles.continueOptions}`}
+								aria-label="Continue dialogue"
+							>
 								<button
 									className={`${styles.option} ${styles.continueOption}`}
 									type="button"
@@ -367,7 +409,10 @@ function DialogueBox({
 							</div>
 						)}
 						{canContinueToAction && (
-							<div className={styles.options} aria-label="Continue dialogue">
+							<div
+								className={`${styles.options} ${styles.continueOptions}`}
+								aria-label="Continue dialogue"
+							>
 								<button
 									className={`${styles.option} ${styles.continueOption}`}
 									type="button"
@@ -378,7 +423,10 @@ function DialogueBox({
 							</div>
 						)}
 						{options.length > 0 && !hasNextPage && (
-							<div className={styles.options} aria-label="Dialogue options">
+							<div
+								className={`${styles.options} ${styles.choiceOptions}`}
+								aria-label="Dialogue options"
+							>
 								{options.map((option) => (
 									<button
 										key={`${nodeId}-${option.text}`}
@@ -404,9 +452,14 @@ function DialogueBox({
 				<aside className={styles.historyPanel} aria-label="Dialogue history">
 					<div className={styles.historyHeader}>
 						<span className={styles.historyTitle}>Dialogue Archive</span>
-						<span className={styles.historySigil} aria-hidden="true">
-							*
-						</span>
+						<button
+							className={styles.historyClose}
+							type="button"
+							aria-label="Close dialogue archive"
+							onClick={() => setIsHistoryOpen(false)}
+						>
+							<FiX aria-hidden="true" />
+						</button>
 					</div>
 					<div ref={historyLinesRef} className={styles.historyLines}>
 						{history.map((entry, index) => (

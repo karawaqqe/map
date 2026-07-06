@@ -4,7 +4,12 @@ import DialogueBox from "../../components/DialogueBox/DialogueBox";
 import SpindelWeatherVolume from "../../components/SpindelWeatherVolume/SpindelWeatherVolume";
 import { ROUTE_TRANSITION_EVENT } from "../../constants/routeTransition";
 import { spindelRoomHitboxes } from "../../data/generatedHitboxes";
-import { spindelFogParticles, spindelRoomAssets } from "../../data/spindel";
+import {
+	spindelFogParticles,
+	spindelRoomAssetFrames,
+	spindelRoomAssets,
+} from "../../data/spindel";
+import { buildHitboxPath } from "../../utils/mapHitbox";
 import styles from "./SpindelRoom.module.scss";
 
 const WINDOW_SNOW_PARTICLES = Array.from({ length: 68 }, (_, index) => {
@@ -187,6 +192,25 @@ const roomSize = {
 	height: 887,
 };
 
+function RoomAssetLayer({ className, frame, src }) {
+	return (
+		<svg
+			className={className}
+			viewBox={`0 0 ${roomSize.width} ${roomSize.height}`}
+			preserveAspectRatio="xMidYMid slice"
+			aria-hidden="true"
+		>
+			<image
+				href={src}
+				x={frame.x}
+				y={frame.y}
+				width={frame.width}
+				height={frame.height}
+			/>
+		</svg>
+	);
+}
+
 const dialogueWindow = new URL(
 	"../../../img/cubes/Spindel/shrine/dialogue_window.png",
 	import.meta.url,
@@ -231,7 +255,24 @@ function SpindelRoom({
 	const [hoveredObject, setHoveredObject] = useState("");
 	const [isQualityOpen, setIsQualityOpen] = useState(false);
 	const [windowViewMode, setWindowViewMode] = useState("room");
+	const [outerWindowHitboxPath, setOuterWindowHitboxPath] = useState("");
 	const windowTransitionTimeoutRef = useRef(null);
+
+	useEffect(() => {
+		let isCancelled = false;
+
+		buildHitboxPath(spindelRoomAssets.outer)
+			.then((path) => {
+				if (!isCancelled) {
+					setOuterWindowHitboxPath(path);
+				}
+			})
+			.catch(() => {});
+
+		return () => {
+			isCancelled = true;
+		};
+	}, []);
 	const effectLimits =
 		ROOM_EFFECT_LIMITS[quality] ?? ROOM_EFFECT_LIMITS.cinematic;
 	const roomWeatherQuality =
@@ -323,7 +364,7 @@ function SpindelRoom({
 		window.dispatchEvent(
 			new CustomEvent(ROUTE_TRANSITION_EVENT, {
 				detail: {
-					to: "/spindel/frostbound-ledger",
+					to: "/spindel/edar-voss-journal",
 					navigationDelay: 850,
 					openingDuration: 900,
 					variant: "black",
@@ -410,7 +451,11 @@ function SpindelRoom({
 	return (
 		<section className={styles.room} aria-label="Abandoned Spindel castle room">
 			<div className={styles.outsideAtmosphere} aria-hidden="true">
-				<img src={spindelRoomAssets.outer} alt="" />
+				<RoomAssetLayer
+					className={styles.outerLayer}
+					frame={spindelRoomAssetFrames.outer}
+					src={spindelRoomAssets.outer}
+				/>
 				<SpindelWeatherVolume
 					mapSize={roomSize}
 					opacity={0.16}
@@ -483,13 +528,12 @@ function SpindelRoom({
 				</div>
 			</div>
 
-			<img
+			<RoomAssetLayer
 				className={`${styles.windowsLayer} ${
 					hoveredObject === "windows" ? styles.windowsLayerActive : ""
 				}`}
+				frame={spindelRoomAssetFrames.windows}
 				src={spindelRoomAssets.windows}
-				alt=""
-				aria-hidden="true"
 			/>
 
 			<svg
@@ -540,29 +584,26 @@ function SpindelRoom({
 				)}
 			</svg>
 
-			<img
+			<RoomAssetLayer
 				className={`${styles.bookshelves} ${
 					hoveredObject === "bookshelves" ? styles.bookshelvesActive : ""
 				}`}
+				frame={spindelRoomAssetFrames.bookshelves}
 				src={spindelRoomAssets.bookshelves}
-				alt=""
-				aria-hidden="true"
 			/>
-			<img
+			<RoomAssetLayer
 				className={`${styles.banner} ${
 					hoveredObject === "banner" ? styles.bannerActive : ""
 				}`}
+				frame={spindelRoomAssetFrames.banner}
 				src={spindelRoomAssets.banner}
-				alt=""
-				aria-hidden="true"
 			/>
-			<img
+			<RoomAssetLayer
 				className={`${styles.bookLayer} ${
 					hoveredObject === "book" ? styles.bookLayerActive : ""
 				}`}
+				frame={spindelRoomAssetFrames.book}
 				src={spindelRoomAssets.book}
-				alt=""
-				aria-hidden="true"
 			/>
 
 			<svg
@@ -571,6 +612,28 @@ function SpindelRoom({
 				preserveAspectRatio="xMidYMid slice"
 				aria-hidden="false"
 			>
+				{outerWindowHitboxPath && (
+					<path
+						className={`${styles.objectHitbox} ${styles.outerWindowHitbox}`}
+						d={outerWindowHitboxPath}
+						transform={`translate(${spindelRoomAssetFrames.outer.x} ${spindelRoomAssetFrames.outer.y})`}
+						role="button"
+						tabIndex="0"
+						focusable="true"
+						aria-label="Inspect the frost-covered windows"
+						onClick={openWindowView}
+						onFocus={() => setHoveredObject("windows")}
+						onBlur={() => setHoveredObject("")}
+						onMouseEnter={() => setHoveredObject("windows")}
+						onMouseLeave={() => setHoveredObject("")}
+						onKeyDown={(event) => {
+							if (event.key === "Enter" || event.key === " ") {
+								event.preventDefault();
+								openWindowView();
+							}
+						}}
+					/>
+				)}
 				{spindelRoomHitboxes.leftWindow && (
 					<path
 						className={`${styles.objectHitbox} ${styles.windowHitbox}`}
@@ -641,7 +704,7 @@ function SpindelRoom({
 						role="button"
 						tabIndex="0"
 						focusable="true"
-						aria-label="Open the frostbound book"
+						aria-label="Open Edran Voss's journal"
 						onClick={openBookSection}
 						onFocus={() => setHoveredObject("book")}
 						onBlur={() => setHoveredObject("")}

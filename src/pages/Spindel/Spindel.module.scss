@@ -210,6 +210,15 @@
 		);
 }
 
+.whiteOverlayLayer {
+	position: absolute;
+	inset: 0;
+	z-index: 12;
+	pointer-events: none;
+	background: #fff;
+	opacity: 0.1;
+}
+
 :global(body.quality-performance) .buildingBackHazeLayer,
 :global(body.quality-performance) .buildingFrontFogLayer,
 :global(body.quality-performance) .frontHazeLayer {
@@ -261,7 +270,7 @@
 	position: absolute;
 	left: 34px;
 	top: 34px;
-	z-index: 12;
+	z-index: 13;
 	width: 76px;
 	height: 76px;
 	display: grid;
@@ -287,7 +296,7 @@
 	position: absolute;
 	left: 34px;
 	bottom: 34px;
-	z-index: 12;
+	z-index: 13;
 	display: grid;
 	justify-items: start;
 	pointer-events: auto;

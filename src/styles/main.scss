@@ -67,3 +67,11 @@ select {
   min-height: 100vh;
   background: #111;
 }
+
+// Map artwork is interactive UI, not selectable document content.
+.mapNoSelect,
+.mapNoSelect * {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}

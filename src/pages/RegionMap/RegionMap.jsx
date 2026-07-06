@@ -677,7 +677,7 @@ function RegionMap({ parentName = 'Eiridor', parentRoute = '/eiridor' }) {
 
   if (!region) {
     return (
-      <section className={styles.page}>
+      <section className={`${styles.page} mapNoSelect`} onDragStart={(event) => event.preventDefault()}>
         <button
           className={styles.backButton}
           type="button"
@@ -739,7 +739,7 @@ function RegionMap({ parentName = 'Eiridor', parentRoute = '/eiridor' }) {
   )
 
   return (
-    <section className={styles.page}>
+    <section className={`${styles.page} mapNoSelect`} onDragStart={(event) => event.preventDefault()}>
       <div
         ref={setStageElement}
         className={styles.mapStage}

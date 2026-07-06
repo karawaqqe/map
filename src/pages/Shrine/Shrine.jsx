@@ -1,5 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { FiArrowLeft } from "react-icons/fi";
+import {
+	FiActivity,
+	FiArrowLeft,
+	FiFastForward,
+	FiMessageSquare,
+} from "react-icons/fi";
 import DialogueBox from "../../components/DialogueBox/DialogueBox";
 import { ROUTE_TRANSITION_EVENT } from "../../constants/routeTransition";
 import {
@@ -17,7 +22,6 @@ const shrineSize = {
 };
 const ROUTE_NAVIGATION_DELAY = 1150;
 const ROUTE_TRANSITION_OPENING_DURATION = 1100;
-const VISION_DURATION = 3200;
 const STATUE_DIALOG_ID = "statue_depths";
 const SMOKE_PLUMES = [
 	{ x: 18, y: 58, delay: "-8s", duration: "26s", scale: 1.1 },
@@ -72,6 +76,10 @@ const dialogueClick = new URL(
 	"../../../sounds/spindel/cave/dialogue_click.mp3",
 	import.meta.url,
 ).href;
+const screamerVideo = new URL(
+	"../../../videos/screamer-test.mp4",
+	import.meta.url,
+).href;
 
 function dispatchRouteTransition(to) {
 	window.dispatchEvent(
@@ -89,13 +97,17 @@ function dispatchRouteTransition(to) {
 function Shrine() {
 	const [isDialogueOpen, setIsDialogueOpen] = useState(false);
 	const [activeDialogue, setActiveDialogue] = useState(statueDialogue);
+	const [dialogueSessionKey, setDialogueSessionKey] = useState(0);
+	const [isDialogueSessionActive, setIsDialogueSessionActive] = useState(false);
+	const [isDebugOpen, setIsDebugOpen] = useState(false);
+	const [yunshulIrritation, setYunshulIrritation] = useState(0);
 	const [isEyesVisible, setIsEyesVisible] = useState(false);
 	const [isVisionPlaying, setIsVisionPlaying] = useState(false);
 	const [isReturningToWorld, setIsReturningToWorld] = useState(false);
 	const [hasSeenStatueDialogue, markStatueDialogueAsSeen] =
 		useSessionDialogMemory(STATUE_DIALOG_ID);
 	const ambienceRef = useRef(null);
-	const visionTimeoutRef = useRef(null);
+	const visionVideoRef = useRef(null);
 
 	useEffect(() => {
 		const audio = ambienceRef.current;
@@ -121,14 +133,13 @@ function Shrine() {
 		};
 	}, []);
 
-	useEffect(
-		() => () => {
-			window.clearTimeout(visionTimeoutRef.current);
-		},
-		[],
-	);
-
 	const closeDialogue = useCallback(() => {
+		setIsDialogueOpen(false);
+		setIsDialogueSessionActive(false);
+		setDialogueSessionKey((current) => current + 1);
+	}, []);
+
+	const hideDialogue = useCallback(() => {
 		setIsDialogueOpen(false);
 	}, []);
 
@@ -137,8 +148,23 @@ function Shrine() {
 		dispatchRouteTransition("/");
 	}, []);
 
+	const navigateToVoid = useCallback(() => {
+		setIsReturningToWorld(true);
+		dispatchRouteTransition("/void");
+	}, []);
+
+	const navigateToSpindel = useCallback(() => {
+		closeDialogue();
+		dispatchRouteTransition("/spindel");
+	}, [closeDialogue]);
+
 	const handleDialogueAction = useCallback(
 		(action) => {
+			if (action === DIALOGUE_ACTIONS.increaseIrritation) {
+				setYunshulIrritation((current) => current + 1);
+				return;
+			}
+
 			if (action === DIALOGUE_ACTIONS.close) {
 				closeDialogue();
 				return;
@@ -151,31 +177,42 @@ function Shrine() {
 			}
 
 			if (action === DIALOGUE_ACTIONS.navigateSpindel) {
-				closeDialogue();
-				dispatchRouteTransition("/spindel");
+				navigateToSpindel();
 				return;
 			}
 
 			if (action === DIALOGUE_ACTIONS.visionThenWorld) {
 				closeDialogue();
 				setIsVisionPlaying(true);
-				window.clearTimeout(visionTimeoutRef.current);
-				visionTimeoutRef.current = window.setTimeout(() => {
-					navigateToWorld();
-				}, VISION_DURATION);
+
+				const video = visionVideoRef.current;
+				if (video) {
+					ambienceRef.current?.pause();
+					video.currentTime = 0;
+					video.muted = false;
+					video.volume = 1;
+					video.play().catch(() => navigateToVoid());
+				}
 			}
 		},
-		[closeDialogue, navigateToWorld],
+		[closeDialogue, navigateToSpindel, navigateToVoid, navigateToWorld],
 	);
+
+	const resetDebugState = () => {
+		setYunshulIrritation(0);
+	};
 
 	const startStatueDialogue = () => {
 		if (isDialogueOpen || isVisionPlaying) {
 			return;
 		}
 
-		setActiveDialogue(
-			hasSeenStatueDialogue ? statueRepeatDialogue : statueDialogue,
-		);
+		if (!isDialogueSessionActive) {
+			setActiveDialogue(
+				hasSeenStatueDialogue ? statueRepeatDialogue : statueDialogue,
+			);
+			setIsDialogueSessionActive(true);
+		}
 
 		if (!hasSeenStatueDialogue) {
 			markStatueDialogueAsSeen();
@@ -203,7 +240,8 @@ function Shrine() {
 
 	return (
 		<section
-			className={`${styles.page} ${isEyesVisible ? styles.pageAwakened : ""}`}
+			className={`${styles.page} mapNoSelect ${isEyesVisible ? styles.pageAwakened : ""}`}
+			onDragStart={(event) => event.preventDefault()}
 		>
 			<audio
 				ref={ambienceRef}
@@ -239,12 +277,6 @@ function Shrine() {
 					width={shrineSize.width}
 					height={shrineSize.height}
 				/>
-				<image
-					className={`${styles.eyesLayer} ${isEyesVisible ? styles.eyesLayerVisible : ""}`}
-					href={shrineEyes}
-					width={shrineSize.width}
-					height={shrineSize.height}
-				/>
 				{shrineStatueHitbox && (
 					<path
 						className={styles.statueHitbox}
@@ -258,6 +290,16 @@ function Shrine() {
 					/>
 				)}
 			</svg>
+			{isDialogueSessionActive && !isDialogueOpen && (
+				<button
+					className={styles.openDialogueButton}
+					type="button"
+					onClick={startStatueDialogue}
+				>
+					<FiMessageSquare aria-hidden="true" />
+					<span>Open dialogue</span>
+				</button>
+			)}
 			<div className={styles.caveAtmosphere} aria-hidden="true">
 				<div className={styles.blackSmokeLayer}>
 					{SMOKE_PLUMES.map((smoke, index) => (
@@ -305,24 +347,84 @@ function Shrine() {
 				</div>
 			</div>
 			<div className={styles.caveVeil} aria-hidden="true" />
-			{isVisionPlaying && (
-				<div className={styles.visionOverlay} aria-hidden="true">
-					<span className={styles.visionGlyph}>Frostmourne</span>
-				</div>
-			)}
-			{isDialogueOpen && (
-				<DialogueBox
-					clickSound={dialogueClick}
-					dialogue={activeDialogue}
-					enableSkip
-					frameImage={dialogueWindow}
-					isOpen={isDialogueOpen}
-					linePause={680}
-					onAction={handleDialogueAction}
-					onClose={closeDialogue}
-					typewriterInterval={78}
+			<div className={styles.blackOverlayLayer} aria-hidden="true" />
+			<svg
+				className={styles.eyesScene}
+				viewBox={`0 0 ${shrineSize.width} ${shrineSize.height}`}
+				preserveAspectRatio="xMidYMid slice"
+				aria-hidden="true"
+			>
+				<image
+					className={`${styles.eyesLayer} ${isEyesVisible ? styles.eyesLayerVisible : ""}`}
+					href={shrineEyes}
+					width={shrineSize.width}
+					height={shrineSize.height}
 				/>
-			)}
+			</svg>
+			<div
+				className={`${styles.visionOverlay} ${isVisionPlaying ? styles.visionOverlayVisible : ""}`}
+				aria-hidden="true"
+			>
+				<video
+					ref={visionVideoRef}
+					className={styles.visionVideo}
+					src={screamerVideo}
+					preload="auto"
+					playsInline
+					onEnded={navigateToVoid}
+					onError={navigateToVoid}
+				/>
+			</div>
+			<DialogueBox
+				key={dialogueSessionKey}
+				clickSound={dialogueClick}
+				dialogue={activeDialogue}
+				enableSkip
+				frameImage={dialogueWindow}
+				isOpen={isDialogueOpen}
+				linePause={680}
+				onAction={handleDialogueAction}
+				onClose={hideDialogue}
+				typewriterInterval={78}
+			/>
+			<div className={styles.debugControls} aria-label="Shrine debug controls">
+				<button
+					className={styles.debugButton}
+					type="button"
+					onClick={navigateToSpindel}
+				>
+					<FiFastForward aria-hidden="true" />
+					<span>Spindel</span>
+				</button>
+				<button
+					className={styles.debugButton}
+					type="button"
+					aria-expanded={isDebugOpen}
+					onClick={() => setIsDebugOpen((current) => !current)}
+				>
+					<FiActivity aria-hidden="true" />
+					<span>Debug</span>
+				</button>
+				{isDebugOpen && (
+					<div className={styles.debugPanel}>
+						<div>
+							<span>Irritation</span>
+							<strong>{yunshulIrritation}</strong>
+						</div>
+						<div>
+							<span>Seen statue</span>
+							<strong>{hasSeenStatueDialogue ? "yes" : "no"}</strong>
+						</div>
+						<div>
+							<span>Dialogue</span>
+							<strong>{isDialogueOpen ? "open" : "closed"}</strong>
+						</div>
+						<button type="button" onClick={resetDebugState}>
+							Reset test state
+						</button>
+					</div>
+				)}
+			</div>
 			<button
 				className={styles.backButton}
 				type="button"

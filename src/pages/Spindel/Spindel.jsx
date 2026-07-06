@@ -1,5 +1,6 @@
 import { memo, useEffect, useRef, useState } from "react";
 import { FiArrowLeft, FiSliders } from "react-icons/fi";
+import { useLocation } from "react-router-dom";
 import SpindelWeatherVolume from "../../components/SpindelWeatherVolume/SpindelWeatherVolume";
 import { ROUTE_TRANSITION_EVENT } from "../../constants/routeTransition";
 import {
@@ -221,8 +222,10 @@ function FogSpriteLayer({ className, fogSprites }) {
 }
 
 function Spindel() {
-	const [activeScene, setActiveScene] = useState("map");
-	const [isCastleAwake, setIsCastleAwake] = useState(false);
+	const location = useLocation();
+	const startsInRoom = location.pathname === "/spindel/room";
+	const [activeScene, setActiveScene] = useState(startsInRoom ? "spindel-room" : "map");
+	const [isCastleAwake, setIsCastleAwake] = useState(startsInRoom);
 	const [quality, setQuality] = useState(getInitialQuality);
 	const [isQualityOpen, setIsQualityOpen] = useState(false);
 	const [isReturningToWorld, setIsReturningToWorld] = useState(false);
@@ -424,7 +427,7 @@ function Spindel() {
 	};
 
 	return (
-		<section className={styles.page}>
+		<section className={`${styles.page} mapNoSelect`} onDragStart={(event) => event.preventDefault()}>
 			<audio
 				ref={ostAudioRef}
 				className={styles.ambientAudio}
@@ -541,6 +544,7 @@ function Spindel() {
 				/>
 				<div className={styles.frontHazeLayer} aria-hidden="true" />
 				<div className={styles.vignetteLayer} aria-hidden="true" />
+				<div className={styles.whiteOverlayLayer} aria-hidden="true" />
 			</div>
 			<button
 				className={styles.backButton}

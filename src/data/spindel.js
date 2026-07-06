@@ -304,7 +304,7 @@ export const spindelInteractiveCastleFrame = {
 };
 
 export const spindelOst = new URL(
-	"../../sounds/spindel/ost/Naktigonis - The Storm That Speaks (Deepwoken OST).mp3",
+	"../../sounds/spindel/ost/Naktigonis - The Killing Wind.mp3",
 	import.meta.url,
 ).href;
 
@@ -314,10 +314,15 @@ export const spindelBlizzardAmbience = new URL(
 ).href;
 
 export const spindelRoomAssets = {
-	outer: new URL("../../img/places/spindel_room/outer.png", import.meta.url).href,
+	outer: new URL(
+		"../../img/places/spindel_room/cropped/outer.png",
+		import.meta.url,
+	).href,
 	room: new URL("../../img/places/spindel_room/room.png", import.meta.url).href,
-	windows: new URL("../../img/places/spindel_room/windows.png", import.meta.url)
-		.href,
+	windows: new URL(
+		"../../img/places/spindel_room/cropped/windows.png",
+		import.meta.url,
+	).href,
 	windowOutside: new URL(
 		"../../img/places/spindel_room/room_window_out2.png",
 		import.meta.url,
@@ -327,10 +332,23 @@ export const spindelRoomAssets = {
 		import.meta.url,
 	).href,
 	bookshelves: new URL(
-		"../../img/places/spindel_room/bookshelfs.png",
+		"../../img/places/spindel_room/cropped/bookshelfs.png",
 		import.meta.url,
 	).href,
-	banner: new URL("../../img/places/spindel_room/banner.png", import.meta.url)
-		.href,
-	book: new URL("../../img/places/spindel_room/book.png", import.meta.url).href,
+	banner: new URL(
+		"../../img/places/spindel_room/cropped/banner.png",
+		import.meta.url,
+	).href,
+	book: new URL(
+		"../../img/places/spindel_room/cropped/book.png",
+		import.meta.url,
+	).href,
+};
+
+export const spindelRoomAssetFrames = {
+	outer: { x: 128, y: 227, width: 505, height: 291 },
+	windows: { x: 104, y: 185, width: 668, height: 472 },
+	bookshelves: { x: 836, y: 83, width: 938, height: 662 },
+	banner: { x: 1187, y: 155, width: 111, height: 408 },
+	book: { x: 340, y: 583, width: 92, height: 30 },
 };

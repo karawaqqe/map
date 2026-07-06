@@ -422,7 +422,7 @@ function WorldMap() {
 	};
 
 	return (
-		<section className={styles.page}>
+		<section className={`${styles.page} mapNoSelect`} onDragStart={(event) => event.preventDefault()}>
 			<div className={styles.mapFrame}>
 				<audio
 					ref={musicAudioRef}

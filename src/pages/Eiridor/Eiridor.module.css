@@ -51,13 +51,9 @@
   transform-origin: center;
 }
 
-.baseMap,
-.regionImage {
+.baseMap {
   width: 1935px;
   height: 812px;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
 }
 
 .baseMap {
@@ -87,6 +83,9 @@
   pointer-events: none;
   transform-box: fill-box;
   transform-origin: center;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
   transition: transform 1100ms cubic-bezier(0.16, 1, 0.3, 1), opacity 420ms ease, filter 520ms ease;
 }
 

@@ -357,7 +357,7 @@ function Eiridor() {
 	};
 
 	return (
-		<section className={styles.page}>
+		<section className={`${styles.page} mapNoSelect`} onDragStart={(event) => event.preventDefault()}>
 			<div className={styles.mapStage}>
 				<audio
 					ref={musicAudioRef}

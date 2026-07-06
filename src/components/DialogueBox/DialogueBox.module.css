@@ -7,28 +7,42 @@
   color: rgba(239, 249, 255, 0.96);
   filter: drop-shadow(0 24px 36px rgba(0, 0, 0, 0.4)) drop-shadow(0 0 22px rgba(120, 198, 255, 0.12));
   transform: translateX(-50%);
+  animation: dialoguePanelShow 460ms cubic-bezier(0.18, 0.82, 0.24, 1) both;
+}
+
+.dialoguePanelClosing {
+  pointer-events: none;
+  animation: dialoguePanelHide 460ms cubic-bezier(0.5, 0, 0.85, 0.35) forwards;
+}
+
+.dialoguePanelClosing .speakerName,
+.dialoguePanelClosing .dialogueTools,
+.dialoguePanelClosing .dialogueLines,
+.dialoguePanelClosing .optionsArea {
+  transition: opacity 160ms ease;
+  opacity: 0;
 }
 
 .dialogueFrame {
   position: absolute;
-  inset: 0;
   z-index: 0;
+  left: 0;
+  top: -60%;
   width: 100%;
-  height: 180%;
+  height: 240%;
   -o-object-fit: fill;
      object-fit: fill;
   pointer-events: none;
   -webkit-user-select: none;
      -moz-user-select: none;
           user-select: none;
-  top: -90px;
 }
 
 .dialogueContent {
   position: relative;
   z-index: 1;
-  display: grid;
-  grid-template-rows: auto clamp(190px, 24vh, 300px) minmax(58px, auto);
+  display: flex;
+  flex-direction: column;
   gap: clamp(14px, 2vh, 26px);
 }
 
@@ -55,7 +69,9 @@
 
 .textFrame {
   position: relative;
-  min-height: 0;
+  height: clamp(210px, 24vh, 280px);
+  flex: 0 0 auto;
+  overflow: hidden;
 }
 
 .dialogueTools {
@@ -94,7 +110,7 @@
   gap: clamp(9px, 1.15vh, 15px);
   overflow-x: hidden;
   overflow-y: auto;
-  padding: clamp(48px, 5vh, 76px) clamp(92px, 7.8vw, 156px) clamp(42px, 4.4vh, 68px);
+  padding: clamp(40px, 4.2vh, 58px) clamp(92px, 7.8vw, 156px) clamp(38px, 4vh, 54px);
   box-sizing: border-box;
   scroll-behavior: smooth;
   animation: segmentIn 420ms cubic-bezier(0.18, 0.82, 0.24, 1);
@@ -161,12 +177,30 @@
   letter-spacing: 0;
 }
 
-.historySigil {
-  color: rgba(171, 219, 255, 0.44);
-  font-family: "Georgia", serif;
-  font-size: 18px;
-  line-height: 1;
-  text-shadow: 0 0 12px rgba(157, 220, 255, 0.32);
+.historyClose {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  border: 1px solid rgba(188, 226, 255, 0.2);
+  border-radius: 4px;
+  color: rgba(230, 246, 255, 0.82);
+  background: rgba(8, 16, 22, 0.36);
+  cursor: pointer;
+}
+
+.historyClose:hover,
+.historyClose:focus-visible {
+  border-color: rgba(210, 238, 255, 0.5);
+  color: rgba(248, 253, 255, 0.96);
+  outline: none;
+}
+
+.historyClose svg {
+  width: 18px;
+  height: 18px;
+  filter: drop-shadow(0 0 8px rgba(157, 220, 255, 0.28));
 }
 
 .historyLines {
@@ -201,16 +235,37 @@
   min-height: 58px;
   display: flex;
   align-items: end;
-  justify-content: flex-end;
+  justify-content: center;
+  overflow: visible;
   padding-inline: clamp(86px, 7.6vw, 150px);
 }
 
 .options {
-  width: 100%;
+  width: min(860px, 100%);
+  height: 156px;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-content: start;
   gap: 10px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  padding-right: 10px;
   animation: optionsIn 360ms ease both;
+  scrollbar-color: rgba(171, 219, 255, 0.28) transparent;
+  scrollbar-width: thin;
+}
+
+.continueOptions {
+  height: 58px;
+  overflow: visible;
+  padding-right: 0;
+}
+
+.choiceOptions {
+  --options-collapsed-height: 58px;
+  --options-expanded-height: 156px;
+  grid-auto-rows: minmax(68px, auto);
+  animation: choiceOptionsIn 680ms cubic-bezier(0.22, 0.78, 0.24, 1) both;
 }
 
 .optionsPlaceholder {
@@ -219,8 +274,8 @@
 }
 
 .option {
-  min-height: 44px;
-  padding: 8px 14px;
+  min-height: 56px;
+  padding: 10px 16px;
   border: 1px solid rgba(188, 226, 255, 0.18);
   border-radius: 4px;
   color: rgba(229, 244, 255, 0.9);
@@ -231,13 +286,18 @@
   line-height: 1.18;
   letter-spacing: 0;
   text-align: left;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
   overflow-wrap: anywhere;
 }
 
 .continueOption {
   grid-column: 2;
   justify-self: end;
+  min-height: 44px;
   min-width: min(220px, 100%);
+  padding-block: 8px;
   text-align: center;
 }
 
@@ -268,6 +328,26 @@
     transform: translate3d(0, 0, 0);
   }
 }
+@keyframes dialoguePanelHide {
+  0% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(calc(100% + 90px));
+  }
+}
+@keyframes dialoguePanelShow {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(calc(100% + 90px));
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
 @keyframes optionsIn {
   from {
     opacity: 0;
@@ -275,6 +355,26 @@
   }
   to {
     opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes choiceOptionsIn {
+  0% {
+    height: var(--options-collapsed-height);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(8px);
+  }
+  58% {
+    height: var(--options-expanded-height);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(8px);
+  }
+  100% {
+    height: var(--options-expanded-height);
+    opacity: 1;
+    pointer-events: auto;
     transform: translateY(0);
   }
 }
@@ -302,7 +402,6 @@
     width: 96vw;
   }
   .dialogueContent {
-    grid-template-rows: auto clamp(176px, 28vh, 260px) minmax(52px, auto);
     gap: 12px;
   }
   .speakerRow {
@@ -316,10 +415,15 @@
     line-height: 1.32;
   }
   .dialogueLines {
-    padding: 48px 38px 40px;
+    padding: 40px 38px 36px;
+  }
+  .textFrame {
+    height: clamp(196px, 30vh, 250px);
   }
   .options {
     grid-template-columns: 1fr;
+    width: 100%;
+    height: 168px;
   }
   .optionsArea {
     padding-inline: 36px;
@@ -327,6 +431,13 @@
   .optionsArea,
   .optionsPlaceholder {
     min-height: 52px;
+  }
+  .continueOptions {
+    height: 52px;
+  }
+  .choiceOptions {
+    --options-collapsed-height: 52px;
+    --options-expanded-height: 168px;
   }
   .continueOption {
     grid-column: 1;
@@ -340,5 +451,11 @@
   }
   .historyLines {
     max-height: calc(42vh - 72px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dialoguePanel,
+  .choiceOptions {
+    animation-duration: 1ms;
   }
 }/*# sourceMappingURL=DialogueBox.module.css.map */

@@ -74,4 +74,12 @@ select {
 #root {
   min-height: 100vh;
   background: #111;
+}
+
+.mapNoSelect,
+.mapNoSelect * {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+       user-select: none;
+  -webkit-user-drag: none;
 }/*# sourceMappingURL=main.css.map */

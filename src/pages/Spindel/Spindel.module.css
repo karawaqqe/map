@@ -77,8 +77,6 @@
 }
 
 .castleInteractionImage {
-  width: 1774px;
-  height: 887px;
   pointer-events: none;
   opacity: 0.86;
   filter: drop-shadow(0 0 calc(5px * var(--fx-shadow)) rgba(190, 229, 255, 0.1)) drop-shadow(0 0 calc(16px * var(--fx-shadow)) rgba(80, 166, 224, 0.08));
@@ -139,6 +137,15 @@
   background: radial-gradient(ellipse at center, transparent 42%, rgba(0, 6, 10, 0.2) 68%, rgba(0, 3, 6, 0.58) 100%), linear-gradient(180deg, rgba(0, 0, 0, 0.32), transparent 24%, transparent 70%, rgba(0, 0, 0, 0.36));
 }
 
+.whiteOverlayLayer {
+  position: absolute;
+  inset: 0;
+  z-index: 12;
+  pointer-events: none;
+  background: #fff;
+  opacity: 0.1;
+}
+
 :global(body.quality-performance) .buildingBackHazeLayer,
 :global(body.quality-performance) .buildingFrontFogLayer,
 :global(body.quality-performance) .frontHazeLayer {
@@ -151,13 +158,9 @@
   animation: none;
 }
 
-.baseMap,
-.regionImage {
+.baseMap {
   width: 1774px;
   height: 887px;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-          user-select: none;
 }
 
 .baseMap {
@@ -187,13 +190,16 @@
   pointer-events: none;
   transform-box: fill-box;
   transform-origin: center;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
 }
 
 .backButton {
   position: absolute;
   left: 34px;
   top: 34px;
-  z-index: 12;
+  z-index: 13;
   width: 76px;
   height: 76px;
   display: grid;
@@ -210,7 +216,7 @@
   position: absolute;
   left: 34px;
   bottom: 34px;
-  z-index: 12;
+  z-index: 13;
   display: grid;
   justify-items: start;
   pointer-events: auto;

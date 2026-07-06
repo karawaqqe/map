@@ -5,7 +5,7 @@ function CityMap() {
   const { cityId } = useParams()
 
   return (
-    <section className={styles.page}>
+    <section className={`${styles.page} mapNoSelect`} onDragStart={(event) => event.preventDefault()}>
       <h1>City Map</h1>
       <p>{cityId}</p>
     </section>
