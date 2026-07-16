@@ -28,9 +28,23 @@
 	pointer-events: none;
 	box-shadow: inset 0 0 220px 58px rgba(0, 0, 0, 0.97);
 	background:
-		radial-gradient(ellipse at 50% 44%, rgba(0, 0, 0, 0.08) 24%, rgba(2, 3, 4, 0.38) 72%, rgba(0, 0, 0, 0.72) 100%),
-		linear-gradient(115deg, rgba(14, 31, 39, 0.15), transparent 48%, rgba(87, 45, 15, 0.1)),
-		repeating-linear-gradient(104deg, transparent 0 4px, rgba(255, 255, 255, 0.006) 5px 6px);
+		radial-gradient(
+			ellipse at 50% 44%,
+			rgba(0, 0, 0, 0.08) 24%,
+			rgba(2, 3, 4, 0.38) 72%,
+			rgba(0, 0, 0, 0.72) 100%
+		),
+		linear-gradient(
+			115deg,
+			rgba(14, 31, 39, 0.15),
+			transparent 48%,
+			rgba(87, 45, 15, 0.1)
+		),
+		repeating-linear-gradient(
+			104deg,
+			transparent 0 4px,
+			rgba(255, 255, 255, 0.006) 5px 6px
+		);
 	z-index: 9;
 }
 .aurora,
@@ -82,8 +96,11 @@
 	opacity: 0.2;
 	animation: snowfall var(--duration) linear var(--delay) infinite;
 }
+.ambientAudio {
+	display: none;
+}
 .backButton,
-.soundButton {
+.optionsToggle {
 	position: absolute;
 	top: 28px;
 	z-index: 20;
@@ -102,19 +119,161 @@
 .backButton {
 	left: 28px;
 }
-.soundButton {
+.optionsPanel {
+	position: absolute;
+	top: 28px;
 	right: 28px;
+	z-index: 20;
+	display: grid;
+	justify-items: end;
+}
+.optionsToggle {
+	position: relative;
+	top: auto;
+	right: auto;
 }
 .backButton:hover,
-.soundButton:hover {
+.optionsPanel:hover .optionsToggle,
+.optionsPanel:focus-within .optionsToggle,
+.optionsPanelOpen .optionsToggle {
 	transform: scale(1.08);
 	border-color: #b9dbe9;
 	box-shadow: 0 0 28px rgba(133, 201, 224, 0.2);
+	outline: none;
 }
 .backButton svg,
-.soundButton svg {
+.optionsToggle svg {
 	width: 22px;
 	height: 22px;
+}
+.optionsMenu {
+	position: absolute;
+	top: 66px;
+	right: 0;
+	width: min(310px, calc(100vw - 32px));
+	padding: 16px;
+	border: 1px solid rgba(198, 224, 237, 0.2);
+	border-radius: 8px;
+	background:
+		linear-gradient(180deg, rgba(8, 16, 21, 0.93), rgba(3, 6, 9, 0.88)),
+		radial-gradient(
+			ellipse at 100% 0%,
+			rgba(127, 191, 215, 0.16),
+			transparent 58%
+		);
+	box-shadow:
+		0 22px 48px rgba(0, 0, 0, 0.55),
+		inset 0 1px 0 rgba(255, 255, 255, 0.05);
+	color: rgba(224, 239, 245, 0.88);
+	font-family: "MedievalSharp", "Georgia", serif;
+	opacity: 0;
+	pointer-events: none;
+	transform: translateY(-8px) scale(0.98);
+	transform-origin: top right;
+	transition:
+		opacity 180ms ease,
+		transform 220ms cubic-bezier(0.18, 0.82, 0.24, 1);
+}
+.optionsPanel:hover .optionsMenu,
+.optionsPanel:focus-within .optionsMenu,
+.optionsPanelOpen .optionsMenu {
+	opacity: 1;
+	pointer-events: auto;
+	transform: translateY(0) scale(1);
+}
+.optionsTitle {
+	display: block;
+	margin-bottom: 12px;
+	color: rgba(220, 236, 243, 0.72);
+	font-size: 15px;
+	line-height: 1;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+}
+.optionRow {
+	width: 100%;
+	min-height: 48px;
+	display: grid;
+	grid-template-columns: 26px 1fr auto;
+	align-items: center;
+	gap: 10px;
+	margin-bottom: 9px;
+	padding: 0 12px;
+	border: 1px solid rgba(198, 224, 237, 0.13);
+	border-radius: 6px;
+	color: rgba(224, 239, 245, 0.72);
+	background: rgba(255, 255, 255, 0.035);
+	cursor: pointer;
+	font: inherit;
+	text-align: left;
+	transition:
+		background 180ms ease,
+		border-color 180ms ease,
+		color 180ms ease;
+}
+.optionRow:hover,
+.optionRow:focus-visible {
+	border-color: rgba(185, 219, 233, 0.34);
+	color: rgba(244, 251, 254, 0.94);
+	background: rgba(133, 201, 224, 0.08);
+	outline: none;
+}
+.optionRow svg {
+	width: 20px;
+	height: 20px;
+}
+.optionRow b {
+	font-size: 13px;
+	font-weight: 600;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+}
+.optionRowActive {
+	border-color: rgba(185, 219, 233, 0.48);
+	color: rgba(244, 251, 254, 0.96);
+	background: rgba(133, 201, 224, 0.12);
+}
+.languageGroup {
+	display: grid;
+	gap: 10px;
+	padding-top: 5px;
+}
+.languageGroup > span {
+	display: flex;
+	align-items: center;
+	gap: 9px;
+	color: rgba(220, 236, 243, 0.72);
+	font-size: 15px;
+}
+.languageGroup svg {
+	width: 18px;
+	height: 18px;
+}
+.languageOptions {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 8px;
+}
+.languageOptions button {
+	min-height: 42px;
+	border: 1px solid rgba(198, 224, 237, 0.13);
+	border-radius: 6px;
+	color: rgba(224, 239, 245, 0.72);
+	background: rgba(255, 255, 255, 0.035);
+	cursor: pointer;
+	font: inherit;
+	transition:
+		background 180ms ease,
+		border-color 180ms ease,
+		color 180ms ease;
+}
+.languageOptions button:hover,
+.languageOptions button:focus-visible,
+.languageOptions .languageOptionActive {
+	border-color: rgba(185, 219, 233, 0.48);
+	color: rgba(244, 251, 254, 0.96);
+	background: rgba(133, 201, 224, 0.12);
+	outline: none;
 }
 .bookStage {
 	position: relative;
@@ -125,8 +284,7 @@
 	perspective-origin: 50% 48%;
 	touch-action: none;
 	user-select: none;
-	filter:
-		drop-shadow(0 16px 18px rgba(0, 0, 0, 0.68))
+	filter: drop-shadow(0 16px 18px rgba(0, 0, 0, 0.68))
 		drop-shadow(0 42px 58px rgba(0, 0, 0, 0.9));
 }
 .isOpen {
@@ -153,7 +311,12 @@
 	width: 46%;
 	height: 78%;
 	border-radius: 14%;
-	background: radial-gradient(ellipse, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.72) 54%, transparent 78%);
+	background: radial-gradient(
+		ellipse,
+		rgba(0, 0, 0, 0.9) 0%,
+		rgba(0, 0, 0, 0.72) 54%,
+		transparent 78%
+	);
 	box-shadow: 0 28px 52px rgba(0, 0, 0, 0.82);
 	filter: blur(10px);
 	transform: translateX(-50%) scale(0.98);
@@ -194,6 +357,17 @@
 	width: 100%;
 	height: 100%;
 	margin: 0 auto;
+}
+.dragSurface {
+	position: absolute;
+	z-index: 20;
+	inset: 0;
+	cursor: grab;
+	touch-action: none;
+	user-select: none;
+}
+.dragSurface:active {
+	cursor: grabbing;
 }
 .flipPage {
 	position: absolute;
@@ -294,13 +468,25 @@
 	content: "";
 	opacity: calc(var(--turn-shadow, 0) * 0.72);
 	background:
-		linear-gradient(90deg, rgba(38, 18, 7, 0.58), transparent 16%, transparent 70%, rgba(255, 237, 194, 0.34)),
+		linear-gradient(
+			90deg,
+			rgba(38, 18, 7, 0.58),
+			transparent 16%,
+			transparent 70%,
+			rgba(255, 237, 194, 0.34)
+		),
 		radial-gradient(ellipse at 100% 50%, rgba(0, 0, 0, 0.38), transparent 58%);
 	mix-blend-mode: multiply;
 }
 .sheetBack::after {
 	background:
-		linear-gradient(90deg, rgba(255, 237, 194, 0.3), transparent 28%, transparent 84%, rgba(38, 18, 7, 0.56)),
+		linear-gradient(
+			90deg,
+			rgba(255, 237, 194, 0.3),
+			transparent 28%,
+			transparent 84%,
+			rgba(38, 18, 7, 0.56)
+		),
 		radial-gradient(ellipse at 0 50%, rgba(0, 0, 0, 0.34), transparent 58%);
 }
 .sheetFace > img {
@@ -514,7 +700,7 @@
 .leafContent {
 	position: absolute;
 	z-index: 2;
-	inset: 4.5% 6.5% 3.5%;
+	inset: 4.5% 6.5% 6%;
 	overflow: hidden;
 	font-family: "MedievalSharp", "Comic Sans MS", cursive;
 	font-size: clamp(12px, 1.2vw, 17px);
@@ -529,6 +715,14 @@
 	left: 8%;
 	right: 10%;
 	padding-left: 1.5%;
+}
+:global([lang="ru"]) .leafContent {
+	font-family: "Neucha", Georgia, "Times New Roman", serif;
+	font-size: clamp(12.5px, 1.08vw, 17px);
+	line-height: 1.34;
+}
+:global([lang="ru"]) .dropCap::first-letter {
+	font-family: "Neucha", Georgia, "Times New Roman", serif;
 }
 .leafContent p {
 	max-width: 100%;
@@ -961,7 +1155,7 @@
 		width: min(1180px, 108vw);
 	}
 	.backButton,
-	.soundButton {
+	.optionsToggle {
 		top: 16px;
 		width: 44px;
 		height: 44px;
@@ -969,8 +1163,16 @@
 	.backButton {
 		left: 16px;
 	}
-	.soundButton {
+	.optionsPanel {
+		top: 16px;
 		right: 16px;
+	}
+	.optionsToggle {
+		top: auto;
+	}
+	.optionsMenu {
+		top: 54px;
+		padding: 13px;
 	}
 	.footer {
 		bottom: 12px;
