@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom'
 import { ROUTE_TRANSITION_EVENT } from '../../constants/routeTransition'
 import styles from './RegionMap.module.scss'
 import drakenholmMapImage from '../../../img/continents/Regions/Eiridor/Drakenholm/Untitled23_20260607205818.png'
+import noktreynMapImage from '../../../img/continents/Regions/Eiridor/Noktreyn/Noktrein.png'
 import everdanMapImage from '../../../img/continents/Regions/Holylight/Everdawn/Everdan.png'
 import kaelmoreMapImage from '../../../img/continents/Regions/Holylight/Kaelmore/kaelmore.png'
 import birdImage from '../../../img/bird/newbird.png'
@@ -330,6 +331,16 @@ const REGION_MAPS = {
     name: 'Drakenholm',
     tiles: createFullRegionTile(drakenholmMapImage, 4000, 2000),
     width: 4000,
+  },
+  noktreyn: {
+    aspectRatio: '4431 / 2663',
+    birdFlocks: [],
+    focus: { x: 0.5, y: 0.5 },
+    height: 2663,
+    markers: [],
+    name: 'Noktreyn',
+    tiles: createFullRegionTile(noktreynMapImage, 4431, 2663),
+    width: 4431,
   },
   everdan: {
     aspectRatio: '4500 / 2500',
