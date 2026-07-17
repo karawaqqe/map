@@ -1,7 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
 import { FiInfo, FiX } from 'react-icons/fi'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
+import LoadingScreen from '../LoadingScreen/LoadingScreen'
 import { ROUTE_TRANSITION_EVENT } from '../../constants/routeTransition'
+import { getRouteLoadingTarget } from '../../data/routeLoadingAssets'
+import { preloadAssets } from '../../utils/assetPreloader'
 import FogTransition from '../FogTransition/FogTransition'
 import styles from './Layout.module.scss'
 import beerIconUrl from '../../../svg/infopanel/beer_mug_transparent.svg'
@@ -25,6 +28,11 @@ function Layout() {
   const [transitionMode, setTransitionMode] = useState('idle')
   const [transitionVariant, setTransitionVariant] = useState('clouds')
   const [isLegendOpen, setIsLegendOpen] = useState(false)
+  const [loadingState, setLoadingState] = useState({
+    label: 'Location',
+    progress: 0,
+    visible: false,
+  })
   const location = useLocation()
   const navigate = useNavigate()
   const hidesLegend = LEGEND_HIDDEN_ROUTES.includes(location.pathname)
@@ -35,6 +43,8 @@ function Layout() {
   const openingDurationRef = useRef(DEFAULT_OPENING_DURATION)
   const targetPathRef = useRef(null)
   const hasNavigatedRef = useRef(false)
+  const initialPathRef = useRef(location.pathname)
+  const loadingRunRef = useRef(0)
 
   useEffect(() => {
     const clearTransitionTimeouts = () => {
@@ -47,12 +57,56 @@ function Layout() {
       clearTransitionTimeouts()
       targetPathRef.current = null
       hasNavigatedRef.current = false
+      setLoadingState((currentState) => ({
+        ...currentState,
+        visible: false,
+      }))
       setTransitionVariant('clouds')
       setTransitionMode('idle')
     }
 
+    const startLoading = (loadingPath, runId) => {
+      const { assets, label } = getRouteLoadingTarget(loadingPath)
+
+      if (!assets.length) {
+        setLoadingState({
+          label,
+          progress: 1,
+          visible: false,
+        })
+        return Promise.resolve()
+      }
+
+      setLoadingState({
+        label,
+        progress: 0,
+        visible: true,
+      })
+
+      return preloadAssets(assets, (progress) => {
+        if (loadingRunRef.current !== runId) {
+          return
+        }
+
+        setLoadingState({
+          label,
+          progress,
+          visible: true,
+        })
+      }).then(() => {
+        if (loadingRunRef.current === runId) {
+          setLoadingState({
+            label,
+            progress: 1,
+            visible: true,
+          })
+        }
+      })
+    }
+
     const startRouteTransition = (event) => {
       const {
+        loadingPath,
         to,
         onTransitionPoint,
         navigationDelay = DEFAULT_NAVIGATION_DELAY,
@@ -63,6 +117,9 @@ function Layout() {
       if (!to && typeof onTransitionPoint !== 'function') {
         return
       }
+
+      const transitionRunId = loadingRunRef.current + 1
+      loadingRunRef.current = transitionRunId
 
       if (LEGEND_HIDDEN_ROUTES.includes(to)) {
         setIsLegendOpen(false)
@@ -75,7 +132,18 @@ function Layout() {
       setTransitionVariant(variant)
       setTransitionMode('closing')
 
-      navigationTimeoutRef.current = window.setTimeout(() => {
+      const delayPromise = new Promise((resolve) => {
+        navigationTimeoutRef.current = window.setTimeout(resolve, navigationDelay)
+      })
+      const loadingPromise = loadingPath || to
+        ? startLoading(loadingPath ?? to, transitionRunId)
+        : Promise.resolve()
+
+      Promise.all([delayPromise, loadingPromise]).then(() => {
+        if (loadingRunRef.current !== transitionRunId) {
+          return
+        }
+
         onTransitionPoint?.()
 
         if (to) {
@@ -88,11 +156,11 @@ function Layout() {
         cleanupTimeoutRef.current = window.setTimeout(() => {
           endRouteTransition()
         }, openingDuration)
-      }, navigationDelay)
+      })
 
       fallbackTimeoutRef.current = window.setTimeout(() => {
         endRouteTransition()
-      }, navigationDelay + openingDuration + 1200)
+      }, navigationDelay + openingDuration + 28000)
     }
 
     window.addEventListener(ROUTE_TRANSITION_EVENT, startRouteTransition)
@@ -102,6 +170,58 @@ function Layout() {
       window.removeEventListener(ROUTE_TRANSITION_EVENT, startRouteTransition)
     }
   }, [navigate])
+
+  useEffect(() => {
+    const initialRunId = loadingRunRef.current + 1
+    loadingRunRef.current = initialRunId
+    const { assets, label } = getRouteLoadingTarget(initialPathRef.current)
+
+    if (!assets.length) {
+      return undefined
+    }
+
+    let hideTimeoutId = null
+    setLoadingState({
+      label,
+      progress: 0,
+      visible: true,
+    })
+
+    preloadAssets(assets, (progress) => {
+      if (loadingRunRef.current !== initialRunId) {
+        return
+      }
+
+      setLoadingState({
+        label,
+        progress,
+        visible: true,
+      })
+    }).then(() => {
+      if (loadingRunRef.current !== initialRunId) {
+        return
+      }
+
+      setLoadingState({
+        label,
+        progress: 1,
+        visible: true,
+      })
+
+      hideTimeoutId = window.setTimeout(() => {
+        if (loadingRunRef.current === initialRunId) {
+          setLoadingState((currentState) => ({
+            ...currentState,
+            visible: false,
+          }))
+        }
+      }, 220)
+    })
+
+    return () => {
+      window.clearTimeout(hideTimeoutId)
+    }
+  }, [])
 
   useEffect(() => {
     if (transitionMode === 'idle' || !hasNavigatedRef.current || location.pathname !== targetPathRef.current) {
@@ -198,6 +318,11 @@ function Layout() {
         <Outlet />
       </main>
       {transitionMode !== 'idle' && <FogTransition mode={transitionMode} variant={transitionVariant} />}
+      <LoadingScreen
+        label={loadingState.label}
+        progress={loadingState.progress}
+        visible={loadingState.visible}
+      />
     </div>
   )
 }

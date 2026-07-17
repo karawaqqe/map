@@ -406,6 +406,7 @@ function Spindel() {
 							setIsCastleAwake(false);
 						}
 					},
+					loadingPath: nextScene === "spindel-room" ? "/spindel/room" : "/spindel",
 					navigationDelay: ROOM_TRANSITION_DELAY,
 					openingDuration: ROOM_TRANSITION_OPENING_DURATION,
 					variant: "black",
