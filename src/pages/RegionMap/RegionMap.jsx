@@ -4,9 +4,11 @@ import { useParams } from 'react-router-dom'
 import { ROUTE_TRANSITION_EVENT } from '../../constants/routeTransition'
 import styles from './RegionMap.module.scss'
 import drakenholmMapImage from '../../../img/continents/Regions/Eiridor/Drakenholm/Untitled23_20260607205818.png'
+import morveynMapImage from '../../../img/continents/Regions/Eiridor/Morvein/rea.png'
 import noktreynMapImage from '../../../img/continents/Regions/Eiridor/Noktreyn/Noktrein.png'
 import everdanMapImage from '../../../img/continents/Regions/Holylight/Everdawn/Everdan.png'
 import kaelmoreMapImage from '../../../img/continents/Regions/Holylight/Kaelmore/kaelmore.png'
+import lyumerisMapImage from '../../../img/continents/Regions/Eiridor/lumeris/lumeris2.png'
 import birdImage from '../../../img/bird/newbird.png'
 import birdSound from '../../../sounds/birds/birdsound.mp3'
 import cloud1 from '../../../img/clouds/cloud1.png'
@@ -20,6 +22,14 @@ import churchIcon from '../../../svg/Eiridor/Church/cross3.svg'
 import tavernIcon from '../../../svg/Eiridor/Bar/drakenholm_tavern_icon.svg'
 import forgeIcon from '../../../svg/Eiridor/Forge/forge_transparent.svg'
 import marketIcon from '../../../svg/Eiridor/Market/market_scalesdrakenholm.svg'
+import morveynTavernIcon from '../../../svg/Eiridor/Bar/morvein_tavern_icon.svg'
+import morveynChurchIcon from '../../../svg/HolyLight/Church/cross8.svg'
+import morveynForgeIcon from '../../../svg/infopanel/forge_icon.svg'
+import morveynMarketIcon from '../../../svg/infopanel/market_scales.svg'
+import noktreynTavernIcon from '../../../svg/Eiridor/Bar/noktrein_tavern_icon.svg'
+import noktreynChurchIcon from '../../../svg/HolyLight/Church/cross6.svg'
+import noktreynForgeIcon from '../../../svg/infopanel/forge_icon.svg'
+import noktreynMarketIcon from '../../../svg/infopanel/market_scales.svg'
 import lyumerisTavernIcon from '../../../svg/Eiridor/Bar/lumeris_tavern_icon_transparent.svg'
 import everdanChurchIcon from '../../../svg/HolyLight/Church/cross11.svg'
 import everdanForgeIcon from '../../../svg/HolyLight/Forge/everdane_forge_icon.svg'
@@ -34,13 +44,6 @@ import kaelmoreForgeIcon from '../../../svg/HolyLight/Forge/kaelmore_forge_icon.
 import kaelmoreMarketIcon from '../../../svg/HolyLight/Market/kaelmore_market_icon_no_bg.svg'
 import kaelmoreMonasteryIcon from '../../../svg/HolyLight/Monastery/dark_monastery_shield.svg'
 import kaelmoreTavernIcon from '../../../svg/HolyLight/Bar/kaelmor_tavern_icon.svg'
-
-const lyumerisTileImages = Object.entries(import.meta.glob(
-  '../../../img/continents/Regions/Eiridor/lumeris/tiles/*.png',
-  { eager: true, import: 'default' },
-))
-  .sort(([leftPath], [rightPath]) => leftPath.localeCompare(rightPath))
-  .map(([, image]) => image)
 
 const MIN_ZOOM = 1
 const MAX_VISIBLE_AREA_PERCENT = 20
@@ -113,6 +116,51 @@ const DRAKENHOLM_MARKERS = [
   { id: 'marker-51', type: 'forge', x: 11.7768, y: 72.8254, offsetX: 3.75, offsetY: 2.5 },
 ]
 
+const MORVEYN_MARKERS = [
+  { id: 'morveyn-tavern-01', type: 'tavern', x: 71.7804, y: 13.2843 },
+  { id: 'morveyn-tavern-02', type: 'tavern', x: 28.1387, y: 29.2758 },
+  { id: 'morveyn-tavern-03', type: 'tavern', x: 71.2443, y: 38.0266 },
+  { id: 'morveyn-church-01', type: 'church', x: 68.4880, y: 41.6675 },
+  { id: 'morveyn-tavern-04', type: 'tavern', x: 62.7741, y: 58.3697 },
+  { id: 'morveyn-tavern-05', type: 'tavern', x: 84.0877, y: 61.9048 },
+  { id: 'morveyn-church-02', type: 'church', x: 54.0433, y: 64.7413 },
+  { id: 'morveyn-tavern-06', type: 'tavern', x: 59.3862, y: 73.5329 },
+  { id: 'morveyn-tavern-07', type: 'tavern', x: 17.6957, y: 75.8354 },
+  { id: 'morveyn-church-03', type: 'church', x: 29.4694, y: 77.3673 },
+  { id: 'morveyn-market-01', type: 'market', x: 24.8220, y: 78.6053 },
+  { id: 'morveyn-tavern-08', type: 'tavern', x: 33.1689, y: 80.2766 },
+  { id: 'morveyn-tavern-09', type: 'tavern', x: 21.3527, y: 81.7505 },
+  { id: 'morveyn-forge-01', type: 'forge', x: 56.9901, y: 82.1324 },
+  { id: 'morveyn-forge-02', type: 'forge', x: 26.9891, y: 83.3988 },
+  { id: 'morveyn-church-04', type: 'church', x: 42.9139, y: 83.8449 },
+  { id: 'morveyn-tavern-10', type: 'tavern', x: 53.6732, y: 89.1557 },
+  { id: 'morveyn-tavern-11', type: 'tavern', x: 31.5074, y: 89.6347 },
+]
+
+const NOKTREYN_MARKERS = [
+  { id: 'noktreyn-church-01', type: 'church', x: 66.1160, y: 23.1318 },
+  { id: 'noktreyn-forge-01', type: 'forge', x: 68.7542, y: 23.8828 },
+  { id: 'noktreyn-market-01', type: 'market', x: 63.9133, y: 24.5588 },
+  { id: 'noktreyn-tavern-01', type: 'tavern', x: 62.0876, y: 27.0597 },
+  { id: 'noktreyn-tavern-02', type: 'tavern', x: 66.2266, y: 29.4405 },
+  { id: 'noktreyn-tavern-03', type: 'tavern', x: 92.6653, y: 44.4461 },
+  { id: 'noktreyn-forge-02', type: 'forge', x: 94.5949, y: 47.2400 },
+  { id: 'noktreyn-tavern-04', type: 'tavern', x: 8.7565, y: 50.8224 },
+  { id: 'noktreyn-tavern-05', type: 'tavern', x: 53.0806, y: 53.8115 },
+  { id: 'noktreyn-tavern-06', type: 'tavern', x: 41.6385, y: 55.2009 },
+  { id: 'noktreyn-tavern-07', type: 'tavern', x: 17.2783, y: 58.5242 },
+  { id: 'noktreyn-tavern-08', type: 'tavern', x: 32.7669, y: 59.2039 },
+  { id: 'noktreyn-tavern-09', type: 'tavern', x: 58.1720, y: 60.2554 },
+  { id: 'noktreyn-tavern-10', type: 'tavern', x: 25.6037, y: 62.1480 },
+  { id: 'noktreyn-tavern-11', type: 'tavern', x: 71.1397, y: 67.0747 },
+  { id: 'noktreyn-church-02', type: 'church', x: 51.6362, y: 67.5554 },
+  { id: 'noktreyn-tavern-12', type: 'tavern', x: 25.1072, y: 68.7195 },
+  { id: 'noktreyn-forge-03', type: 'forge', x: 42.2478, y: 75.8393 },
+  { id: 'noktreyn-tavern-13', type: 'tavern', x: 35.7910, y: 81.9715 },
+  { id: 'noktreyn-church-03', type: 'church', x: 49.9210, y: 85.1671 },
+  { id: 'noktreyn-tavern-14', type: 'tavern', x: 51.2525, y: 90.8374 },
+]
+
 const EVERDAN_MARKERS = [
   { id: 'everdan-tavern-01', type: 'tavern', x: 46.9383, y: 11.2865 },
   { id: 'everdan-monastery-01', type: 'monastery', x: 80.8004, y: 14.1196 },
@@ -164,27 +212,29 @@ const KAELMORE_MARKERS = [
 ]
 
 const LYUMERIS_MARKERS = [
-  { id: 'lyumeris-tavern-01', type: 'tavern', x: 49.9526, y: 8.4895 },
-  { id: 'lyumeris-tavern-02', type: 'tavern', x: 22.2391, y: 12.6516 },
-  { id: 'lyumeris-tavern-03', type: 'tavern', x: 35.3476, y: 16.1797 },
-  { id: 'lyumeris-tavern-04', type: 'tavern', x: 29.7973, y: 19.6527 },
-  { id: 'lyumeris-tavern-05', type: 'tavern', x: 36.3989, y: 28.2387 },
-  { id: 'lyumeris-tavern-06', type: 'tavern', x: 26.3118, y: 29.4101 },
-  { id: 'lyumeris-tavern-07', type: 'tavern', x: 47.2912, y: 32.0149 },
-  { id: 'lyumeris-tavern-08', type: 'tavern', x: 74.5785, y: 35.5292 },
-  { id: 'lyumeris-tavern-09', type: 'tavern', x: 56.5732, y: 39.6775 },
-  { id: 'lyumeris-tavern-10', type: 'tavern', x: 46.2303, y: 40.3390 },
-  { id: 'lyumeris-tavern-11', type: 'tavern', x: 70.8846, y: 43.7155 },
-  { id: 'lyumeris-tavern-12', type: 'tavern', x: 12.1502, y: 44.8563 },
-  { id: 'lyumeris-tavern-13', type: 'tavern', x: 33.8132, y: 53.8589 },
-  { id: 'lyumeris-tavern-14', type: 'tavern', x: 64.3872, y: 61.6455 },
-  { id: 'lyumeris-forge-01', type: 'forge', x: 52.6331, y: 7.4283 },
-  { id: 'lyumeris-forge-02', type: 'forge', x: 36.3137, y: 23.6218 },
-  { id: 'lyumeris-forge-03', type: 'forge', x: 9.6514, y: 42.8749 },
-  { id: 'lyumeris-market-01', type: 'market', x: 51.4220, y: 36.0410 },
-  { id: 'lyumeris-church-01', type: 'church', x: 37.7827, y: 26.1859 },
-  { id: 'lyumeris-church-02', type: 'church', x: 48.6460, y: 41.0426 },
-  { id: 'lyumeris-church-03', type: 'church', x: 66.3297, y: 53.2256 },
+  { id: 'lyumeris-church-01', type: 'church', x: 54.5004, y: 7.2687 },
+  { id: 'lyumeris-forge-01', type: 'forge', x: 46.4009, y: 13.1860 },
+  { id: 'lyumeris-tavern-01', type: 'tavern', x: 56.6694, y: 13.7718 },
+  { id: 'lyumeris-market-01', type: 'market', x: 53.1595, y: 14.2997 },
+  { id: 'lyumeris-tavern-02', type: 'tavern', x: 36.0407, y: 17.1186 },
+  { id: 'lyumeris-tavern-03', type: 'tavern', x: 22.9198, y: 22.7381 },
+  { id: 'lyumeris-forge-02', type: 'forge', x: 24.6314, y: 23.4607 },
+  { id: 'lyumeris-tavern-04', type: 'tavern', x: 28.8406, y: 23.8004 },
+  { id: 'lyumeris-tavern-05', type: 'tavern', x: 10.3300, y: 35.9072 },
+  { id: 'lyumeris-tavern-06', type: 'tavern', x: 31.3615, y: 37.0907 },
+  { id: 'lyumeris-market-02', type: 'market', x: 51.4485, y: 40.7672 },
+  { id: 'lyumeris-tavern-07', type: 'tavern', x: 21.9314, y: 40.9098 },
+  { id: 'lyumeris-tavern-08', type: 'tavern', x: 44.7702, y: 41.7148 },
+  { id: 'lyumeris-tavern-09', type: 'tavern', x: 65.7102, y: 42.5354 },
+  { id: 'lyumeris-church-02', type: 'church', x: 52.9009, y: 43.3407 },
+  { id: 'lyumeris-tavern-10', type: 'tavern', x: 78.7510, y: 44.9820 },
+  { id: 'lyumeris-forge-03', type: 'forge', x: 51.3901, y: 46.6919 },
+  { id: 'lyumeris-tavern-11', type: 'tavern', x: 46.8103, y: 46.9182 },
+  { id: 'lyumeris-church-03', type: 'church', x: 35.6814, y: 48.2750 },
+  { id: 'lyumeris-tavern-12', type: 'tavern', x: 67.4706, y: 49.5074 },
+  { id: 'lyumeris-forge-04', type: 'forge', x: 59.3505, y: 65.4433 },
+  { id: 'lyumeris-tavern-13', type: 'tavern', x: 68.7208, y: 65.7935 },
+  { id: 'lyumeris-market-03', type: 'market', x: 71.4510, y: 65.9356 },
 ]
 
 const MARKER_ICONS = {
@@ -192,6 +242,18 @@ const MARKER_ICONS = {
   forge: forgeIcon,
   market: marketIcon,
   tavern: tavernIcon,
+}
+const MORVEYN_MARKER_ICONS = {
+  church: morveynChurchIcon,
+  forge: morveynForgeIcon,
+  market: morveynMarketIcon,
+  tavern: morveynTavernIcon,
+}
+const NOKTREYN_MARKER_ICONS = {
+  church: noktreynChurchIcon,
+  forge: noktreynForgeIcon,
+  market: noktreynMarketIcon,
+  tavern: noktreynTavernIcon,
 }
 const EVERDAN_MARKER_ICONS = {
   church: everdanChurchIcon,
@@ -227,34 +289,6 @@ const DEBUG_REGION_TILES = false
 const createFullRegionTile = (image, width, height) => [
   { id: 'base-0', image, x: 0, y: 0, width, height },
 ]
-
-const createOverlappedRegionTiles = (images, width, height, columns, rows, overlap) => {
-  const tiles = []
-
-  for (let row = 0; row < rows; row += 1) {
-    for (let column = 0; column < columns; column += 1) {
-      const baseX = Math.floor((column * width) / columns)
-      const baseY = Math.floor((row * height) / rows)
-      const baseRight = Math.floor(((column + 1) * width) / columns)
-      const baseBottom = Math.floor(((row + 1) * height) / rows)
-      const x = Math.max(0, baseX - overlap)
-      const y = Math.max(0, baseY - overlap)
-      const right = Math.min(width, baseRight + overlap)
-      const bottom = Math.min(height, baseBottom + overlap)
-
-      tiles.push({
-        id: `tile-${row}-${column}`,
-        image: images[row * columns + column],
-        x,
-        y,
-        width: right - x,
-        height: bottom - y,
-      })
-    }
-  }
-
-  return tiles
-}
 
 const cloudImages = [cloud1, cloud2, cloud3, cloud4, cloud5, cloud6, cloud7]
 const CINEMATIC_CLOUDS = [
@@ -332,12 +366,35 @@ const REGION_MAPS = {
     tiles: createFullRegionTile(drakenholmMapImage, 4000, 2000),
     width: 4000,
   },
+  morveyn: {
+    aspectRatio: '3648 / 2748',
+    birdFlocks: [],
+    focus: { x: 0.5, y: 0.5 },
+    height: 2748,
+    markerIcons: MORVEYN_MARKER_ICONS,
+    markers: MORVEYN_MARKERS,
+    name: 'Morveyn',
+    tiles: createFullRegionTile(morveynMapImage, 3648, 2748),
+    width: 3648,
+  },
+  morvein: {
+    aspectRatio: '3648 / 2748',
+    birdFlocks: [],
+    focus: { x: 0.5, y: 0.5 },
+    height: 2748,
+    markerIcons: MORVEYN_MARKER_ICONS,
+    markers: MORVEYN_MARKERS,
+    name: 'Morveyn',
+    tiles: createFullRegionTile(morveynMapImage, 3648, 2748),
+    width: 3648,
+  },
   noktreyn: {
     aspectRatio: '4431 / 2663',
     birdFlocks: [],
     focus: { x: 0.5, y: 0.5 },
     height: 2663,
-    markers: [],
+    markerIcons: NOKTREYN_MARKER_ICONS,
+    markers: NOKTREYN_MARKERS,
     name: 'Noktreyn',
     tiles: createFullRegionTile(noktreynMapImage, 4431, 2663),
     width: 4431,
@@ -375,10 +432,10 @@ const REGION_MAPS = {
     width: 4566,
   },
   lyumeris: {
-    aspectRatio: '5279 / 3628',
+    aspectRatio: '5000 / 3536',
     birdFlocks: [],
     focus: { x: 0.5, y: 0.5 },
-    height: 3628,
+    height: 3536,
     markerIcons: LYUMERIS_MARKER_ICONS,
     markers: LYUMERIS_MARKERS,
     name: 'Lyumeris',
@@ -400,8 +457,8 @@ const REGION_MAPS = {
       },
     },
     surfaceBackground: 'radial-gradient(ellipse at 48% 42%, rgba(244, 236, 216, 0.82), transparent 58%), linear-gradient(135deg, #eee7d8 0%, #ded0b6 48%, #f7f3ea 100%)',
-    tiles: createOverlappedRegionTiles(lyumerisTileImages, 5279, 3628, 4, 4, 16),
-    width: 5279,
+    tiles: createFullRegionTile(lyumerisMapImage, 5000, 3536),
+    width: 5000,
   },
 }
 
