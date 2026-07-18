@@ -236,6 +236,10 @@ function Layout() {
       window.clearTimeout(fallbackTimeoutRef.current)
       targetPathRef.current = null
       hasNavigatedRef.current = false
+      setLoadingState((currentState) => ({
+        ...currentState,
+        visible: false,
+      }))
       setTransitionVariant('clouds')
       setTransitionMode('idle')
     }, openingDurationRef.current)
@@ -244,6 +248,23 @@ function Layout() {
       window.clearTimeout(cleanupTimeoutRef.current)
     }
   }, [transitionMode, location.pathname])
+
+  useEffect(() => {
+    if (!loadingState.visible || loadingState.progress < 1 || transitionMode === 'closing') {
+      return undefined
+    }
+
+    const hideLoadingTimeoutId = window.setTimeout(() => {
+      setLoadingState((currentState) => ({
+        ...currentState,
+        visible: false,
+      }))
+    }, 420)
+
+    return () => {
+      window.clearTimeout(hideLoadingTimeoutId)
+    }
+  }, [loadingState.visible, loadingState.progress, transitionMode])
 
   useEffect(() => {
     if (!isLegendOpen) {

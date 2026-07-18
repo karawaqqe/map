@@ -65,10 +65,11 @@ function preloadAsset(url, timeoutMs) {
 	});
 }
 
-export function preloadAssets(assets, onProgress, { timeoutMs = 25000 } = {}) {
+export function preloadAssets(assets, onProgress, { timeoutMs = 8000, maxDurationMs = 10000 } = {}) {
 	const uniqueAssets = [...new Set(assets.filter(Boolean))];
 	const total = uniqueAssets.length;
 	let completed = 0;
+	let finished = false;
 
 	if (!total) {
 		onProgress?.(1);
@@ -77,12 +78,30 @@ export function preloadAssets(assets, onProgress, { timeoutMs = 25000 } = {}) {
 
 	onProgress?.(0);
 
-	return Promise.all(
+	const reportProgress = (progress) => {
+		if (!finished) {
+			onProgress?.(progress);
+		}
+	};
+
+	const loadingPromise = Promise.all(
 		uniqueAssets.map((asset) =>
 			preloadAsset(asset, timeoutMs).then(() => {
 				completed += 1;
-				onProgress?.(completed / total);
+				reportProgress(completed / total);
 			}),
 		),
-	).then(() => undefined);
+	).then(() => true);
+
+	const deadlinePromise = new Promise((resolve) => {
+		window.setTimeout(() => resolve(false), maxDurationMs);
+	});
+
+	return Promise.race([loadingPromise, deadlinePromise]).then((loadedAllAssets) => {
+		finished = true;
+
+		if (!loadedAllAssets) {
+			onProgress?.(1);
+		}
+	});
 }
