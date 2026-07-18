@@ -10,6 +10,10 @@ import styles from './Layout.module.scss'
 import beerIconUrl from '../../../svg/infopanel/beer_mug_transparent.svg'
 import churchIconUrl from '../../../svg/infopanel/cross2.svg'
 import forgeIconUrl from '../../../svg/infopanel/forge_icon.svg'
+import lawFieldUrl from '../../../img/herbs/lawherbs/lawfield.png'
+import lawFlagsUrl from '../../../img/herbs/lawherbs/lawflags.png'
+import lawListUrl from '../../../img/herbs/lawherbs/lawlist.png'
+import lawSwordsUrl from '../../../img/herbs/lawherbs/lawswords.png'
 import marketIconUrl from '../../../svg/infopanel/market_scales.svg'
 import monasteryIconUrl from '../../../svg/infopanel/monastery_shield.svg'
 
@@ -23,11 +27,17 @@ const LEGEND_ITEMS = [
   { icon: marketIconUrl, label: 'рынок' },
   { icon: monasteryIconUrl, label: 'монастырь' },
 ]
+const LAW_HERB_ITEMS = [
+  { icon: lawFlagsUrl, label: 'Law flags' },
+  { icon: lawListUrl, label: 'Law list' },
+  { icon: lawSwordsUrl, label: 'Law swords' },
+]
 
 function Layout() {
   const [transitionMode, setTransitionMode] = useState('idle')
   const [transitionVariant, setTransitionVariant] = useState('clouds')
   const [isLegendOpen, setIsLegendOpen] = useState(false)
+  const [isLawPanelOpen, setIsLawPanelOpen] = useState(false)
   const [loadingState, setLoadingState] = useState({
     label: 'Location',
     progress: 0,
@@ -37,6 +47,7 @@ function Layout() {
   const navigate = useNavigate()
   const hidesLegend = LEGEND_HIDDEN_ROUTES.includes(location.pathname)
   const legendRef = useRef(null)
+  const lawPanelRef = useRef(null)
   const navigationTimeoutRef = useRef(null)
   const cleanupTimeoutRef = useRef(null)
   const fallbackTimeoutRef = useRef(null)
@@ -124,6 +135,7 @@ function Layout() {
       if (LEGEND_HIDDEN_ROUTES.includes(to)) {
         setIsLegendOpen(false)
       }
+      setIsLawPanelOpen(false)
 
       clearTransitionTimeouts()
       targetPathRef.current = to
@@ -267,6 +279,34 @@ function Layout() {
   }, [loadingState.visible, loadingState.progress, transitionMode])
 
   useEffect(() => {
+    if (!isLawPanelOpen) {
+      return undefined
+    }
+
+    const closeLawPanel = (event) => {
+      if (lawPanelRef.current?.contains(event.target)) {
+        return
+      }
+
+      setIsLawPanelOpen(false)
+    }
+
+    const closeLawPanelOnEscape = (event) => {
+      if (event.key === 'Escape') {
+        setIsLawPanelOpen(false)
+      }
+    }
+
+    window.addEventListener('pointerdown', closeLawPanel)
+    window.addEventListener('keydown', closeLawPanelOnEscape)
+
+    return () => {
+      window.removeEventListener('pointerdown', closeLawPanel)
+      window.removeEventListener('keydown', closeLawPanelOnEscape)
+    }
+  }, [isLawPanelOpen])
+
+  useEffect(() => {
     if (!isLegendOpen) {
       return undefined
     }
@@ -300,8 +340,40 @@ function Layout() {
     }
   }
 
+  const closeLawPanelOnBlur = (event) => {
+    if (!event.currentTarget.contains(event.relatedTarget)) {
+      setIsLawPanelOpen(false)
+    }
+  }
+
   return (
     <div className={styles.layout}>
+      <div
+        ref={lawPanelRef}
+        className={`${styles.lawWidget} ${isLawPanelOpen ? styles.lawWidgetOpen : ''}`}
+        onBlur={closeLawPanelOnBlur}
+      >
+        <div
+          className={styles.lawPanel}
+          aria-hidden={!isLawPanelOpen}
+          aria-label="Law herbs"
+        >
+          {LAW_HERB_ITEMS.map((item) => (
+            <div key={item.icon} className={styles.lawHerbItem}>
+              <img className={styles.lawHerbImage} src={item.icon} alt={item.label} />
+            </div>
+          ))}
+        </div>
+        <button
+          className={styles.lawToggle}
+          type="button"
+          aria-label={isLawPanelOpen ? 'Close law herbs' : 'Open law herbs'}
+          aria-expanded={isLawPanelOpen}
+          onClick={() => setIsLawPanelOpen((current) => !current)}
+        >
+          <img className={styles.lawToggleImage} src={lawFieldUrl} alt="" />
+        </button>
+      </div>
       {!hidesLegend && <div
         ref={legendRef}
         className={`${styles.legend} ${isLegendOpen ? styles.legendOpen : ''}`}

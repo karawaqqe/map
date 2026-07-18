@@ -96,7 +96,7 @@ const eiridorAssets = [
 	birdImage,
 	birdSound,
 	...cloudImages,
-	...eiridorRegions.map((region) => region.image),
+	...eiridorRegions.flatMap((region) => [region.image, region.crest]),
 ];
 
 const holyLightAssets = [

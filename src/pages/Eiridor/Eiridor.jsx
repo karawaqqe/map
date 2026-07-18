@@ -487,11 +487,18 @@ function Eiridor() {
 								height={region.label.height}
 							>
 								<div
-									className={styles.capitalBadge}
+									className={`${styles.capitalBadge} ${region.crest ? styles.capitalBadgeWithIcon : ""}`}
 									style={{
 										"--capital-size": `${region.label.size}px`,
 									}}
 								>
+									{region.crest && (
+										<img
+											className={styles.capitalIcon}
+											src={region.crest}
+											alt=""
+										/>
+									)}
 									<span className={styles.capitalName}>
 										{region.capitalName}
 									</span>
