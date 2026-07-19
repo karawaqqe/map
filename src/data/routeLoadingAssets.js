@@ -91,6 +91,7 @@ const worldAssets = [
 
 const eiridorAssets = [
 	eiridorMapImage,
+	new URL("../../img/herbs/eiridor_union/eiridor_union_crest.png", import.meta.url).href,
 	eiridorMusic,
 	windSound,
 	birdImage,

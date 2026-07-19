@@ -1,0 +1,148 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10020;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: radial-gradient(ellipse at center, rgba(20, 18, 28, 0.38), rgba(0, 0, 0, 0.86) 72%), rgba(0, 0, 0, 0.62);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 180ms ease;
+}
+
+.overlayVisible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.panel {
+  width: min(620px, 86vw);
+  display: grid;
+  gap: 4px;
+  justify-items: center;
+  transform: translateY(10px) scale(0.98);
+  opacity: 0;
+  transition: opacity 200ms ease, transform 260ms cubic-bezier(0.18, 0.82, 0.24, 1);
+}
+
+.overlayVisible .panel {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.frameWrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1530/554;
+  display: grid;
+  place-items: center;
+}
+
+.frameBase,
+.frameFill {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  -o-object-position: center;
+     object-position: center;
+  pointer-events: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+
+.frameBase {
+  opacity: 0.34;
+  filter: grayscale(1) sepia(0.24) brightness(0.62) drop-shadow(0 12px 24px rgba(0, 0, 0, 0.72));
+}
+
+.frameFill {
+  clip-path: inset(0 calc((1 - var(--load-progress)) * 100%) 0 0);
+  filter: drop-shadow(0 0 10px rgba(255, 231, 179, 0.7)) drop-shadow(0 0 24px rgba(187, 137, 63, 0.38));
+  transition: clip-path 220ms ease;
+}
+
+.progressAura {
+  position: absolute;
+  left: 30%;
+  right: 30%;
+  top: 45%;
+  height: 6%;
+  border-radius: 999px;
+  background: radial-gradient(ellipse at calc(var(--load-progress) * 100%) 50%, rgba(255, 237, 184, 0.8), transparent 18%), linear-gradient(90deg, rgba(248, 221, 160, 0.04), rgba(255, 236, 183, 0.22));
+  opacity: 0.54;
+  filter: blur(10px);
+  transform: translateY(-50%);
+}
+
+.progressTrack {
+  position: absolute;
+  left: 31%;
+  right: 31%;
+  top: 50%;
+  height: clamp(4px, 0.6vw, 8px);
+  overflow: hidden;
+  border: 1px solid rgba(255, 236, 188, 0.26);
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.54), rgba(32, 23, 14, 0.42)), rgba(8, 7, 8, 0.72);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.8), 0 0 10px rgba(255, 222, 156, 0.08);
+  transform: translateY(-50%);
+}
+
+.progressTrack i {
+  display: block;
+  width: calc(var(--load-progress) * 100%);
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, rgba(134, 78, 31, 0.86), rgba(255, 226, 150, 0.96) 58%, rgb(255, 246, 210));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.48), 0 0 10px rgba(255, 220, 140, 0.5);
+  transition: width 220ms ease;
+}
+
+.meta {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  width: min(300px, 58%);
+  margin-top: -5%;
+  color: rgba(255, 240, 203, 0.92);
+  font-family: "MedievalSharp", "Georgia", serif;
+  font-size: clamp(12px, 1.1vw, 15px);
+  letter-spacing: 0;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9), 0 0 12px rgba(255, 216, 139, 0.28);
+}
+
+.meta span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.meta b {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 640px) {
+  .panel {
+    width: min(420px, 90vw);
+  }
+  .meta {
+    width: 68%;
+    margin-top: -4%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .overlay,
+  .panel,
+  .frameFill,
+  .progressTrack i {
+    transition: none;
+  }
+}/*# sourceMappingURL=LoadingScreen.module.css.map */

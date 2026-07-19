@@ -19,6 +19,8 @@ import monasteryIconUrl from '../../../svg/infopanel/monastery_shield.svg'
 
 const DEFAULT_NAVIGATION_DELAY = 1150
 const DEFAULT_OPENING_DURATION = 1100
+const EIRIDOR_ROUTE = '/eiridor'
+const EIRIDOR_LAW_ACTION_EVENT = 'eiridor-law-action'
 const LEGEND_HIDDEN_ROUTES = ['/', '/eiridor', '/holy-light', '/shrine', '/spindel', '/spindel/room', '/spindel/edar-voss-journal']
 const LEGEND_ITEMS = [
   { icon: beerIconUrl, label: 'бар' },
@@ -28,9 +30,9 @@ const LEGEND_ITEMS = [
   { icon: monasteryIconUrl, label: 'монастырь' },
 ]
 const LAW_HERB_ITEMS = [
-  { icon: lawFlagsUrl, label: 'Law flags' },
-  { icon: lawListUrl, label: 'Law list' },
-  { icon: lawSwordsUrl, label: 'Law swords' },
+  { id: 'flags', icon: lawFlagsUrl, label: 'Law flags' },
+  { id: 'list', icon: lawListUrl, label: 'Law list' },
+  { id: 'swords', icon: lawSwordsUrl, label: 'Law swords' },
 ]
 
 function Layout() {
@@ -38,6 +40,7 @@ function Layout() {
   const [transitionVariant, setTransitionVariant] = useState('clouds')
   const [isLegendOpen, setIsLegendOpen] = useState(false)
   const [isLawPanelOpen, setIsLawPanelOpen] = useState(false)
+  const [activeLawAction, setActiveLawAction] = useState(null)
   const [loadingState, setLoadingState] = useState({
     label: 'Location',
     progress: 0,
@@ -46,6 +49,7 @@ function Layout() {
   const location = useLocation()
   const navigate = useNavigate()
   const hidesLegend = LEGEND_HIDDEN_ROUTES.includes(location.pathname)
+  const showsLawWidget = location.pathname === EIRIDOR_ROUTE
   const legendRef = useRef(null)
   const lawPanelRef = useRef(null)
   const navigationTimeoutRef = useRef(null)
@@ -136,6 +140,7 @@ function Layout() {
         setIsLegendOpen(false)
       }
       setIsLawPanelOpen(false)
+      setActiveLawAction(null)
 
       clearTransitionTimeouts()
       targetPathRef.current = to
@@ -346,9 +351,21 @@ function Layout() {
     }
   }
 
+  const handleLawHerbClick = (itemId) => {
+    const nextAction = activeLawAction === itemId ? null : itemId
+
+    setActiveLawAction(nextAction)
+    window.dispatchEvent(new CustomEvent(EIRIDOR_LAW_ACTION_EVENT, {
+      detail: {
+        action: itemId,
+        active: nextAction === 'flags',
+      },
+    }))
+  }
+
   return (
     <div className={styles.layout}>
-      <div
+      {showsLawWidget && <div
         ref={lawPanelRef}
         className={`${styles.lawWidget} ${isLawPanelOpen ? styles.lawWidgetOpen : ''}`}
         onBlur={closeLawPanelOnBlur}
@@ -359,9 +376,17 @@ function Layout() {
           aria-label="Law herbs"
         >
           {LAW_HERB_ITEMS.map((item) => (
-            <div key={item.icon} className={styles.lawHerbItem}>
-              <img className={styles.lawHerbImage} src={item.icon} alt={item.label} />
-            </div>
+            <button
+              key={item.id}
+              className={`${styles.lawHerbItem} ${activeLawAction === item.id ? styles.lawHerbItemActive : ''}`}
+              type="button"
+              aria-label={item.label}
+              aria-pressed={activeLawAction === item.id}
+              tabIndex={isLawPanelOpen ? 0 : -1}
+              onClick={() => handleLawHerbClick(item.id)}
+            >
+              <img className={styles.lawHerbImage} src={item.icon} alt="" />
+            </button>
           ))}
         </div>
         <button
@@ -373,7 +398,7 @@ function Layout() {
         >
           <img className={styles.lawToggleImage} src={lawFieldUrl} alt="" />
         </button>
-      </div>
+      </div>}
       {!hidesLegend && <div
         ref={legendRef}
         className={`${styles.legend} ${isLegendOpen ? styles.legendOpen : ''}`}

@@ -15,11 +15,14 @@ import {
 } from "../../data/eiridor";
 import { eiridorHitboxes } from "../../data/generatedHitboxes";
 import styles from "./Eiridor.module.scss";
+import eiridorUnionCrest from "../../../img/herbs/eiridor_union/eiridor_union_crest.png";
 
 const WORLD_NAVIGATION_DELAY = 1150;
 const WORLD_TRANSITION_OPENING_DURATION = 1100;
 const REGION_NAVIGATION_DELAY = 1150;
 const REGION_TRANSITION_OPENING_DURATION = 1100;
+const EIRIDOR_LAW_ACTION_EVENT = "eiridor-law-action";
+const UNION_REGION_IDS = new Set(["morveyn", "noktreyn", "lyumeris", "drakenholm"]);
 const CLOUDS = [
 	{
 		image: 0,
@@ -164,6 +167,7 @@ function getInitialQuality() {
 
 const RegionLayer = memo(function RegionLayer({
 	hitbox,
+	isUnionActive,
 	onEnterRegion,
 	region,
 }) {
@@ -177,13 +181,13 @@ const RegionLayer = memo(function RegionLayer({
 
 	return (
 		<g
-			className={styles.region}
+			className={`${styles.region} ${isUnionActive ? styles.regionUnionActive : ""}`}
 			transform={`translate(${frame.x} ${frame.y})`}
 			style={{
-				"--region-glow": region.glowColor,
-				"--region-glow-fill": region.glowFill,
-				"--region-glow-opacity": region.glowOpacity,
-				"--region-glow-strength": region.glowStrength,
+				"--region-glow": isUnionActive ? "#f1cc6d" : region.glowColor,
+				"--region-glow-fill": isUnionActive ? "rgba(241, 204, 109, 0.18)" : region.glowFill,
+				"--region-glow-opacity": isUnionActive ? 0.48 : region.glowOpacity,
+				"--region-glow-strength": isUnionActive ? 0.46 : region.glowStrength,
 				"--region-float-delay": region.floatDelay,
 			}}
 		>
@@ -220,6 +224,7 @@ const RegionLayer = memo(function RegionLayer({
 
 function Eiridor() {
 	const [quality, setQuality] = useState(getInitialQuality);
+	const [isUnionActive, setIsUnionActive] = useState(false);
 	const [isQualityOpen, setIsQualityOpen] = useState(false);
 	const [isReturningToWorld, setIsReturningToWorld] = useState(false);
 	const [isEnteringRegion, setIsEnteringRegion] = useState(false);
@@ -333,6 +338,20 @@ function Eiridor() {
 		};
 	}, [quality]);
 
+	useEffect(() => {
+		const handleLawAction = (event) => {
+			setIsUnionActive(
+				event.detail?.action === "flags" && event.detail?.active !== false,
+			);
+		};
+
+		window.addEventListener(EIRIDOR_LAW_ACTION_EVENT, handleLawAction);
+
+		return () => {
+			window.removeEventListener(EIRIDOR_LAW_ACTION_EVENT, handleLawAction);
+		};
+	}, []);
+
 	const closeQualityPanelOnBlur = (event) => {
 		if (!event.currentTarget.contains(event.relatedTarget)) {
 			setIsQualityOpen(false);
@@ -406,6 +425,7 @@ function Eiridor() {
 						<RegionLayer
 							key={region.id}
 							hitbox={eiridorHitboxes[region.id]}
+							isUnionActive={isUnionActive && UNION_REGION_IDS.has(region.id)}
 							onEnterRegion={enterRegion}
 							region={region}
 						/>
@@ -475,36 +495,60 @@ function Eiridor() {
 						</div>
 					</foreignObject>
 
+					<foreignObject
+						className={`${styles.unionCrestOverlay} ${isUnionActive ? styles.unionCrestOverlayActive : ""}`}
+						x="884"
+						y="286"
+						width="112"
+						height="146"
+						aria-hidden="true"
+					>
+						<img
+							className={styles.unionCrest}
+							src={eiridorUnionCrest}
+							alt=""
+						/>
+					</foreignObject>
+
 					<g className={styles.capitalOverlayLayer} aria-hidden="true">
-						{eiridorRegions.map((region) => (
-							<foreignObject
-								key={`capital-${region.id}`}
-								data-region-id={region.id}
-								className={styles.capitalOverlay}
-								x={region.label.x}
-								y={region.label.y}
-								width={region.label.width}
-								height={region.label.height}
-							>
-								<div
-									className={`${styles.capitalBadge} ${region.crest ? styles.capitalBadgeWithIcon : ""}`}
-									style={{
-										"--capital-size": `${region.label.size}px`,
-									}}
+						{eiridorRegions.map((region) => {
+							const isUnionRegion = isUnionActive && UNION_REGION_IDS.has(region.id);
+							const showRegionCrest = region.crest && !isUnionRegion;
+
+							return (
+								<foreignObject
+									key={`capital-${region.id}`}
+									data-region-id={region.id}
+									className={`${styles.capitalOverlay} ${
+										isUnionRegion ? styles.capitalOverlayActive : ""
+									} ${
+										isUnionRegion ? styles.capitalOverlayUnion : ""
+									}`}
+									x={region.label.x}
+									y={region.label.y}
+									width={region.label.width}
+									height={region.label.height}
 								>
-									{region.crest && (
-										<img
-											className={styles.capitalIcon}
-											src={region.crest}
-											alt=""
-										/>
-									)}
-									<span className={styles.capitalName}>
-										{region.capitalName}
-									</span>
-								</div>
-							</foreignObject>
-						))}
+									<div
+										className={`${styles.capitalBadge} ${showRegionCrest ? styles.capitalBadgeWithIcon : ""}`}
+										style={{
+											"--capital-size": `${region.label.size}px`,
+										}}
+									>
+										{showRegionCrest && (
+											<img
+												className={styles.capitalIcon}
+												src={region.crest}
+												alt=""
+											/>
+										)}
+										<span className={styles.capitalName}>
+											{region.capitalName}
+										</span>
+									</div>
+								</foreignObject>
+							);
+						})}
 					</g>
 				</svg>
 				<button
