@@ -6,6 +6,7 @@ import styles from './RegionMap.module.scss'
 import drakenholmMapImage from '../../../img/continents/Regions/Eiridor/Drakenholm/Untitled23_20260607205818.png'
 import morveynMapImage from '../../../img/continents/Regions/Eiridor/Morvein/rea.png'
 import noktreynMapImage from '../../../img/continents/Regions/Eiridor/Noktreyn/Noktrein.png'
+import bellarysMapImage from '../../../img/continents/Regions/Holylight/Bellarys/Jj.png'
 import everdanMapImage from '../../../img/continents/Regions/Holylight/Everdawn/Everdan.png'
 import kaelmoreMapImage from '../../../img/continents/Regions/Holylight/Kaelmore/kaelmore.png'
 import lyumerisMapImage from '../../../img/continents/Regions/Eiridor/lumeris/lumeris2.png'
@@ -49,6 +50,11 @@ import kaelmoreForgeIcon from '../../../svg/HolyLight/Forge/kaelmore_forge_icon.
 import kaelmoreMarketIcon from '../../../svg/HolyLight/Market/kaelmore_market_icon_no_bg.svg'
 import kaelmoreMonasteryIcon from '../../../svg/HolyLight/Monastery/dark_monastery_shield.svg'
 import kaelmoreTavernIcon from '../../../svg/HolyLight/Bar/kaelmor_tavern_icon.svg'
+import bellarysChurchIcon from '../../../svg/HolyLight/Church/cross6.svg'
+import bellarysForgeIcon from '../../../svg/infopanel/forge_icon.svg'
+import bellarysMarketIcon from '../../../svg/infopanel/market_scales.svg'
+import bellarysMonasteryIcon from '../../../svg/HolyLight/Monastery/bellarysmonastery.svg'
+import bellarysTavernIcon from '../../../svg/HolyLight/Bar/bellaris_tavern_icon.svg'
 
 const MIN_ZOOM = 1
 const MAX_VISIBLE_AREA_PERCENT = 20
@@ -216,6 +222,30 @@ const KAELMORE_MARKERS = [
   { id: 'kaelmore-monastery-02', type: 'monastery', x: 12.4729, y: 54.6873 },
 ]
 
+const BELLARYS_MARKERS = [
+  { id: 'bellarys-monastery-01', type: 'monastery', x: 49.0073, y: 6.9183 },
+  { id: 'bellarys-monastery-02', type: 'monastery', x: 55.9482, y: 12.0947 },
+  { id: 'bellarys-tavern-01', type: 'tavern', x: 64.0524, y: 16.4577 },
+  { id: 'bellarys-tavern-02', type: 'tavern', x: 44.7359, y: 17.2375 },
+  { id: 'bellarys-monastery-03', type: 'monastery', x: 85.8022, y: 23.0972 },
+  { id: 'bellarys-tavern-03', type: 'tavern', x: 39.8624, y: 23.1830 },
+  { id: 'bellarys-tavern-04', type: 'tavern', x: 93.6778, y: 29.6086 },
+  { id: 'bellarys-tavern-05', type: 'tavern', x: 71.8631, y: 29.8972 },
+  { id: 'bellarys-tavern-06', type: 'tavern', x: 12.0026, y: 32.7417 },
+  { id: 'bellarys-tavern-07', type: 'tavern', x: 5.8421, y: 37.5969 },
+  { id: 'bellarys-forge-01', type: 'forge', x: 45.0699, y: 41.8526 },
+  { id: 'bellarys-tavern-08', type: 'tavern', x: 55.7530, y: 42.0022 },
+  { id: 'bellarys-market-01', type: 'market', x: 49.0399, y: 42.5898 },
+  { id: 'bellarys-church-01', type: 'church', x: 53.0183, y: 44.7174 },
+  { id: 'bellarys-church-02', type: 'church', x: 30.6591, y: 45.3807 },
+  { id: 'bellarys-forge-02', type: 'forge', x: 76.9325, y: 49.6044 },
+  { id: 'bellarys-tavern-09', type: 'tavern', x: 44.7201, y: 49.8189 },
+  { id: 'bellarys-tavern-10', type: 'tavern', x: 20.6916, y: 56.1170 },
+  { id: 'bellarys-tavern-11', type: 'tavern', x: 53.8899, y: 73.7500 },
+  { id: 'bellarys-tavern-12', type: 'tavern', x: 39.2521, y: 78.1544 },
+  { id: 'bellarys-tavern-13', type: 'tavern', x: 55.8259, y: 80.4427 },
+]
+
 const LYUMERIS_MARKERS = [
   { id: 'lyumeris-church-01', type: 'church', x: 54.5004, y: 7.2687 },
   { id: 'lyumeris-forge-01', type: 'forge', x: 46.4009, y: 13.1860 },
@@ -349,6 +379,13 @@ const KAELMORE_MARKER_ICONS = {
   market: kaelmoreMarketIcon,
   monastery: kaelmoreMonasteryIcon,
   tavern: kaelmoreTavernIcon,
+}
+const BELLARYS_MARKER_ICONS = {
+  church: bellarysChurchIcon,
+  forge: bellarysForgeIcon,
+  market: bellarysMarketIcon,
+  monastery: bellarysMonasteryIcon,
+  tavern: bellarysTavernIcon,
 }
 const LYUMERIS_MARKER_ICONS = {
   church: lyumerisChurchIcon,
@@ -517,6 +554,17 @@ const REGION_MAPS = {
     name: 'Kaelmore',
     tiles: createFullRegionTile(kaelmoreMapImage, 4566, 2403),
     width: 4566,
+  },
+  bellarys: {
+    aspectRatio: '6144 / 4680',
+    birdFlocks: [],
+    focus: { x: 0.5, y: 0.46 },
+    height: 4680,
+    markerIcons: BELLARYS_MARKER_ICONS,
+    markers: BELLARYS_MARKERS,
+    name: 'Bellarys',
+    tiles: createFullRegionTile(bellarysMapImage, 6144, 4680),
+    width: 6144,
   },
   valdora: {
     aspectRatio: '5685 / 3511',
