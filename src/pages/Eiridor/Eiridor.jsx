@@ -16,6 +16,12 @@ import {
 import { eiridorHitboxes } from "../../data/generatedHitboxes";
 import styles from "./Eiridor.module.scss";
 import eiridorUnionCrest from "../../../img/herbs/eiridor_union/eiridor_union_crest.png";
+import drakenholmTreatyImage from "../../../img/peace_treaty/drakenholmpeace.png";
+import lumerisTreatyImage from "../../../img/peace_treaty/lumerispeace.png";
+import morveinTreatyImage from "../../../img/peace_treaty/morveinpeace.png";
+import noktreynTreatyImage from "../../../img/peace_treaty/noktreynpeace.png";
+import valdoraTreatyImage from "../../../img/peace_treaty/valdorapeace.png";
+import warSwordsImage from "../../../img/herbs/lawherbs/lawswords.png";
 
 const WORLD_NAVIGATION_DELAY = 1150;
 const WORLD_TRANSITION_OPENING_DURATION = 1100;
@@ -23,6 +29,39 @@ const REGION_NAVIGATION_DELAY = 1150;
 const REGION_TRANSITION_OPENING_DURATION = 1100;
 const EIRIDOR_LAW_ACTION_EVENT = "eiridor-law-action";
 const UNION_REGION_IDS = new Set(["morveyn", "noktreyn", "lyumeris", "drakenholm"]);
+const TREATY_SCROLL_SIZE = {
+	width: 62,
+	height: 84,
+};
+const TREATY_SCROLL_OFFSETS = {
+	drakenholm: { x: -72, y: -88 },
+	lyumeris: { x: -34, y: -86 },
+	morveyn: { x: -18, y: -80 },
+	noktreyn: { x: -26, y: -46 },
+	valdora: { x: -62, y: -78 },
+};
+const TREATIES_BY_REGION_ID = {
+	drakenholm: {
+		image: drakenholmTreatyImage,
+		title: "Drakenholm peace treaty",
+	},
+	lyumeris: {
+		image: lumerisTreatyImage,
+		title: "Lyumeris peace treaty",
+	},
+	morveyn: {
+		image: morveinTreatyImage,
+		title: "Morveyn peace treaty",
+	},
+	noktreyn: {
+		image: noktreynTreatyImage,
+		title: "Noktreyn peace treaty",
+	},
+	valdora: {
+		image: valdoraTreatyImage,
+		title: "Valdora peace treaty",
+	},
+};
 const CLOUDS = [
 	{
 		image: 0,
@@ -225,6 +264,9 @@ const RegionLayer = memo(function RegionLayer({
 function Eiridor() {
 	const [quality, setQuality] = useState(getInitialQuality);
 	const [isUnionActive, setIsUnionActive] = useState(false);
+	const [showTreaties, setShowTreaties] = useState(false);
+	const [selectedTreaty, setSelectedTreaty] = useState(null);
+	const [isWarModalOpen, setIsWarModalOpen] = useState(false);
 	const [isQualityOpen, setIsQualityOpen] = useState(false);
 	const [isReturningToWorld, setIsReturningToWorld] = useState(false);
 	const [isEnteringRegion, setIsEnteringRegion] = useState(false);
@@ -340,9 +382,14 @@ function Eiridor() {
 
 	useEffect(() => {
 		const handleLawAction = (event) => {
-			setIsUnionActive(
-				event.detail?.action === "flags" && event.detail?.active !== false,
-			);
+			const action = event.detail?.action;
+			const isActive = event.detail?.active !== false;
+
+			setIsUnionActive(action === "flags" && isActive);
+			setShowTreaties(action === "list" && isActive);
+			setSelectedTreaty(null);
+
+			setIsWarModalOpen(action === "swords" && isActive);
 		};
 
 		window.addEventListener(EIRIDOR_LAW_ACTION_EVENT, handleLawAction);
@@ -352,10 +399,42 @@ function Eiridor() {
 		};
 	}, []);
 
+	useEffect(() => {
+		if (!selectedTreaty) {
+			return undefined;
+		}
+
+		const closeTreatyOnEscape = (event) => {
+			if (event.key === "Escape") {
+				setSelectedTreaty(null);
+			}
+		};
+
+		window.addEventListener("keydown", closeTreatyOnEscape);
+
+		return () => {
+			window.removeEventListener("keydown", closeTreatyOnEscape);
+		};
+	}, [selectedTreaty]);
+
 	const closeQualityPanelOnBlur = (event) => {
 		if (!event.currentTarget.contains(event.relatedTarget)) {
 			setIsQualityOpen(false);
 		}
+	};
+
+	const closeWarModal = () => {
+		setIsWarModalOpen(false);
+	};
+
+	const openTreaty = (event, treaty) => {
+		event.preventDefault();
+		event.stopPropagation();
+		setSelectedTreaty(treaty);
+	};
+
+	const closeTreaty = () => {
+		setSelectedTreaty(null);
 	};
 
 	const returnToWorld = () => {
@@ -510,46 +589,90 @@ function Eiridor() {
 						/>
 					</foreignObject>
 
-					<g className={styles.capitalOverlayLayer} aria-hidden="true">
+					<g className={styles.treatyOverlayLayer} aria-hidden={!showTreaties}>
 						{eiridorRegions.map((region) => {
-							const isUnionRegion = isUnionActive && UNION_REGION_IDS.has(region.id);
-							const showRegionCrest = region.crest && !isUnionRegion;
+							const treaty = TREATIES_BY_REGION_ID[region.id];
+
+							if (!treaty) {
+								return null;
+							}
+
+							const frame = getLayerFrame(region);
+							const offset = TREATY_SCROLL_OFFSETS[region.id] ?? { x: -42, y: -34 };
+							const x = frame.x + frame.width / 2 - TREATY_SCROLL_SIZE.width / 2 + offset.x;
+							const y = frame.y + frame.height / 2 - TREATY_SCROLL_SIZE.height / 2 + offset.y;
 
 							return (
 								<foreignObject
-									key={`capital-${region.id}`}
-									data-region-id={region.id}
-									className={`${styles.capitalOverlay} ${
-										isUnionRegion ? styles.capitalOverlayActive : ""
-									} ${
-										isUnionRegion ? styles.capitalOverlayUnion : ""
+									key={`treaty-${region.id}`}
+									className={`${styles.treatyScrollOverlay} ${
+										showTreaties ? styles.treatyScrollOverlayActive : ""
 									}`}
-									x={region.label.x}
-									y={region.label.y}
-									width={region.label.width}
-									height={region.label.height}
+									x={x}
+									y={y}
+									width={TREATY_SCROLL_SIZE.width}
+									height={TREATY_SCROLL_SIZE.height}
 								>
-									<div
-										className={`${styles.capitalBadge} ${showRegionCrest ? styles.capitalBadgeWithIcon : ""}`}
-										style={{
-											"--capital-size": `${region.label.size}px`,
-										}}
+									<button
+										className={styles.treatyScrollFrame}
+										type="button"
+										aria-label={treaty.title}
+										tabIndex={showTreaties ? 0 : -1}
+										onClick={(event) => openTreaty(event, treaty)}
 									>
-										{showRegionCrest && (
-											<img
-												className={styles.capitalIcon}
-												src={region.crest}
-												alt=""
-											/>
-										)}
-										<span className={styles.capitalName}>
-											{region.capitalName}
-										</span>
-									</div>
+										<img
+											className={styles.treatyScroll}
+											src={treaty.image}
+											alt=""
+										/>
+									</button>
 								</foreignObject>
 							);
 						})}
 					</g>
+
+					{!showTreaties && (
+						<g className={styles.capitalOverlayLayer} aria-hidden="true">
+							{eiridorRegions.map((region) => {
+								const isUnionRegion = isUnionActive && UNION_REGION_IDS.has(region.id);
+								const showRegionCrest = region.crest && !isUnionRegion;
+
+								return (
+									<foreignObject
+										key={`capital-${region.id}`}
+										data-region-id={region.id}
+										className={`${styles.capitalOverlay} ${
+											isUnionRegion ? styles.capitalOverlayActive : ""
+										} ${
+											isUnionRegion ? styles.capitalOverlayUnion : ""
+										}`}
+										x={region.label.x}
+										y={region.label.y}
+										width={region.label.width}
+										height={region.label.height}
+									>
+										<div
+											className={`${styles.capitalBadge} ${showRegionCrest ? styles.capitalBadgeWithIcon : ""}`}
+											style={{
+												"--capital-size": `${region.label.size}px`,
+											}}
+										>
+											{showRegionCrest && (
+												<img
+													className={styles.capitalIcon}
+													src={region.crest}
+													alt=""
+												/>
+											)}
+											<span className={styles.capitalName}>
+												{region.capitalName}
+											</span>
+										</div>
+									</foreignObject>
+								);
+							})}
+						</g>
+					)}
 				</svg>
 				<button
 					className={styles.backButton}
@@ -596,6 +719,61 @@ function Eiridor() {
 						</div>
 					</div>
 				</div>
+				{isWarModalOpen && (
+					<div className={styles.warModalBackdrop} role="presentation" onClick={closeWarModal}>
+						<div
+							className={styles.warModal}
+							role="dialog"
+							aria-modal="true"
+							aria-label="War status"
+							onClick={(event) => event.stopPropagation()}
+						>
+							<div className={styles.warModalIcon} aria-hidden="true">
+								<img
+									className={styles.warModalIconImage}
+									src={warSwordsImage}
+									alt=""
+								/>
+							</div>
+							<button
+								className={styles.warModalClose}
+								type="button"
+								aria-label="Close war status"
+								onClick={closeWarModal}
+							>
+								x
+							</button>
+							<p className={styles.warModalText}>
+								There are currently no hostilities
+							</p>
+						</div>
+					</div>
+				)}
+				{selectedTreaty && (
+					<div className={styles.treatyModalBackdrop} role="presentation" onClick={closeTreaty}>
+						<div
+							className={styles.treatyModal}
+							role="dialog"
+							aria-modal="true"
+							aria-label={selectedTreaty.title}
+							onClick={(event) => event.stopPropagation()}
+						>
+							<button
+								className={styles.treatyModalClose}
+								type="button"
+								aria-label="Close treaty"
+								onClick={closeTreaty}
+							>
+								x
+							</button>
+							<img
+								className={styles.treatyModalImage}
+								src={selectedTreaty.image}
+								alt={selectedTreaty.title}
+							/>
+						</div>
+					</div>
+				)}
 			</div>
 		</section>
 	);

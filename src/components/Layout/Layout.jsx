@@ -358,7 +358,7 @@ function Layout() {
     window.dispatchEvent(new CustomEvent(EIRIDOR_LAW_ACTION_EVENT, {
       detail: {
         action: itemId,
-        active: nextAction === 'flags',
+        active: nextAction === itemId,
       },
     }))
   }
@@ -378,7 +378,7 @@ function Layout() {
           {LAW_HERB_ITEMS.map((item) => (
             <button
               key={item.id}
-              className={`${styles.lawHerbItem} ${activeLawAction === item.id ? styles.lawHerbItemActive : ''}`}
+              className={`${styles.lawHerbItem} ${item.id === 'swords' ? styles.lawHerbItemWar : ''} ${activeLawAction === item.id ? styles.lawHerbItemActive : ''}`}
               type="button"
               aria-label={item.label}
               aria-pressed={activeLawAction === item.id}

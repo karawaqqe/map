@@ -9,6 +9,7 @@ import noktreynMapImage from '../../../img/continents/Regions/Eiridor/Noktreyn/N
 import everdanMapImage from '../../../img/continents/Regions/Holylight/Everdawn/Everdan.png'
 import kaelmoreMapImage from '../../../img/continents/Regions/Holylight/Kaelmore/kaelmore.png'
 import lyumerisMapImage from '../../../img/continents/Regions/Eiridor/lumeris/lumeris2.png'
+import valdoraMapImage from '../../../img/continents/Regions/Eiridor/Valdora/valdora.png'
 import birdImage from '../../../img/bird/newbird.png'
 import birdSound from '../../../sounds/birds/birdsound.mp3'
 import cloud1 from '../../../img/clouds/cloud1.png'
@@ -31,6 +32,10 @@ import noktreynChurchIcon from '../../../svg/HolyLight/Church/cross6.svg'
 import noktreynForgeIcon from '../../../svg/infopanel/forge_icon.svg'
 import noktreynMarketIcon from '../../../svg/infopanel/market_scales.svg'
 import lyumerisTavernIcon from '../../../svg/Eiridor/Bar/lumeris_tavern_icon_transparent.svg'
+import valdoraTavernIcon from '../../../svg/Eiridor/Bar/valdora_tavern_icon.svg'
+import valdoraChurchIcon from '../../../svg/HolyLight/Church/cross7.svg'
+import valdoraForgeIcon from '../../../svg/infopanel/forge_icon.svg'
+import valdoraMarketIcon from '../../../svg/infopanel/market_scales.svg'
 import everdanChurchIcon from '../../../svg/HolyLight/Church/cross11.svg'
 import everdanForgeIcon from '../../../svg/HolyLight/Forge/everdane_forge_icon.svg'
 import everdanMarketIcon from '../../../svg/HolyLight/Market/everdane_market_scales_detailed.svg'
@@ -237,6 +242,82 @@ const LYUMERIS_MARKERS = [
   { id: 'lyumeris-market-03', type: 'market', x: 71.4510, y: 65.9356 },
 ]
 
+const VALDORA_MARKERS = [
+  { id: 'valdora-forge-01', type: 'forge', x: 23.6850, y: 4.7846 },
+  { id: 'valdora-tavern-01', type: 'tavern', x: 40.5541, y: 7.2938 },
+  { id: 'valdora-tavern-02', type: 'tavern', x: 15.2767, y: 8.3454 },
+  { id: 'valdora-tavern-03', type: 'tavern', x: 47.5477, y: 8.9860 },
+  { id: 'valdora-tavern-04', type: 'tavern', x: 52.3307, y: 10.7377 },
+  { id: 'valdora-market-01', type: 'market', x: 30.7916, y: 11.0652 },
+  { id: 'valdora-tavern-05', type: 'tavern', x: 29.6566, y: 11.1360 },
+  { id: 'valdora-church-01', type: 'church', x: 12.7017, y: 11.8685 },
+  { id: 'valdora-church-02', type: 'church', x: 34.9615, y: 12.2620 },
+  { id: 'valdora-church-03', type: 'church', x: 90.6777, y: 12.9179 },
+  { id: 'valdora-church-04', type: 'church', x: 55.0671, y: 13.4026 },
+  { id: 'valdora-market-02', type: 'market', x: 10.8267, y: 13.8849 },
+  { id: 'valdora-forge-02', type: 'forge', x: 7.7748, y: 14.6682 },
+  { id: 'valdora-tavern-06', type: 'tavern', x: 11.8997, y: 15.0669 },
+  { id: 'valdora-tavern-07', type: 'tavern', x: 37.7309, y: 15.9071 },
+  { id: 'valdora-forge-03', type: 'forge', x: 61.2225, y: 19.3248 },
+  { id: 'valdora-tavern-08', type: 'tavern', x: 53.8885, y: 20.5515 },
+  { id: 'valdora-church-05', type: 'church', x: 39.0237, y: 22.6716 },
+  { id: 'valdora-tavern-09', type: 'tavern', x: 32.3657, y: 22.7003 },
+  { id: 'valdora-tavern-10', type: 'tavern', x: 63.7819, y: 23.3552 },
+  { id: 'valdora-tavern-11', type: 'tavern', x: 43.8522, y: 24.0961 },
+  { id: 'valdora-tavern-12', type: 'tavern', x: 81.1080, y: 24.2539 },
+  { id: 'valdora-tavern-13', type: 'tavern', x: 88.8039, y: 25.5768 },
+  { id: 'valdora-church-06', type: 'church', x: 24.0458, y: 25.9343 },
+  { id: 'valdora-tavern-14', type: 'tavern', x: 93.6678, y: 27.7840 },
+  { id: 'valdora-tavern-15', type: 'tavern', x: 56.8965, y: 28.2132 },
+  { id: 'valdora-forge-04', type: 'forge', x: 89.5742, y: 28.3989 },
+  { id: 'valdora-tavern-16', type: 'tavern', x: 22.5066, y: 28.8095 },
+  { id: 'valdora-market-03', type: 'market', x: 33.3685, y: 31.3586 },
+  { id: 'valdora-tavern-17', type: 'tavern', x: 67.2999, y: 31.8001 },
+  { id: 'valdora-tavern-18', type: 'tavern', x: 36.3412, y: 31.9571 },
+  { id: 'valdora-forge-05', type: 'forge', x: 33.3421, y: 32.8823 },
+  { id: 'valdora-tavern-19', type: 'tavern', x: 31.4864, y: 32.8966 },
+  { id: 'valdora-church-07', type: 'church', x: 46.7899, y: 35.0039 },
+  { id: 'valdora-tavern-20', type: 'tavern', x: 51.6271, y: 37.1974 },
+  { id: 'valdora-tavern-21', type: 'tavern', x: 45.9629, y: 37.3114 },
+  { id: 'valdora-tavern-22', type: 'tavern', x: 23.7027, y: 39.0202 },
+  { id: 'valdora-tavern-23', type: 'tavern', x: 32.3740, y: 43.5200 },
+  { id: 'valdora-tavern-24', type: 'tavern', x: 70.1143, y: 43.6058 },
+  { id: 'valdora-church-08', type: 'church', x: 65.1900, y: 43.8353 },
+  { id: 'valdora-market-04', type: 'market', x: 63.9954, y: 44.4522 },
+  { id: 'valdora-tavern-25', type: 'tavern', x: 55.6728, y: 45.0726 },
+  { id: 'valdora-tavern-26', type: 'tavern', x: 67.3968, y: 45.1582 },
+  { id: 'valdora-tavern-27', type: 'tavern', x: 81.4778, y: 45.5425 },
+  { id: 'valdora-forge-06', type: 'forge', x: 62.2673, y: 46.8363 },
+  { id: 'valdora-tavern-28', type: 'tavern', x: 47.7565, y: 47.1086 },
+  { id: 'valdora-tavern-29', type: 'tavern', x: 36.9129, y: 47.9920 },
+  { id: 'valdora-tavern-30', type: 'tavern', x: 64.6085, y: 49.0888 },
+  { id: 'valdora-tavern-31', type: 'tavern', x: 53.5443, y: 49.9011 },
+  { id: 'valdora-tavern-32', type: 'tavern', x: 70.1495, y: 52.8340 },
+  { id: 'valdora-tavern-33', type: 'tavern', x: 81.8646, y: 55.2264 },
+  { id: 'valdora-tavern-34', type: 'tavern', x: 55.3210, y: 55.6537 },
+  { id: 'valdora-church-09', type: 'church', x: 36.6667, y: 59.5557 },
+  { id: 'valdora-tavern-35', type: 'tavern', x: 23.7028, y: 61.1510 },
+  { id: 'valdora-market-05', type: 'market', x: 24.9956, y: 62.7741 },
+  { id: 'valdora-tavern-36', type: 'tavern', x: 78.5148, y: 64.5561 },
+  { id: 'valdora-tavern-37', type: 'tavern', x: 66.0774, y: 65.2663 },
+  { id: 'valdora-tavern-38', type: 'tavern', x: 90.2375, y: 68.0860 },
+  { id: 'valdora-tavern-39', type: 'tavern', x: 59.6482, y: 69.3250 },
+  { id: 'valdora-tavern-40', type: 'tavern', x: 32.8232, y: 71.6502 },
+  { id: 'valdora-market-06', type: 'market', x: 30.2551, y: 71.8314 },
+  { id: 'valdora-tavern-41', type: 'tavern', x: 45.5233, y: 73.0272 },
+  { id: 'valdora-tavern-42', type: 'tavern', x: 69.2272, y: 73.6415 },
+  { id: 'valdora-tavern-43', type: 'tavern', x: 85.1443, y: 74.2112 },
+  { id: 'valdora-tavern-44', type: 'tavern', x: 54.9694, y: 74.2951 },
+  { id: 'valdora-tavern-45', type: 'tavern', x: 66.1214, y: 77.1717 },
+  { id: 'valdora-tavern-46', type: 'tavern', x: 59.3419, y: 78.4843 },
+  { id: 'valdora-tavern-47', type: 'tavern', x: 34.1422, y: 79.0944 },
+  { id: 'valdora-church-10', type: 'church', x: 29.9822, y: 81.4148 },
+  { id: 'valdora-tavern-48', type: 'tavern', x: 44.5841, y: 83.8227 },
+  { id: 'valdora-tavern-49', type: 'tavern', x: 61.6458, y: 84.0377 },
+  { id: 'valdora-tavern-50', type: 'tavern', x: 56.7282, y: 85.4457 },
+  { id: 'valdora-tavern-51', type: 'tavern', x: 49.9472, y: 87.8240 },
+]
+
 const MARKER_ICONS = {
   church: churchIcon,
   forge: forgeIcon,
@@ -274,6 +355,12 @@ const LYUMERIS_MARKER_ICONS = {
   forge: lyumerisForgeIcon,
   market: lyumerisMarketIcon,
   tavern: lyumerisTavernIcon,
+}
+const VALDORA_MARKER_ICONS = {
+  church: valdoraChurchIcon,
+  forge: valdoraForgeIcon,
+  market: valdoraMarketIcon,
+  tavern: valdoraTavernIcon,
 }
 const MARKER_LABELS = {
   church: 'Church',
@@ -430,6 +517,17 @@ const REGION_MAPS = {
     name: 'Kaelmore',
     tiles: createFullRegionTile(kaelmoreMapImage, 4566, 2403),
     width: 4566,
+  },
+  valdora: {
+    aspectRatio: '5685 / 3511',
+    birdFlocks: [],
+    focus: { x: 0.5, y: 0.48 },
+    height: 3511,
+    markerIcons: VALDORA_MARKER_ICONS,
+    markers: VALDORA_MARKERS,
+    name: 'Valdora',
+    tiles: createFullRegionTile(valdoraMapImage, 5685, 3511),
+    width: 5685,
   },
   lyumeris: {
     aspectRatio: '5000 / 3536',

@@ -42,6 +42,7 @@ const regionMapImages = {
 	morvein: new URL("../../img/continents/Regions/Eiridor/Morvein/rea.png", import.meta.url).href,
 	morveyn: new URL("../../img/continents/Regions/Eiridor/Morvein/rea.png", import.meta.url).href,
 	noktreyn: new URL("../../img/continents/Regions/Eiridor/Noktreyn/Noktrein.png", import.meta.url).href,
+	valdora: new URL("../../img/continents/Regions/Eiridor/Valdora/valdora.png", import.meta.url).href,
 };
 
 const regionMarkerIcons = [
@@ -52,7 +53,9 @@ const regionMarkerIcons = [
 	new URL("../../svg/Eiridor/Bar/morvein_tavern_icon.svg", import.meta.url).href,
 	new URL("../../svg/Eiridor/Bar/noktrein_tavern_icon.svg", import.meta.url).href,
 	new URL("../../svg/Eiridor/Bar/lumeris_tavern_icon_transparent.svg", import.meta.url).href,
+	new URL("../../svg/Eiridor/Bar/valdora_tavern_icon.svg", import.meta.url).href,
 	new URL("../../svg/HolyLight/Church/cross6.svg", import.meta.url).href,
+	new URL("../../svg/HolyLight/Church/cross7.svg", import.meta.url).href,
 	new URL("../../svg/HolyLight/Church/cross8.svg", import.meta.url).href,
 	new URL("../../svg/HolyLight/Church/cross11.svg", import.meta.url).href,
 	new URL("../../svg/HolyLight/Forge/everdane_forge_icon.svg", import.meta.url).href,
@@ -92,6 +95,7 @@ const worldAssets = [
 const eiridorAssets = [
 	eiridorMapImage,
 	new URL("../../img/herbs/eiridor_union/eiridor_union_crest.png", import.meta.url).href,
+	new URL("../../img/herbs/lawherbs/lawlist.png", import.meta.url).href,
 	eiridorMusic,
 	windSound,
 	birdImage,
