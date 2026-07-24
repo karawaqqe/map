@@ -43,6 +43,8 @@ const regionMapImages = {
 	morveyn: new URL("../../img/continents/Regions/Eiridor/Morvein/rea.png", import.meta.url).href,
 	nordhelm: new URL("../../img/continents/Regions/Holylight/Nordhelm/Nordhelm_map.png", import.meta.url).href,
 	noktreyn: new URL("../../img/continents/Regions/Eiridor/Noktreyn/Noktrein.png", import.meta.url).href,
+	radwane: new URL("../../img/continents/Regions/Holylight/Radwane/radwane.png", import.meta.url).href,
+	redwayne: new URL("../../img/continents/Regions/Holylight/Radwane/radwane.png", import.meta.url).href,
 	valdora: new URL("../../img/continents/Regions/Eiridor/Valdora/valdora.png", import.meta.url).href,
 };
 
@@ -70,6 +72,7 @@ const regionMarkerIcons = [
 	new URL("../../svg/HolyLight/Bar/everdan_tavern_icon.svg", import.meta.url).href,
 	new URL("../../svg/HolyLight/Bar/kaelmor_tavern_icon.svg", import.meta.url).href,
 	new URL("../../svg/HolyLight/Bar/nordheim_tavern_icon.svg", import.meta.url).href,
+	new URL("../../svg/HolyLight/Bar/redvein_tavern_icon.svg", import.meta.url).href,
 	new URL("../../svg/infopanel/cross2.svg", import.meta.url).href,
 	new URL("../../svg/infopanel/forge_icon.svg", import.meta.url).href,
 	new URL("../../svg/infopanel/market_scales.svg", import.meta.url).href,

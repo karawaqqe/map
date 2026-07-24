@@ -63,8 +63,8 @@ export const holyLightRegions = [
 	},
 	{
 		id: "redwayne",
-		name: "Redwayne",
-		capitalName: "Redwayne",
+		name: "Radwane",
+		capitalName: "Radwane",
 		image: new URL("../../img/cubes/Holylight/cropped/part5.png", import.meta.url).href,
 		frame: { x: 738, y: 500, width: 365, height: 239 },
 		glowColor: "#cdb36c",

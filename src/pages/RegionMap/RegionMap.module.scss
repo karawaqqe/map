@@ -99,8 +99,8 @@
   position: absolute;
   left: var(--marker-x);
   top: var(--marker-y);
-  width: clamp(18px, 1.12vw, 32px);
-  height: clamp(18px, 1.12vw, 32px);
+  width: clamp(16px, 1.04vw, 30px);
+  height: clamp(16px, 1.04vw, 30px);
   opacity: 0.94;
   pointer-events: auto;
   transform: translate(-50%, -50%) scale(1);
@@ -136,28 +136,28 @@
 }
 
 .churchMarker {
-  width: clamp(20px, 1.18vw, 34px);
-  height: clamp(20px, 1.18vw, 34px);
+  width: clamp(18px, 1.1vw, 32px);
+  height: clamp(18px, 1.1vw, 32px);
 }
 
 .tavernMarker {
-  width: clamp(19px, 1.1vw, 31px);
-  height: clamp(19px, 1.1vw, 31px);
+  width: clamp(17px, 1.02vw, 29px);
+  height: clamp(17px, 1.02vw, 29px);
 }
 
 .forgeMarker {
-  width: clamp(20px, 1.16vw, 33px);
-  height: clamp(20px, 1.16vw, 33px);
+  width: clamp(18px, 1.08vw, 31px);
+  height: clamp(18px, 1.08vw, 31px);
 }
 
 .marketMarker {
-  width: clamp(20px, 1.14vw, 32px);
-  height: clamp(20px, 1.14vw, 32px);
+  width: clamp(18px, 1.06vw, 30px);
+  height: clamp(18px, 1.06vw, 30px);
 }
 
 .monasteryMarker {
-  width: clamp(21px, 1.2vw, 34px);
-  height: clamp(21px, 1.2vw, 34px);
+  width: clamp(19px, 1.12vw, 32px);
+  height: clamp(19px, 1.12vw, 32px);
 }
 
 .ambientAudio {
