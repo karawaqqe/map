@@ -7,8 +7,9 @@ import drakenholmMapImage from '../../../img/continents/Regions/Eiridor/Drakenho
 import morveynMapImage from '../../../img/continents/Regions/Eiridor/Morvein/rea.png'
 import noktreynMapImage from '../../../img/continents/Regions/Eiridor/Noktreyn/Noktrein.png'
 import bellarysMapImage from '../../../img/continents/Regions/Holylight/Bellarys/Jj.png'
-import everdanMapImage from '../../../img/continents/Regions/Holylight/Everdawn/Everdan.png'
+import everdanMapImage from '../../../img/continents/Regions/Holylight/Everdawn/Everdan_map.png'
 import kaelmoreMapImage from '../../../img/continents/Regions/Holylight/Kaelmore/kaelmore.png'
+import nordhelmMapImage from '../../../img/continents/Regions/Holylight/Nordhelm/Nordhelm_map.png'
 import lyumerisMapImage from '../../../img/continents/Regions/Eiridor/lumeris/lumeris2.png'
 import valdoraMapImage from '../../../img/continents/Regions/Eiridor/Valdora/valdora.png'
 import birdImage from '../../../img/bird/newbird.png'
@@ -37,11 +38,16 @@ import valdoraTavernIcon from '../../../svg/Eiridor/Bar/valdora_tavern_icon.svg'
 import valdoraChurchIcon from '../../../svg/HolyLight/Church/cross7.svg'
 import valdoraForgeIcon from '../../../svg/infopanel/forge_icon.svg'
 import valdoraMarketIcon from '../../../svg/infopanel/market_scales.svg'
-import everdanChurchIcon from '../../../svg/HolyLight/Church/cross11.svg'
+import everdanChurchIcon from '../../../svg/HolyLight/Church/cross10.svg'
 import everdanForgeIcon from '../../../svg/HolyLight/Forge/everdane_forge_icon.svg'
-import everdanMarketIcon from '../../../svg/HolyLight/Market/everdane_market_scales_detailed.svg'
-import everdanMonasteryIcon from '../../../svg/HolyLight/Monastery/golden_monastery_cross.svg'
+import everdanMarketIcon from '../../../svg/HolyLight/Market/everdane_market_scales.svg'
+import everdanMonasteryIcon from '../../../svg/HolyLight/Monastery/dark_monastery.svg'
 import everdanTavernIcon from '../../../svg/HolyLight/Bar/everdan_tavern_icon.svg'
+import nordhelmChurchIcon from '../../../svg/HolyLight/Church/cross14.svg'
+import nordhelmForgeIcon from '../../../svg/HolyLight/Forge/everdane_forge_icon.svg'
+import nordhelmMarketIcon from '../../../svg/HolyLight/Market/kaelmore_market_scales.svg'
+import nordhelmMonasteryIcon from '../../../svg/HolyLight/Monastery/dark_monastery.svg'
+import nordhelmTavernIcon from '../../../svg/HolyLight/Bar/nordheim_tavern_icon.svg'
 import lyumerisChurchIcon from '../../../svg/infopanel/cross2.svg'
 import lyumerisForgeIcon from '../../../svg/infopanel/forge_icon.svg'
 import lyumerisMarketIcon from '../../../svg/infopanel/market_scales.svg'
@@ -173,11 +179,83 @@ const NOKTREYN_MARKERS = [
 ]
 
 const EVERDAN_MARKERS = [
-  { id: 'everdan-tavern-01', type: 'tavern', x: 46.9383, y: 11.2865 },
-  { id: 'everdan-monastery-01', type: 'monastery', x: 80.8004, y: 14.1196 },
-  { id: 'everdan-church-01', type: 'church', x: 71.4449, y: 49.6366 },
-  { id: 'everdan-market-01', type: 'market', x: 69.5654, y: 55.1489 },
-  { id: 'everdan-forge-01', type: 'forge', x: 74.2297, y: 54.8820 },
+  { id: 'everdan-tavern-01', type: 'tavern', x: 82.7188, y: 24.8094 },
+  { id: 'everdan-tavern-02', type: 'tavern', x: 19.6703, y: 30.3479 },
+  { id: 'everdan-tavern-03', type: 'tavern', x: 92.1233, y: 32.0685 },
+  { id: 'everdan-tavern-04', type: 'tavern', x: 76.5772, y: 34.7167 },
+  { id: 'everdan-tavern-05', type: 'tavern', x: 17.9388, y: 37.9190 },
+  { id: 'everdan-tavern-06', type: 'tavern', x: 75.1184, y: 45.3977 },
+  { id: 'everdan-tavern-07', type: 'tavern', x: 26.2007, y: 45.4445 },
+  { id: 'everdan-tavern-08', type: 'tavern', x: 43.1984, y: 53.1697 },
+  { id: 'everdan-tavern-09', type: 'tavern', x: 55.6542, y: 54.9786 },
+  { id: 'everdan-tavern-10', type: 'tavern', x: 73.9084, y: 55.8408 },
+  { id: 'everdan-tavern-11', type: 'tavern', x: 31.0175, y: 57.2526 },
+  { id: 'everdan-tavern-12', type: 'tavern', x: 60.2468, y: 57.5474 },
+  { id: 'everdan-tavern-13', type: 'tavern', x: 71.2062, y: 59.4070 },
+  { id: 'everdan-tavern-14', type: 'tavern', x: 77.5924, y: 64.5481 },
+  { id: 'everdan-tavern-15', type: 'tavern', x: 67.4213, y: 70.1983 },
+  { id: 'everdan-tavern-16', type: 'tavern', x: 17.9814, y: 77.8577 },
+  { id: 'everdan-forge-01', type: 'forge', x: 74.4964, y: 59.1893 },
+  { id: 'everdan-forge-02', type: 'forge', x: 75.2947, y: 66.6160 },
+  { id: 'everdan-church-01', type: 'church', x: 44.3987, y: 15.3697 },
+  { id: 'everdan-church-02', type: 'church', x: 21.1521, y: 43.8308 },
+  { id: 'everdan-church-03', type: 'church', x: 53.7965, y: 45.8895 },
+  { id: 'everdan-church-04', type: 'church', x: 77.1726, y: 48.2919 },
+  { id: 'everdan-church-05', type: 'church', x: 33.9244, y: 53.8814 },
+  { id: 'everdan-church-06', type: 'church', x: 74.5832, y: 56.7060 },
+  { id: 'everdan-church-07', type: 'church', x: 70.1551, y: 74.6712 },
+  { id: 'everdan-church-08', type: 'church', x: 52.1885, y: 75.0005 },
+  { id: 'everdan-church-09', type: 'church', x: 55.1654, y: 78.4970 },
+  { id: 'everdan-market-01', type: 'market', x: 12.8031, y: 31.0569 },
+  { id: 'everdan-market-02', type: 'market', x: 54.5128, y: 55.5080 },
+  { id: 'everdan-market-03', type: 'market', x: 72.7963, y: 60.6571 },
+  { id: 'everdan-market-04', type: 'market', x: 69.2168, y: 62.5719 },
+  { id: 'everdan-monastery-01', type: 'monastery', x: 66.9534, y: 16.6698 },
+  { id: 'everdan-monastery-02', type: 'monastery', x: 69.7400, y: 17.8736 },
+  { id: 'everdan-monastery-03', type: 'monastery', x: 14.9044, y: 19.8031 },
+  { id: 'everdan-monastery-04', type: 'monastery', x: 90.0280, y: 26.4549 },
+  { id: 'everdan-monastery-05', type: 'monastery', x: 13.5290, y: 27.3258 },
+  { id: 'everdan-monastery-06', type: 'monastery', x: 93.3132, y: 31.1504 },
+  { id: 'everdan-monastery-07', type: 'monastery', x: 61.1155, y: 32.4403 },
+  { id: 'everdan-monastery-08', type: 'monastery', x: 84.8427, y: 39.4116 },
+  { id: 'everdan-monastery-09', type: 'monastery', x: 83.1468, y: 41.3257 },
+  { id: 'everdan-monastery-10', type: 'monastery', x: 67.7502, y: 43.7374 },
+  { id: 'everdan-monastery-11', type: 'monastery', x: 18.9626, y: 68.8529 },
+  { id: 'everdan-monastery-12', type: 'monastery', x: 11.6817, y: 71.7464 },
+  { id: 'everdan-monastery-13', type: 'monastery', x: 35.8022, y: 77.5093 },
+]
+
+const NORDHELM_MARKERS = [
+  { id: 'nordhelm-tavern-01', type: 'tavern', x: 32.0100, y: 19.4500 },
+  { id: 'nordhelm-tavern-02', type: 'tavern', x: 26.4900, y: 19.4833 },
+  { id: 'nordhelm-tavern-03', type: 'tavern', x: 34.8300, y: 25.2167 },
+  { id: 'nordhelm-tavern-04', type: 'tavern', x: 40.2300, y: 34.6833 },
+  { id: 'nordhelm-tavern-05', type: 'tavern', x: 36.9500, y: 43.5500 },
+  { id: 'nordhelm-tavern-06', type: 'tavern', x: 45.2700, y: 46.0833 },
+  { id: 'nordhelm-tavern-07', type: 'tavern', x: 12.6700, y: 50.6167 },
+  { id: 'nordhelm-tavern-08', type: 'tavern', x: 20.5700, y: 68.3167 },
+  { id: 'nordhelm-tavern-09', type: 'tavern', x: 48.6900, y: 81.4500 },
+  { id: 'nordhelm-forge-01', type: 'forge', x: 31.0400, y: 23.9667 },
+  { id: 'nordhelm-forge-02', type: 'forge', x: 68.3200, y: 25.4000 },
+  { id: 'nordhelm-forge-03', type: 'forge', x: 41.7600, y: 43.7667 },
+  { id: 'nordhelm-forge-04', type: 'forge', x: 15.9000, y: 55.6667 },
+  { id: 'nordhelm-church-01', type: 'church', x: 29.5300, y: 14.5167 },
+  { id: 'nordhelm-church-02', type: 'church', x: 39.5700, y: 32.8833 },
+  { id: 'nordhelm-church-03', type: 'church', x: 27.9100, y: 51.3500 },
+  { id: 'nordhelm-church-04', type: 'church', x: 19.4900, y: 66.8167 },
+  { id: 'nordhelm-church-05', type: 'church', x: 80.1700, y: 68.4500 },
+  { id: 'nordhelm-church-06', type: 'church', x: 31.8500, y: 76.9167 },
+  { id: 'nordhelm-church-07', type: 'church', x: 47.8500, y: 80.8167 },
+  { id: 'nordhelm-market-01', type: 'market', x: 28.4500, y: 23.0167 },
+  { id: 'nordhelm-market-02', type: 'market', x: 40.7300, y: 42.3500 },
+  { id: 'nordhelm-market-03', type: 'market', x: 11.7900, y: 50.3167 },
+  { id: 'nordhelm-monastery-01', type: 'monastery', x: 73.3900, y: 3.6500 },
+  { id: 'nordhelm-monastery-02', type: 'monastery', x: 11.6500, y: 26.5833 },
+  { id: 'nordhelm-monastery-03', type: 'monastery', x: 67.3100, y: 33.8167 },
+  { id: 'nordhelm-monastery-04', type: 'monastery', x: 9.3500, y: 37.8833 },
+  { id: 'nordhelm-monastery-05', type: 'monastery', x: 81.5900, y: 50.6500 },
+  { id: 'nordhelm-monastery-06', type: 'monastery', x: 17.6900, y: 52.6167 },
+  { id: 'nordhelm-monastery-07', type: 'monastery', x: 60.3700, y: 79.3833 },
 ]
 
 const KAELMORE_MARKERS = [
@@ -373,6 +451,13 @@ const EVERDAN_MARKER_ICONS = {
   monastery: everdanMonasteryIcon,
   tavern: everdanTavernIcon,
 }
+const NORDHELM_MARKER_ICONS = {
+  church: nordhelmChurchIcon,
+  forge: nordhelmForgeIcon,
+  market: nordhelmMarketIcon,
+  monastery: nordhelmMonasteryIcon,
+  tavern: nordhelmTavernIcon,
+}
 const KAELMORE_MARKER_ICONS = {
   church: kaelmoreChurchIcon,
   forge: kaelmoreForgeIcon,
@@ -437,6 +522,30 @@ const LYUMERIS_BALANCED_CLOUDS = [
   { image: 0, x: 12, y: 13, scale: 0.74, duration: 104, delay: -28, driftX: 9, driftY: 1, opacity: 0.07 },
   { image: 6, x: 66, y: 29, scale: 0.64, duration: 118, delay: -64, driftX: -8, driftY: 2, opacity: 0.06 },
 ]
+const EVERDAN_CINEMATIC_CLOUDS = [
+  { image: 0, x: 1, y: 2, scale: 1.08, duration: 176, delay: -54, driftX: 10, driftY: 2, opacity: 0.3 },
+  { image: 2, x: 18, y: 64, scale: 0.9, duration: 190, delay: -116, driftX: -8, driftY: -3, opacity: 0.22 },
+  { image: 3, x: 38, y: 5, scale: 0.96, duration: 168, delay: -86, driftX: -12, driftY: 3, opacity: 0.24 },
+  { image: 5, x: 68, y: 12, scale: 0.94, duration: 184, delay: -138, driftX: 11, driftY: 2, opacity: 0.23 },
+  { image: 6, x: 82, y: 58, scale: 0.84, duration: 202, delay: -42, driftX: -10, driftY: -2, opacity: 0.2 },
+]
+const EVERDAN_BALANCED_CLOUDS = [
+  { image: 0, x: 6, y: 4, scale: 0.82, duration: 116, delay: -42, driftX: 8, driftY: 1, opacity: 0.13 },
+  { image: 3, x: 44, y: 8, scale: 0.76, duration: 128, delay: -76, driftX: -9, driftY: 2, opacity: 0.1 },
+  { image: 6, x: 78, y: 56, scale: 0.68, duration: 136, delay: -22, driftX: -8, driftY: -2, opacity: 0.09 },
+]
+const NORDHELM_CINEMATIC_CLOUDS = [
+  { image: 0, x: 3, y: 4, scale: 1.02, duration: 178, delay: -44, driftX: 9, driftY: 2, opacity: 0.28 },
+  { image: 2, x: 14, y: 62, scale: 0.88, duration: 196, delay: -108, driftX: -8, driftY: -2, opacity: 0.2 },
+  { image: 3, x: 36, y: 7, scale: 0.92, duration: 166, delay: -78, driftX: -11, driftY: 3, opacity: 0.22 },
+  { image: 5, x: 66, y: 10, scale: 0.9, duration: 184, delay: -132, driftX: 10, driftY: 2, opacity: 0.21 },
+  { image: 6, x: 80, y: 57, scale: 0.82, duration: 204, delay: -38, driftX: -9, driftY: -2, opacity: 0.18 },
+]
+const NORDHELM_BALANCED_CLOUDS = [
+  { image: 0, x: 7, y: 5, scale: 0.8, duration: 116, delay: -38, driftX: 8, driftY: 1, opacity: 0.12 },
+  { image: 3, x: 45, y: 8, scale: 0.74, duration: 128, delay: -72, driftX: -9, driftY: 2, opacity: 0.1 },
+  { image: 6, x: 76, y: 55, scale: 0.66, duration: 136, delay: -20, driftX: -8, driftY: -2, opacity: 0.08 },
+]
 const CINEMATIC_BIRD_FLOCKS = [
   {
     id: 'north-wall',
@@ -460,6 +569,70 @@ const CINEMATIC_BIRD_FLOCKS = [
       { x: 24, y: 23, scale: 0.35, rotate: -6 },
       { x: 54, y: 12, scale: 0.28, rotate: 8 },
       { x: 82, y: 28, scale: 0.3, rotate: -4 },
+    ],
+  },
+]
+const EVERDAN_BIRD_FLOCKS = [
+  {
+    id: 'everdan-north-pass',
+    x: 18,
+    y: 22,
+    travelX: 76,
+    travelY: 8,
+    duration: 150,
+    delay: -36,
+    birds: [
+      { x: 0, y: 10, scale: 0.32, rotate: -4 },
+      { x: 26, y: 1, scale: 0.28, rotate: 5 },
+      { x: 54, y: 17, scale: 0.3, rotate: -7 },
+      { x: 86, y: 6, scale: 0.25, rotate: 6 },
+    ],
+  },
+  {
+    id: 'everdan-south-coast',
+    x: 4,
+    y: 68,
+    travelX: 86,
+    travelY: -10,
+    duration: 184,
+    delay: -94,
+    birds: [
+      { x: 0, y: 14, scale: 0.28, rotate: 5 },
+      { x: 24, y: 28, scale: 0.32, rotate: -5 },
+      { x: 56, y: 11, scale: 0.26, rotate: 8 },
+      { x: 90, y: 25, scale: 0.28, rotate: -4 },
+    ],
+  },
+]
+const NORDHELM_BIRD_FLOCKS = [
+  {
+    id: 'nordhelm-north-ridge',
+    x: 12,
+    y: 20,
+    travelX: 78,
+    travelY: 7,
+    duration: 154,
+    delay: -40,
+    birds: [
+      { x: 0, y: 10, scale: 0.32, rotate: -4 },
+      { x: 26, y: 1, scale: 0.28, rotate: 5 },
+      { x: 54, y: 17, scale: 0.3, rotate: -7 },
+      { x: 86, y: 6, scale: 0.25, rotate: 6 },
+    ],
+  },
+  {
+    id: 'nordhelm-south-road',
+    x: 5,
+    y: 66,
+    travelX: 84,
+    travelY: -9,
+    duration: 186,
+    delay: -92,
+    birds: [
+      { x: 0, y: 14, scale: 0.28, rotate: 5 },
+      { x: 24, y: 28, scale: 0.32, rotate: -5 },
+      { x: 56, y: 11, scale: 0.26, rotate: 8 },
+      { x: 90, y: 25, scale: 0.28, rotate: -4 },
     ],
   },
 ]
@@ -524,26 +697,88 @@ const REGION_MAPS = {
     width: 4431,
   },
   everdan: {
-    aspectRatio: '4500 / 2500',
-    birdFlocks: [],
+    aspectRatio: '6000 / 3500',
+    birdFlocks: EVERDAN_BIRD_FLOCKS,
     focus: { x: 0.5, y: 0.5 },
-    height: 2500,
+    height: 3500,
     markerIcons: EVERDAN_MARKER_ICONS,
     markers: EVERDAN_MARKERS,
     name: 'Everdan',
-    tiles: createFullRegionTile(everdanMapImage, 4500, 2500),
-    width: 4500,
+    qualityAtmosphere: {
+      cinematic: {
+        clouds: EVERDAN_CINEMATIC_CLOUDS,
+        fogClassName: '',
+        showBirds: true,
+      },
+      balanced: {
+        clouds: EVERDAN_BALANCED_CLOUDS,
+        fogClassName: 'fogLayerBalanced',
+        showBirds: true,
+      },
+      performance: {
+        clouds: [],
+        fogClassName: 'fogLayerPerformance',
+        showBirds: false,
+      },
+    },
+    tiles: createFullRegionTile(everdanMapImage, 6000, 3500),
+    width: 6000,
   },
   everdawn: {
-    aspectRatio: '4500 / 2500',
-    birdFlocks: [],
+    aspectRatio: '6000 / 3500',
+    birdFlocks: EVERDAN_BIRD_FLOCKS,
     focus: { x: 0.5, y: 0.5 },
-    height: 2500,
+    height: 3500,
     markerIcons: EVERDAN_MARKER_ICONS,
     markers: EVERDAN_MARKERS,
     name: 'Everdan',
-    tiles: createFullRegionTile(everdanMapImage, 4500, 2500),
-    width: 4500,
+    qualityAtmosphere: {
+      cinematic: {
+        clouds: EVERDAN_CINEMATIC_CLOUDS,
+        fogClassName: '',
+        showBirds: true,
+      },
+      balanced: {
+        clouds: EVERDAN_BALANCED_CLOUDS,
+        fogClassName: 'fogLayerBalanced',
+        showBirds: true,
+      },
+      performance: {
+        clouds: [],
+        fogClassName: 'fogLayerPerformance',
+        showBirds: false,
+      },
+    },
+    tiles: createFullRegionTile(everdanMapImage, 6000, 3500),
+    width: 6000,
+  },
+  nordhelm: {
+    aspectRatio: '5000 / 3000',
+    birdFlocks: NORDHELM_BIRD_FLOCKS,
+    focus: { x: 0.5, y: 0.5 },
+    height: 3000,
+    markerIcons: NORDHELM_MARKER_ICONS,
+    markers: NORDHELM_MARKERS,
+    name: 'Nordhelm',
+    qualityAtmosphere: {
+      cinematic: {
+        clouds: NORDHELM_CINEMATIC_CLOUDS,
+        fogClassName: '',
+        showBirds: true,
+      },
+      balanced: {
+        clouds: NORDHELM_BALANCED_CLOUDS,
+        fogClassName: 'fogLayerBalanced',
+        showBirds: true,
+      },
+      performance: {
+        clouds: [],
+        fogClassName: 'fogLayerPerformance',
+        showBirds: false,
+      },
+    },
+    tiles: createFullRegionTile(nordhelmMapImage, 5000, 3000),
+    width: 5000,
   },
   kaelmore: {
     aspectRatio: '4566 / 2403',
@@ -628,6 +863,25 @@ function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max)
 }
 
+function getZoomBounds(stage, surface, region) {
+  if (!stage || !surface || !region?.useNativeSurfaceSize) {
+    return { min: MIN_ZOOM, max: MAX_ZOOM }
+  }
+
+  const coverZoom = Math.max(
+    stage.clientWidth / surface.clientWidth,
+    stage.clientHeight / surface.clientHeight,
+  )
+  const focusedZoom = Math.max(
+    stage.clientWidth / surface.clientWidth,
+    stage.clientHeight / surface.clientHeight,
+  ) / (MAX_VISIBLE_AREA_PERCENT / 100)
+  const min = Math.max(0.1, coverZoom)
+  const max = Math.max(min, Math.min(MAX_ZOOM, focusedZoom))
+
+  return { min, max }
+}
+
 function getPanLimit(stage, surface, zoom) {
   if (!stage || !surface) {
     return { x: 0, y: 0 }
@@ -683,6 +937,7 @@ function RegionMap({ parentName = 'Eiridor', parentRoute = '/eiridor' }) {
   const [isReturningToParent, setIsReturningToParent] = useState(false)
   const [loadedTiles, setLoadedTiles] = useState({ regionId: null, tiles: {} })
   const region = REGION_MAPS[regionId]
+  const zoomBounds = getZoomBounds(stageRef.current, mapSurfaceRef.current, region)
 
   const setStageElement = useCallback((node) => {
     stageRef.current = node
@@ -716,13 +971,22 @@ function RegionMap({ parentName = 'Eiridor', parentRoute = '/eiridor' }) {
           : nextSize
       })
 
+      const bounds = getZoomBounds(stage, surface, region)
+      const nextZoom = clamp(zoom, bounds.min, bounds.max)
+
+      setZoom((currentZoom) => {
+        const clampedZoom = clamp(currentZoom, bounds.min, bounds.max)
+
+        return currentZoom === clampedZoom ? currentZoom : clampedZoom
+      })
+
       setPan((currentPan) => {
         if (!hasInitialCameraRef.current) {
           hasInitialCameraRef.current = true
-          return getFocusedPan(stage, surface, INITIAL_ZOOM, region?.focus)
+          return getFocusedPan(stage, surface, nextZoom, region?.focus)
         }
 
-        return clampPan(currentPan, zoom, stage, surface)
+        return clampPan(currentPan, nextZoom, stage, surface)
       })
     }
 
@@ -818,10 +1082,11 @@ function RegionMap({ parentName = 'Eiridor', parentRoute = '/eiridor' }) {
 
   const updateZoom = (nextZoom) => {
     setZoom((currentZoom) => {
+      const bounds = getZoomBounds(stageRef.current, mapSurfaceRef.current, region)
       const resolvedZoom = clamp(
         typeof nextZoom === 'function' ? nextZoom(currentZoom) : nextZoom,
-        MIN_ZOOM,
-        MAX_ZOOM,
+        bounds.min,
+        bounds.max,
       )
 
       setPan((currentPan) => (
@@ -963,11 +1228,12 @@ function RegionMap({ parentName = 'Eiridor', parentRoute = '/eiridor' }) {
         onPointerCancel={handlePointerUp}
       >
         <div className={styles.mapLayer}>
-          <div
-            ref={setMapSurfaceElement}
-            className={styles.mapSurface}
+            <div
+              ref={setMapSurfaceElement}
+              className={styles.mapSurface}
             style={{
               '--region-aspect-ratio': region.aspectRatio ?? '2 / 1',
+              '--region-surface-width': region.useNativeSurfaceSize ? `${region.width}px` : undefined,
               '--region-surface-background': region.surfaceBackground,
               left: `calc(50% + ${pan.x}px)`,
               top: `calc(50% + ${pan.y}px)`,
@@ -1120,7 +1386,7 @@ function RegionMap({ parentName = 'Eiridor', parentRoute = '/eiridor' }) {
           className={styles.cameraButton}
           type="button"
           aria-label="Zoom out"
-          disabled={zoom <= MIN_ZOOM}
+          disabled={zoom <= zoomBounds.min}
           onClick={() => updateZoom((currentZoom) => currentZoom - ZOOM_STEP)}
         >
           <FiMinus aria-hidden="true" />
@@ -1130,7 +1396,7 @@ function RegionMap({ parentName = 'Eiridor', parentRoute = '/eiridor' }) {
           className={styles.cameraButton}
           type="button"
           aria-label="Zoom in"
-          disabled={zoom >= MAX_ZOOM}
+          disabled={zoom >= zoomBounds.max}
           onClick={() => updateZoom((currentZoom) => currentZoom + ZOOM_STEP)}
         >
           <FiPlus aria-hidden="true" />

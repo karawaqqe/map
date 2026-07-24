@@ -29,7 +29,7 @@
 
 .mapSurface {
   position: absolute;
-  width: max(100vw, 200vh);
+  width: var(--region-surface-width, max(100vw, 200vh));
   aspect-ratio: var(--region-aspect-ratio, 2 / 1);
   overflow: hidden;
   background: var(
