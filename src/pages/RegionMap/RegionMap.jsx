@@ -3,6 +3,7 @@ import { FiArrowLeft, FiMinus, FiPlus, FiSliders } from 'react-icons/fi'
 import { useParams } from 'react-router-dom'
 import { ROUTE_TRANSITION_EVENT } from '../../constants/routeTransition'
 import styles from './RegionMap.module.scss'
+<<<<<<< HEAD
 import drakenholmMapImage from '../../../img/continents/Regions/Eiridor/Drakenholm/Untitled23_20260607205818.webp'
 import morveynMapImage from '../../../img/continents/Regions/Eiridor/Morvein/rea.webp'
 import noktreynMapImage from '../../../img/continents/Regions/Eiridor/Noktreyn/Noktrein.webp'
@@ -13,6 +14,19 @@ import nordhelmMapImage from '../../../img/continents/Regions/Holylight/Nordhelm
 import lyumerisMapImage from '../../../img/continents/Regions/Eiridor/lumeris/lumeris2.webp'
 import valdoraMapImage from '../../../img/continents/Regions/Eiridor/Valdora/valdora.webp'
 import birdImage from '../../../img/bird/newbird.webp'
+=======
+import drakenholmMapImage from '../../../img/continents/Regions/Eiridor/Drakenholm/Untitled23_20260607205818.png'
+import morveynMapImage from '../../../img/continents/Regions/Eiridor/Morvein/rea.png'
+import noktreynMapImage from '../../../img/continents/Regions/Eiridor/Noktreyn/Noktrein.png'
+import bellarysMapImage from '../../../img/continents/Regions/Holylight/Bellarys/Jj.png'
+import everdanMapImage from '../../../img/continents/Regions/Holylight/Everdawn/Everdan_map.png'
+import kaelmoreMapImage from '../../../img/continents/Regions/Holylight/Kaelmore/kaelmore.png'
+import nordhelmMapImage from '../../../img/continents/Regions/Holylight/Nordhelm/Nordhelm_map.png'
+import radwaneMapImage from '../../../img/continents/Regions/Holylight/Radwane/radwane.png'
+import lyumerisMapImage from '../../../img/continents/Regions/Eiridor/lumeris/lumeris2.png'
+import valdoraMapImage from '../../../img/continents/Regions/Eiridor/Valdora/valdora.png'
+import birdImage from '../../../img/bird/newbird.png'
+>>>>>>> 28e6d65c9573fdace93bca07f4a6d21feaea231a
 import birdSound from '../../../sounds/birds/birdsound.mp3'
 import cloud1 from '../../../img/clouds/cloud1.webp'
 import cloud2 from '../../../img/clouds/cloud2.webp'
@@ -48,6 +62,11 @@ import nordhelmForgeIcon from '../../../svg/HolyLight/Forge/everdane_forge_icon.
 import nordhelmMarketIcon from '../../../svg/HolyLight/Market/kaelmore_market_scales.svg'
 import nordhelmMonasteryIcon from '../../../svg/HolyLight/Monastery/dark_monastery.svg'
 import nordhelmTavernIcon from '../../../svg/HolyLight/Bar/nordheim_tavern_icon.svg'
+import radwaneChurchIcon from '../../../svg/Eiridor/Church/cross3.svg'
+import radwaneForgeIcon from '../../../svg/infopanel/forge_icon.svg'
+import radwaneMarketIcon from '../../../svg/Eiridor/Market/market_scalesdrakenholm.svg'
+import radwaneMonasteryIcon from '../../../svg/HolyLight/Monastery/dark_monastery.svg'
+import radwaneTavernIcon from '../../../svg/HolyLight/Bar/redvein_tavern_icon.svg'
 import lyumerisChurchIcon from '../../../svg/infopanel/cross2.svg'
 import lyumerisForgeIcon from '../../../svg/infopanel/forge_icon.svg'
 import lyumerisMarketIcon from '../../../svg/infopanel/market_scales.svg'
@@ -258,6 +277,45 @@ const NORDHELM_MARKERS = [
   { id: 'nordhelm-monastery-07', type: 'monastery', x: 60.3700, y: 79.3833 },
 ]
 
+const RADWANE_MARKERS = [
+  { id: 'radwane-tavern-01', type: 'tavern', x: 34.4396, y: 23.2490 },
+  { id: 'radwane-tavern-02', type: 'tavern', x: 69.7337, y: 29.9471 },
+  { id: 'radwane-tavern-03', type: 'tavern', x: 21.7144, y: 30.6677 },
+  { id: 'radwane-tavern-04', type: 'tavern', x: 47.2412, y: 30.8486 },
+  { id: 'radwane-tavern-05', type: 'tavern', x: 18.3260, y: 35.6410 },
+  { id: 'radwane-tavern-06', type: 'tavern', x: 50.3787, y: 36.6787 },
+  { id: 'radwane-tavern-07', type: 'tavern', x: 41.2034, y: 42.2783 },
+  { id: 'radwane-tavern-08', type: 'tavern', x: 19.2773, y: 43.5837 },
+  { id: 'radwane-tavern-09', type: 'tavern', x: 55.1617, y: 48.2195 },
+  { id: 'radwane-tavern-10', type: 'tavern', x: 24.7211, y: 49.1165 },
+  { id: 'radwane-tavern-11', type: 'tavern', x: 71.4495, y: 49.8930 },
+  { id: 'radwane-tavern-12', type: 'tavern', x: 42.7979, y: 50.1306 },
+  { id: 'radwane-tavern-13', type: 'tavern', x: 50.6256, y: 51.9214 },
+  { id: 'radwane-tavern-14', type: 'tavern', x: 18.5950, y: 53.5550 },
+  { id: 'radwane-tavern-15', type: 'tavern', x: 13.2422, y: 55.3459 },
+  { id: 'radwane-tavern-16', type: 'tavern', x: 78.9669, y: 59.8624 },
+  { id: 'radwane-tavern-17', type: 'tavern', x: 67.8223, y: 61.5443 },
+  { id: 'radwane-tavern-18', type: 'tavern', x: 53.2108, y: 66.4952 },
+  { id: 'radwane-tavern-19', type: 'tavern', x: 67.7979, y: 85.3211 },
+  { id: 'radwane-forge-01', type: 'forge', x: 43.3694, y: 47.1780 },
+  { id: 'radwane-forge-02', type: 'forge', x: 53.1250, y: 48.9297 },
+  { id: 'radwane-forge-03', type: 'forge', x: 64.3401, y: 77.8528 },
+  { id: 'radwane-church-01', type: 'church', x: 26.7813, y: 16.5053 },
+  { id: 'radwane-church-02', type: 'church', x: 25.2197, y: 57.9675 },
+  { id: 'radwane-market-01', type: 'market', x: 47.4207, y: 48.3983 },
+  { id: 'radwane-monastery-01', type: 'monastery', x: 32.7716, y: 4.3123 },
+  { id: 'radwane-monastery-02', type: 'monastery', x: 67.7069, y: 26.6673 },
+  { id: 'radwane-monastery-03', type: 'monastery', x: 55.8398, y: 29.4801 },
+  { id: 'radwane-monastery-04', type: 'monastery', x: 64.7177, y: 30.8086 },
+  { id: 'radwane-monastery-05', type: 'monastery', x: 34.6924, y: 34.3272 },
+  { id: 'radwane-monastery-06', type: 'monastery', x: 18.3059, y: 41.4956 },
+  { id: 'radwane-monastery-07', type: 'monastery', x: 49.9991, y: 42.8080 },
+  { id: 'radwane-monastery-08', type: 'monastery', x: 7.2138, y: 52.2653 },
+  { id: 'radwane-monastery-09', type: 'monastery', x: 61.8808, y: 54.0959 },
+  { id: 'radwane-monastery-10', type: 'monastery', x: 59.9544, y: 73.4180 },
+  { id: 'radwane-monastery-11', type: 'monastery', x: 68.3907, y: 74.1071 },
+]
+
 const KAELMORE_MARKERS = [
   { id: 'kaelmore-market-01', type: 'market', x: 69.3889, y: 20.2484 },
   { id: 'kaelmore-market-02', type: 'market', x: 74.0042, y: 49.5873 },
@@ -458,6 +516,13 @@ const NORDHELM_MARKER_ICONS = {
   monastery: nordhelmMonasteryIcon,
   tavern: nordhelmTavernIcon,
 }
+const RADWANE_MARKER_ICONS = {
+  church: radwaneChurchIcon,
+  forge: radwaneForgeIcon,
+  market: radwaneMarketIcon,
+  monastery: radwaneMonasteryIcon,
+  tavern: radwaneTavernIcon,
+}
 const KAELMORE_MARKER_ICONS = {
   church: kaelmoreChurchIcon,
   forge: kaelmoreForgeIcon,
@@ -653,6 +718,34 @@ const QUALITY_ATMOSPHERE = {
     showBirds: false,
   },
 }
+const RADWANE_REGION_MAP = {
+  aspectRatio: '5646 / 3605',
+  birdFlocks: [],
+  focus: { x: 0.5, y: 0.48 },
+  height: 3605,
+  markerIcons: RADWANE_MARKER_ICONS,
+  markers: RADWANE_MARKERS,
+  name: 'Radwane',
+  qualityAtmosphere: {
+    cinematic: {
+      clouds: [],
+      fogClassName: null,
+      showBirds: false,
+    },
+    balanced: {
+      clouds: [],
+      fogClassName: null,
+      showBirds: false,
+    },
+    performance: {
+      clouds: [],
+      fogClassName: null,
+      showBirds: false,
+    },
+  },
+  tiles: createFullRegionTile(radwaneMapImage, 5646, 3605),
+  width: 5646,
+}
 const REGION_MAPS = {
   drakenholm: {
     aspectRatio: '2 / 1',
@@ -780,6 +873,8 @@ const REGION_MAPS = {
     tiles: createFullRegionTile(nordhelmMapImage, 5000, 3000),
     width: 5000,
   },
+  redwayne: RADWANE_REGION_MAP,
+  radwane: RADWANE_REGION_MAP,
   kaelmore: {
     aspectRatio: '4566 / 2403',
     focus: { x: 0.5, y: 0.48 },

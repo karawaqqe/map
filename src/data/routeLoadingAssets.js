@@ -34,6 +34,7 @@ const shrineAssets = {
 };
 
 const regionMapImages = {
+<<<<<<< HEAD
 	drakenholm: new URL("../../img/continents/Regions/Eiridor/Drakenholm/Untitled23_20260607205818.webp", import.meta.url).href,
 	everdan: new URL("../../img/continents/Regions/Holylight/Everdawn/Everdan_map.webp", import.meta.url).href,
 	everdawn: new URL("../../img/continents/Regions/Holylight/Everdawn/Everdan_map.webp", import.meta.url).href,
@@ -44,6 +45,20 @@ const regionMapImages = {
 	nordhelm: new URL("../../img/continents/Regions/Holylight/Nordhelm/Nordhelm_map.webp", import.meta.url).href,
 	noktreyn: new URL("../../img/continents/Regions/Eiridor/Noktreyn/Noktrein.webp", import.meta.url).href,
 	valdora: new URL("../../img/continents/Regions/Eiridor/Valdora/valdora.webp", import.meta.url).href,
+=======
+	drakenholm: new URL("../../img/continents/Regions/Eiridor/Drakenholm/Untitled23_20260607205818.png", import.meta.url).href,
+	everdan: new URL("../../img/continents/Regions/Holylight/Everdawn/Everdan_map.png", import.meta.url).href,
+	everdawn: new URL("../../img/continents/Regions/Holylight/Everdawn/Everdan_map.png", import.meta.url).href,
+	kaelmore: new URL("../../img/continents/Regions/Holylight/Kaelmore/kaelmore.png", import.meta.url).href,
+	lyumeris: new URL("../../img/continents/Regions/Eiridor/lumeris/lumeris2.png", import.meta.url).href,
+	morvein: new URL("../../img/continents/Regions/Eiridor/Morvein/rea.png", import.meta.url).href,
+	morveyn: new URL("../../img/continents/Regions/Eiridor/Morvein/rea.png", import.meta.url).href,
+	nordhelm: new URL("../../img/continents/Regions/Holylight/Nordhelm/Nordhelm_map.png", import.meta.url).href,
+	noktreyn: new URL("../../img/continents/Regions/Eiridor/Noktreyn/Noktrein.png", import.meta.url).href,
+	radwane: new URL("../../img/continents/Regions/Holylight/Radwane/radwane.png", import.meta.url).href,
+	redwayne: new URL("../../img/continents/Regions/Holylight/Radwane/radwane.png", import.meta.url).href,
+	valdora: new URL("../../img/continents/Regions/Eiridor/Valdora/valdora.png", import.meta.url).href,
+>>>>>>> 28e6d65c9573fdace93bca07f4a6d21feaea231a
 };
 
 const regionMarkerIcons = [
@@ -70,6 +85,7 @@ const regionMarkerIcons = [
 	new URL("../../svg/HolyLight/Bar/everdan_tavern_icon.svg", import.meta.url).href,
 	new URL("../../svg/HolyLight/Bar/kaelmor_tavern_icon.svg", import.meta.url).href,
 	new URL("../../svg/HolyLight/Bar/nordheim_tavern_icon.svg", import.meta.url).href,
+	new URL("../../svg/HolyLight/Bar/redvein_tavern_icon.svg", import.meta.url).href,
 	new URL("../../svg/infopanel/cross2.svg", import.meta.url).href,
 	new URL("../../svg/infopanel/forge_icon.svg", import.meta.url).href,
 	new URL("../../svg/infopanel/market_scales.svg", import.meta.url).href,
