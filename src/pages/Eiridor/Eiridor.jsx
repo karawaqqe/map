@@ -15,13 +15,13 @@ import {
 } from "../../data/eiridor";
 import { eiridorHitboxes } from "../../data/generatedHitboxes";
 import styles from "./Eiridor.module.scss";
-import eiridorUnionCrest from "../../../img/herbs/eiridor_union/eiridor_union_crest.png";
-import drakenholmTreatyImage from "../../../img/peace_treaty/drakenholmpeace.png";
-import lumerisTreatyImage from "../../../img/peace_treaty/lumerispeace.png";
-import morveinTreatyImage from "../../../img/peace_treaty/morveinpeace.png";
-import noktreynTreatyImage from "../../../img/peace_treaty/noktreynpeace.png";
-import valdoraTreatyImage from "../../../img/peace_treaty/valdorapeace.png";
-import warSwordsImage from "../../../img/herbs/lawherbs/lawswords.png";
+import eiridorUnionCrest from "../../../img/herbs/eiridor_union/eiridor_union_crest.webp";
+import drakenholmTreatyImage from "../../../img/peace_treaty/drakenholmpeace.webp";
+import lumerisTreatyImage from "../../../img/peace_treaty/lumerispeace.webp";
+import morveinTreatyImage from "../../../img/peace_treaty/morveinpeace.webp";
+import noktreynTreatyImage from "../../../img/peace_treaty/noktreynpeace.webp";
+import valdoraTreatyImage from "../../../img/peace_treaty/valdorapeace.webp";
+import warSwordsImage from "../../../img/herbs/lawherbs/lawswords.webp";
 
 const WORLD_NAVIGATION_DELAY = 1150;
 const WORLD_TRANSITION_OPENING_DURATION = 1100;

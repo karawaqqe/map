@@ -8,15 +8,15 @@ import styles from "./SpindelBookSection.module.scss";
 
 const ASSET_ROOT = "../../../img/books/spindel/voss_journal/book_assets/";
 const assets = {
-	cover: new URL(`${ASSET_ROOT}cover_front.png`, import.meta.url).href,
-	open: new URL(`${ASSET_ROOT}open_book.png`, import.meta.url).href,
+	cover: new URL(`${ASSET_ROOT}cover_front.webp`, import.meta.url).href,
+	open: new URL(`${ASSET_ROOT}open_book.webp`, import.meta.url).href,
 	pages: {
-		left: new URL(`${ASSET_ROOT}pages_left.png`, import.meta.url).href,
-		right: new URL(`${ASSET_ROOT}pages_right.png`, import.meta.url).href,
+		left: new URL(`${ASSET_ROOT}pages_left.webp`, import.meta.url).href,
+		right: new URL(`${ASSET_ROOT}pages_right.webp`, import.meta.url).href,
 	},
 	castle: {
-		left: new URL(`${ASSET_ROOT}castle_page_left.png`, import.meta.url).href,
-		right: new URL(`${ASSET_ROOT}castle_page_right.png`, import.meta.url).href,
+		left: new URL(`${ASSET_ROOT}castle_page_left.webp`, import.meta.url).href,
+		right: new URL(`${ASSET_ROOT}castle_page_right.webp`, import.meta.url).href,
 	},
 };
 

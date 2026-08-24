@@ -49,23 +49,23 @@ const WATER_DRIPS = [
 ];
 
 const shrineBg = new URL(
-	"../../../img/cubes/Spindel/shrine/shrine_bg.png",
+	"../../../img/cubes/Spindel/shrine/shrine_bg.webp",
 	import.meta.url,
 ).href;
 const shrineStatue = new URL(
-	"../../../img/cubes/Spindel/shrine/shrine_statue.png",
+	"../../../img/cubes/Spindel/shrine/shrine_statue.webp",
 	import.meta.url,
 ).href;
 const shrineEffects = new URL(
-	"../../../img/cubes/Spindel/shrine/shrine_effects.png",
+	"../../../img/cubes/Spindel/shrine/shrine_effects.webp",
 	import.meta.url,
 ).href;
 const shrineEyes = new URL(
-	"../../../img/cubes/Spindel/shrine/eyes_glow_shrine.png",
+	"../../../img/cubes/Spindel/shrine/eyes_glow_shrine.webp",
 	import.meta.url,
 ).href;
 const dialogueWindow = new URL(
-	"../../../img/cubes/Spindel/shrine/dialogue_window.png",
+	"../../../img/cubes/Spindel/shrine/dialogue_window.webp",
 	import.meta.url,
 ).href;
 const shrineAmbience = new URL(

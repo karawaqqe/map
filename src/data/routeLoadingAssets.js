@@ -23,27 +23,27 @@ import {
 } from "./spindel";
 
 const shrineAssets = {
-	background: new URL("../../img/cubes/Spindel/shrine/shrine_bg.png", import.meta.url).href,
-	statue: new URL("../../img/cubes/Spindel/shrine/shrine_statue.png", import.meta.url).href,
-	effects: new URL("../../img/cubes/Spindel/shrine/shrine_effects.png", import.meta.url).href,
-	eyes: new URL("../../img/cubes/Spindel/shrine/eyes_glow_shrine.png", import.meta.url).href,
-	dialogueWindow: new URL("../../img/cubes/Spindel/shrine/dialogue_window.png", import.meta.url).href,
+	background: new URL("../../img/cubes/Spindel/shrine/shrine_bg.webp", import.meta.url).href,
+	statue: new URL("../../img/cubes/Spindel/shrine/shrine_statue.webp", import.meta.url).href,
+	effects: new URL("../../img/cubes/Spindel/shrine/shrine_effects.webp", import.meta.url).href,
+	eyes: new URL("../../img/cubes/Spindel/shrine/eyes_glow_shrine.webp", import.meta.url).href,
+	dialogueWindow: new URL("../../img/cubes/Spindel/shrine/dialogue_window.webp", import.meta.url).href,
 	ambience: new URL("../../sounds/spindel/cave/cave_shrine_ambience.mp3", import.meta.url).href,
 	dialogueClick: new URL("../../sounds/spindel/cave/dialogue_click.mp3", import.meta.url).href,
 	screamer: new URL("../../videos/screamer-test.mp4", import.meta.url).href,
 };
 
 const regionMapImages = {
-	drakenholm: new URL("../../img/continents/Regions/Eiridor/Drakenholm/Untitled23_20260607205818.png", import.meta.url).href,
-	everdan: new URL("../../img/continents/Regions/Holylight/Everdawn/Everdan_map.png", import.meta.url).href,
-	everdawn: new URL("../../img/continents/Regions/Holylight/Everdawn/Everdan_map.png", import.meta.url).href,
-	kaelmore: new URL("../../img/continents/Regions/Holylight/Kaelmore/kaelmore.png", import.meta.url).href,
-	lyumeris: new URL("../../img/continents/Regions/Eiridor/lumeris/lumeris2.png", import.meta.url).href,
-	morvein: new URL("../../img/continents/Regions/Eiridor/Morvein/rea.png", import.meta.url).href,
-	morveyn: new URL("../../img/continents/Regions/Eiridor/Morvein/rea.png", import.meta.url).href,
-	nordhelm: new URL("../../img/continents/Regions/Holylight/Nordhelm/Nordhelm_map.png", import.meta.url).href,
-	noktreyn: new URL("../../img/continents/Regions/Eiridor/Noktreyn/Noktrein.png", import.meta.url).href,
-	valdora: new URL("../../img/continents/Regions/Eiridor/Valdora/valdora.png", import.meta.url).href,
+	drakenholm: new URL("../../img/continents/Regions/Eiridor/Drakenholm/Untitled23_20260607205818.webp", import.meta.url).href,
+	everdan: new URL("../../img/continents/Regions/Holylight/Everdawn/Everdan_map.webp", import.meta.url).href,
+	everdawn: new URL("../../img/continents/Regions/Holylight/Everdawn/Everdan_map.webp", import.meta.url).href,
+	kaelmore: new URL("../../img/continents/Regions/Holylight/Kaelmore/kaelmore.webp", import.meta.url).href,
+	lyumeris: new URL("../../img/continents/Regions/Eiridor/lumeris/lumeris2.webp", import.meta.url).href,
+	morvein: new URL("../../img/continents/Regions/Eiridor/Morvein/rea.webp", import.meta.url).href,
+	morveyn: new URL("../../img/continents/Regions/Eiridor/Morvein/rea.webp", import.meta.url).href,
+	nordhelm: new URL("../../img/continents/Regions/Holylight/Nordhelm/Nordhelm_map.webp", import.meta.url).href,
+	noktreyn: new URL("../../img/continents/Regions/Eiridor/Noktreyn/Noktrein.webp", import.meta.url).href,
+	valdora: new URL("../../img/continents/Regions/Eiridor/Valdora/valdora.webp", import.meta.url).href,
 };
 
 const regionMarkerIcons = [
@@ -76,13 +76,13 @@ const regionMarkerIcons = [
 ];
 
 const bookAssets = [
-	new URL("../../img/books/spindel/voss_journal/book_assets/table_back.jpg", import.meta.url).href,
-	new URL("../../img/books/spindel/voss_journal/book_assets/cover_front.png", import.meta.url).href,
-	new URL("../../img/books/spindel/voss_journal/book_assets/open_book.png", import.meta.url).href,
-	new URL("../../img/books/spindel/voss_journal/book_assets/pages_left.png", import.meta.url).href,
-	new URL("../../img/books/spindel/voss_journal/book_assets/pages_right.png", import.meta.url).href,
-	new URL("../../img/books/spindel/voss_journal/book_assets/castle_page_left.png", import.meta.url).href,
-	new URL("../../img/books/spindel/voss_journal/book_assets/castle_page_right.png", import.meta.url).href,
+	new URL("../../img/books/spindel/voss_journal/book_assets/table_back.webp", import.meta.url).href,
+	new URL("../../img/books/spindel/voss_journal/book_assets/cover_front.webp", import.meta.url).href,
+	new URL("../../img/books/spindel/voss_journal/book_assets/open_book.webp", import.meta.url).href,
+	new URL("../../img/books/spindel/voss_journal/book_assets/pages_left.webp", import.meta.url).href,
+	new URL("../../img/books/spindel/voss_journal/book_assets/pages_right.webp", import.meta.url).href,
+	new URL("../../img/books/spindel/voss_journal/book_assets/castle_page_left.webp", import.meta.url).href,
+	new URL("../../img/books/spindel/voss_journal/book_assets/castle_page_right.webp", import.meta.url).href,
 	spindelOst,
 ];
 
@@ -98,8 +98,8 @@ const worldAssets = [
 
 const eiridorAssets = [
 	eiridorMapImage,
-	new URL("../../img/herbs/eiridor_union/eiridor_union_crest.png", import.meta.url).href,
-	new URL("../../img/herbs/lawherbs/lawlist.png", import.meta.url).href,
+	new URL("../../img/herbs/eiridor_union/eiridor_union_crest.webp", import.meta.url).href,
+	new URL("../../img/herbs/lawherbs/lawlist.webp", import.meta.url).href,
 	eiridorMusic,
 	windSound,
 	birdImage,

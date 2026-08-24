@@ -212,7 +212,7 @@ function RoomAssetLayer({ className, frame, src }) {
 }
 
 const dialogueWindow = new URL(
-	"../../../img/cubes/Spindel/shrine/dialogue_window.png",
+	"../../../img/cubes/Spindel/shrine/dialogue_window.webp",
 	import.meta.url,
 ).href;
 const dialogueClick = new URL(

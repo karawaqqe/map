@@ -4,7 +4,7 @@ export const spindelMapSize = {
 };
 
 export const spindelMapImage = new URL(
-	"../../img/cubes/Spindel/full_map.png",
+	"../../img/cubes/Spindel/full_map.webp",
 	import.meta.url,
 ).href;
 
@@ -13,7 +13,7 @@ export const spindelRegions = [
 		id: "spindel-base-1",
 		name: "Spindel base 1",
 		image: new URL(
-			"../../img/cubes/Spindel_new/cropped/base_new1.png",
+			"../../img/cubes/Spindel_new/cropped/base_new1.webp",
 			import.meta.url,
 		).href,
 		frame: { x: 114, y: 288, width: 478, height: 584 },
@@ -27,7 +27,7 @@ export const spindelRegions = [
 		id: "spindel-base-2",
 		name: "Spindel base 2",
 		image: new URL(
-			"../../img/cubes/Spindel_new/cropped/base_new2.png",
+			"../../img/cubes/Spindel_new/cropped/base_new2.webp",
 			import.meta.url,
 		).href,
 		frame: { x: 578, y: 458, width: 615, height: 429 },
@@ -41,7 +41,7 @@ export const spindelRegions = [
 		id: "spindel-base-3",
 		name: "Spindel base 3",
 		image: new URL(
-			"../../img/cubes/Spindel_new/cropped/base_new3.png",
+			"../../img/cubes/Spindel_new/cropped/base_new3.webp",
 			import.meta.url,
 		).href,
 		frame: { x: 681, y: 281, width: 368, height: 270 },
@@ -55,7 +55,7 @@ export const spindelRegions = [
 		id: "spindel-base-4",
 		name: "Spindel base 4",
 		image: new URL(
-			"../../img/cubes/Spindel_new/cropped/base_new4.png",
+			"../../img/cubes/Spindel_new/cropped/base_new4.webp",
 			import.meta.url,
 		).href,
 		frame: { x: 435, y: 144, width: 349, height: 313 },
@@ -69,7 +69,7 @@ export const spindelRegions = [
 		id: "spindel-base-5",
 		name: "Spindel base 5",
 		image: new URL(
-			"../../img/cubes/Spindel_new/cropped/base_new5.png",
+			"../../img/cubes/Spindel_new/cropped/base_new5.webp",
 			import.meta.url,
 		).href,
 		frame: { x: 1023, y: 403, width: 447, height: 333 },
@@ -83,7 +83,7 @@ export const spindelRegions = [
 		id: "spindel-base-6",
 		name: "Spindel base 6",
 		image: new URL(
-			"../../img/cubes/Spindel_new/cropped/base_new6.png",
+			"../../img/cubes/Spindel_new/cropped/base_new6.webp",
 			import.meta.url,
 		).href,
 		frame: { x: 1072, y: 99, width: 415, height: 393 },
@@ -97,7 +97,7 @@ export const spindelRegions = [
 		id: "spindel-base-7",
 		name: "Spindel base 7",
 		image: new URL(
-			"../../img/cubes/Spindel_new/cropped/base_new7.png",
+			"../../img/cubes/Spindel_new/cropped/base_new7.webp",
 			import.meta.url,
 		).href,
 		frame: { x: 602, y: 35, width: 486, height: 300 },
@@ -111,7 +111,7 @@ export const spindelRegions = [
 		id: "spindel-bridges-1",
 		name: "Spindel bridges 1",
 		image: new URL(
-			"../../img/cubes/Spindel_new/cropped/bridges_new1.png",
+			"../../img/cubes/Spindel_new/cropped/bridges_new1.webp",
 			import.meta.url,
 		).href,
 		frame: { x: 536, y: 274, width: 648, height: 391 },
@@ -125,7 +125,7 @@ export const spindelRegions = [
 		id: "spindel-bridges-2",
 		name: "Spindel bridges 2",
 		image: new URL(
-			"../../img/cubes/Spindel_new/cropped/bridges_new2.png",
+			"../../img/cubes/Spindel_new/cropped/bridges_new2.webp",
 			import.meta.url,
 		).href,
 		frame: { x: 487, y: 167, width: 687, height: 318 },
@@ -139,7 +139,7 @@ export const spindelRegions = [
 		id: "spindel-bridges-3",
 		name: "Spindel bridges 3",
 		image: new URL(
-			"../../img/cubes/Spindel_new/cropped/bridges_new3.png",
+			"../../img/cubes/Spindel_new/cropped/bridges_new3.webp",
 			import.meta.url,
 		).href,
 		frame: { x: 452, y: 252, width: 410, height: 489 },
@@ -153,7 +153,7 @@ export const spindelRegions = [
 		id: "spindel-columns-1",
 		name: "Spindel columns 1",
 		image: new URL(
-			"../../img/cubes/Spindel_new/cropped/columns_new1.png",
+			"../../img/cubes/Spindel_new/cropped/columns_new1.webp",
 			import.meta.url,
 		).href,
 		frame: { x: 97, y: 141, width: 1478, height: 649 },
@@ -167,7 +167,7 @@ export const spindelRegions = [
 		id: "spindel-columns-2",
 		name: "Spindel columns 2",
 		image: new URL(
-			"../../img/cubes/Spindel_new/cropped/columns_new2.png",
+			"../../img/cubes/Spindel_new/cropped/columns_new2.webp",
 			import.meta.url,
 		).href,
 		frame: { x: 86, y: 238, width: 1487, height: 554 },
@@ -181,7 +181,7 @@ export const spindelRegions = [
 		id: "spindel-columns-3",
 		name: "Spindel columns 3",
 		image: new URL(
-			"../../img/cubes/Spindel_new/cropped/columns_new3.png",
+			"../../img/cubes/Spindel_new/cropped/columns_new3.webp",
 			import.meta.url,
 		).href,
 		frame: { x: 365, y: 68, width: 1224, height: 756 },
@@ -195,7 +195,7 @@ export const spindelRegions = [
 		id: "spindel-columns-4",
 		name: "Spindel columns 4",
 		image: new URL(
-			"../../img/cubes/Spindel_new/cropped/columns_new4.png",
+			"../../img/cubes/Spindel_new/cropped/columns_new4.webp",
 			import.meta.url,
 		).href,
 		frame: { x: 9, y: 49, width: 1703, height: 719 },
@@ -209,7 +209,7 @@ export const spindelRegions = [
 		id: "spindel-columns-5",
 		name: "Spindel columns 5",
 		image: new URL(
-			"../../img/cubes/Spindel_new/cropped/columns_new5.png",
+			"../../img/cubes/Spindel_new/cropped/columns_new5.webp",
 			import.meta.url,
 		).href,
 		frame: { x: 59, y: 51, width: 1423, height: 436 },
@@ -226,7 +226,7 @@ export const spindelBuildingLayers = [
 		id: "spindel-buildings-1",
 		name: "Spindel buildings 1",
 		image: new URL(
-			"../../img/cubes/Spindel_new/cropped/buildings1.png",
+			"../../img/cubes/Spindel_new/cropped/buildings1.webp",
 			import.meta.url,
 		).href,
 		frame: { x: 258, y: 321, width: 148, height: 381 },
@@ -236,7 +236,7 @@ export const spindelBuildingLayers = [
 		id: "spindel-buildings-2",
 		name: "Spindel buildings 2",
 		image: new URL(
-			"../../img/cubes/Spindel_new/cropped/buildings2.png",
+			"../../img/cubes/Spindel_new/cropped/buildings2.webp",
 			import.meta.url,
 		).href,
 		frame: { x: 776, y: 459, width: 233, height: 175 },
@@ -246,7 +246,7 @@ export const spindelBuildingLayers = [
 		id: "spindel-buildings-3",
 		name: "Spindel buildings 3",
 		image: new URL(
-			"../../img/cubes/Spindel_new/cropped/buildings3.png",
+			"../../img/cubes/Spindel_new/cropped/buildings3.webp",
 			import.meta.url,
 		).href,
 		frame: { x: 801, y: 281, width: 170, height: 111 },
@@ -256,7 +256,7 @@ export const spindelBuildingLayers = [
 		id: "spindel-buildings-4",
 		name: "Spindel buildings 4",
 		image: new URL(
-			"../../img/cubes/Spindel_new/cropped/buildings4.png",
+			"../../img/cubes/Spindel_new/cropped/buildings4.webp",
 			import.meta.url,
 		).href,
 		frame: { x: 549, y: 147, width: 113, height: 98 },
@@ -266,7 +266,7 @@ export const spindelBuildingLayers = [
 		id: "spindel-buildings-5",
 		name: "Spindel buildings 5",
 		image: new URL(
-			"../../img/cubes/Spindel_new/cropped/buildings5.png",
+			"../../img/cubes/Spindel_new/cropped/buildings5.webp",
 			import.meta.url,
 		).href,
 		frame: { x: 1181, y: 417, width: 47, height: 75 },
@@ -276,7 +276,7 @@ export const spindelBuildingLayers = [
 		id: "spindel-buildings-7",
 		name: "Spindel buildings 7",
 		image: new URL(
-			"../../img/cubes/Spindel_new/cropped/buildings7.png",
+			"../../img/cubes/Spindel_new/cropped/buildings7.webp",
 			import.meta.url,
 		).href,
 		frame: { x: 1194, y: 163, width: 99, height: 85 },
@@ -285,14 +285,14 @@ export const spindelBuildingLayers = [
 ];
 
 export const spindelFogParticles = [
-	new URL("../../img/particles/fog_particle1.png", import.meta.url).href,
-	new URL("../../img/particles/fog_particle2.png", import.meta.url).href,
-	new URL("../../img/particles/fog_particle3.png", import.meta.url).href,
-	new URL("../../img/particles/fog_particle4.png", import.meta.url).href,
+	new URL("../../img/particles/fog_particle1.webp", import.meta.url).href,
+	new URL("../../img/particles/fog_particle2.webp", import.meta.url).href,
+	new URL("../../img/particles/fog_particle3.webp", import.meta.url).href,
+	new URL("../../img/particles/fog_particle4.webp", import.meta.url).href,
 ];
 
 export const spindelInteractiveCastle = new URL(
-	"../../img/cubes/Spindel_new/cropped/interactable_castle.png",
+	"../../img/cubes/Spindel_new/cropped/interactable_castle.webp",
 	import.meta.url,
 ).href;
 
@@ -315,32 +315,32 @@ export const spindelBlizzardAmbience = new URL(
 
 export const spindelRoomAssets = {
 	outer: new URL(
-		"../../img/places/spindel_room/cropped/outer.png",
+		"../../img/places/spindel_room/cropped/outer.webp",
 		import.meta.url,
 	).href,
-	room: new URL("../../img/places/spindel_room/room.png", import.meta.url).href,
+	room: new URL("../../img/places/spindel_room/room.webp", import.meta.url).href,
 	windows: new URL(
-		"../../img/places/spindel_room/cropped/windows.png",
+		"../../img/places/spindel_room/cropped/windows.webp",
 		import.meta.url,
 	).href,
 	windowOutside: new URL(
-		"../../img/places/spindel_room/room_window_out2.png",
+		"../../img/places/spindel_room/room_window_out2.webp",
 		import.meta.url,
 	).href,
 	windowInterior: new URL(
-		"../../img/places/spindel_room/room_window2.png",
+		"../../img/places/spindel_room/room_window2.webp",
 		import.meta.url,
 	).href,
 	bookshelves: new URL(
-		"../../img/places/spindel_room/cropped/bookshelfs.png",
+		"../../img/places/spindel_room/cropped/bookshelfs.webp",
 		import.meta.url,
 	).href,
 	banner: new URL(
-		"../../img/places/spindel_room/cropped/banner.png",
+		"../../img/places/spindel_room/cropped/banner.webp",
 		import.meta.url,
 	).href,
 	book: new URL(
-		"../../img/places/spindel_room/cropped/book.png",
+		"../../img/places/spindel_room/cropped/book.webp",
 		import.meta.url,
 	).href,
 };

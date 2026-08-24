@@ -27,7 +27,7 @@
 
 .mapSurface {
   position: absolute;
-  width: max(100vw, 200vh);
+  width: var(--region-surface-width, max(100vw, 200vh));
   aspect-ratio: var(--region-aspect-ratio, 2/1);
   overflow: hidden;
   background: var(--region-surface-background, radial-gradient(ellipse at 42% 40%, rgba(255, 219, 148, 0.2), transparent 58%), linear-gradient(135deg, #7f9184 0%, #a7ad82 44%, #697f72 100%));

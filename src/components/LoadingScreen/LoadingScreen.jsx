@@ -1,7 +1,7 @@
 import styles from "./LoadingScreen.module.scss";
 
 const frameImage = new URL(
-	"../../../img/loading/ChatGPT_Image_18_июл._2026_г.__01_21_13-removebg-preview.png",
+	"../../../img/loading/ChatGPT_Image_18_июл._2026_г.__01_21_13-removebg-preview.webp",
 	import.meta.url,
 ).href;
 

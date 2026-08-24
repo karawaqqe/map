@@ -16,7 +16,7 @@
   z-index: 0;
   inset: -2%;
   pointer-events: none;
-  background-image: url("../../../img/books/spindel/voss_journal/book_assets/table_back.jpg");
+  background-image: url("../../../img/books/spindel/voss_journal/book_assets/table_back.webp");
   background-position: center;
   background-size: cover;
   filter: brightness(0.36) contrast(1.16) saturate(0.56) sepia(0.08) blur(0.7px);
